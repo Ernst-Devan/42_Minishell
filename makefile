@@ -3,22 +3,24 @@
 # =======================================
 
 CC			=	cc
-NAME		=	pipex
-CCFLAGS 		?=	-Wall -Werror -Wextra -MMD -MP
+NAME		=	minishell
+CCFLAGS ?=	-Wall -Werror -Wextra -MMD -MP
+CPPFLAGS = -lreadline
 
 # =======================================
 # Main Directories - Paths
 # =======================================
 
-SRCS		=	minishell.c
+SRCS		=	minishell.c \
+				parsing.c
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
 
-SRC_D		=	srcs/
-OBJ_D		=	objs/
-INC_D		=	-Iincludes \
-				-Ilibft/includes
+SRC_D		=	src/
+OBJ_D		=	obj/
+INC_D		=	-Iinclude \
+					-Ilibs/libft/includes
 
 # =======================================
 # Objets Files
@@ -26,14 +28,14 @@ INC_D		=	-Iincludes \
 
 .PHONY: all
 all: 
-	$(MAKE) -C libft
+	$(MAKE) -C libs/libft
 	$(MAKE) $(NAME)
 
 OBJS	:= $(addprefix $(OBJ_D), $(OBJS))
 SRCS	:= $(addprefix $(SRC_D), $(SRCS))
 
 $(NAME):$(OBJS)
-	$(CC) $(CCFLAGS) $(INC_D) $(OBJS) -lm libft/libft.a -o $@
+	$(CC) $(CCFLAGS) $(INC_D) $(CPPFLAGS) $(OBJS) -lm libs/libft/libft.a -o $@
 
 $(OBJ_D)%.o: $(SRC_D)%.c | $(OBJ_D)
 	$(CC) $(CCFLAGS) $(INC_D) -c $< -o $@
@@ -41,13 +43,13 @@ $(OBJ_D)%.o: $(SRC_D)%.c | $(OBJ_D)
 .PHONY: clean
 clean:
 	rm -rf $(OBJ_D)
-	$(MAKE) clean -C libft
+	$(MAKE) clean -C libs/libft
 
 .PHONY: fclean
 fclean: clean
 	rm -f $(NAME)
 	rm -f libft.a
-	$(MAKE) fclean -C libft
+	$(MAKE) fclean -C libs/libft
 
 .PHONY: debug
 debug:

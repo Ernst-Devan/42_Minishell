@@ -1,6 +1,13 @@
-#include "unistd.h"
 
-int main(void)
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "unistd.h"
+#include "minishell.h"
+
+int main(int ac, char **argv, char **env)
 {
-  write(1,"test", 4);
+    (void)ac;
+    (void)argv;
+    parsing(env);
 }
