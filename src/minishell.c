@@ -1,6 +1,6 @@
 
 #include "minishell.h"
-#include "parse.h"
+#include "parsing.h"
 
 void	minishell(char **env)
 {
