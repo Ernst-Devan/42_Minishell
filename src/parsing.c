@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
+#include "parsing.h"
 //! Secure the env if null (env -i)
 
 void    display_split(char **str)
@@ -66,23 +67,14 @@ t_command parsing(char **env)
 {
     char *path;
     char *buffer;
-    char *command_path;
     t_command command;
-
-    command = init_command(command);
 
     path = get_path(env);
     buffer = readline("-> ");
-    command_path = check_command(path, buffer);
-    if (!command_path)
+    command.args = ft_split(buffer, ' ');
+    command.path = check_command(path, command.args[0]);
+    if (!command.path)
         error_message(1);
-    else
-    {
-        ft_printf("%s\n", command_path);
-        return (1);
-    }
-    command.args = ft_split(buffer, " ");
-    command.path = command_path;
     free(buffer);
-    return (init_command);
+    return (command);
 }
