@@ -13,7 +13,7 @@ CPPFLAGS = -lreadline
 
 SRCS		=	minishell.c \
 				parsing.c   \
-				init.c 
+				init.c      \
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
