@@ -29,8 +29,6 @@ char *get_path(char **env)
     return (NULL);
 }
 
-//int check_bultins();
-
 char  *check_command(char *path, char *command)
 {
     char    **splited_path;
@@ -67,14 +65,17 @@ t_command parsing(char **env)
 {
     char *path;
     char *buffer;
-    t_command command;
+    t_command   command;
 
     path = get_path(env);
     buffer = readline("-> ");
     command.args = ft_split(buffer, ' ');
     command.path = check_command(path, command.args[0]);
     if (!command.path)
-        error_message(1);
-    free(buffer);
+    {
+        command.path = command.args[0];
+        command.args++;
+    }
     return (command);
+    free(buffer);
 }
