@@ -1,4 +1,3 @@
-
 #include "libft.h"
 #include <stdio.h>
 #include <readline/readline.h>
@@ -6,7 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
-
+#include <errno.h>
 //! Secure the env if null (env -i)
 
 void    display_split(char **str)
@@ -14,7 +13,7 @@ void    display_split(char **str)
     while (*str != NULL)
     {
         ft_printf("%s\n", *str);
-        str++;
+        str++;  
     }
 }
 
@@ -63,24 +62,27 @@ void    error_message(int error_code)
     }
 }
 
-
-char **parsing(char **env)
+t_command parsing(char **env)
 {
     char *path;
-    char **table_command = NULL;
     char *buffer;
     char *command_path;
+    t_command command;
+
+    command = init_command(command);
 
     path = get_path(env);
-    while (1)
+    buffer = readline("-> ");
+    command_path = check_command(path, buffer);
+    if (!command_path)
+        error_message(1);
+    else
     {
-        buffer = readline("-> ");
-        command_path = check_command(path, buffer);
-        if (!command_path)
-            error_message(1);
-        else
-            ft_printf("%s\n", command_path);
-        free(buffer);
+        ft_printf("%s\n", command_path);
+        return (1);
     }
-    return (table_command);
+    command.args = ft_split(buffer, " ");
+    command.path = command_path;
+    free(buffer);
+    return (init_command);
 }
