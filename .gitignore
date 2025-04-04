@@ -4,6 +4,8 @@
 
 .swp
 
-/obj
+*obj*
 
 minishell
+
+libs/libft/libft.a

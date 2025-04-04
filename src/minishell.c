@@ -1,6 +1,7 @@
 
 #include "minishell.h"
 #include "parsing.h"
+#include "exec.h"
 #include "libft.h"
 
 void	minishell(char **env)
@@ -10,10 +11,7 @@ void	minishell(char **env)
 	while (1)
     {
 		command = parsing(env);
-        ft_printf("%s\n", command.path);
-        ft_printf("%s", command.args[0]);
-
-        //exec(command);
+		exec(command);
     }
 }
 
