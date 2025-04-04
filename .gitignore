@@ -2,4 +2,8 @@
 
 .env
 
+.swp
+
 /obj
+
+minishell
