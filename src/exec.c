@@ -36,12 +36,11 @@ int	exec_src_bin(t_command command)
 
 int	exec(t_command command)
 {
-	if (command.path)
-	{
-		if (exec_src_bin(command))
-			return (1);
-	}
-	else if (ft_strncmp(command.args[0], "cd", 2)) // ligne have to change
+	if (ft_strncmp(command.path, "cd", 2) == 0) // ligne have to change
 		ms_cd(command);
+    else {
+        if (exec_src_bin(command))
+            return (1);
+    }
 	return (0);
 }

@@ -16,7 +16,7 @@
 
 int	ms_cd(t_command command)
 {
-	if (chdir(command.args[1]) == -1)
+	if (chdir(command.args[0]) == -1)
 	{
 		perror("chdir on ms_cd");
 		return (1);
