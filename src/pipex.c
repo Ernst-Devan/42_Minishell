@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/07 17:07:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:19:05 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	read_in_pipe(int *pipefd, t_command command)
 	return (0);
 }
 
-int	ms_pipe(t_command command)
+int	ms_pipe(t_command *command)
 {
 	int		pipefd[2];
 
@@ -137,7 +137,7 @@ int	ms_pipe(t_command command)
 		perror("pipe faild on pipe");
 		return (1);
 	}
-	write_in_pipe(pipefd, command);
-	read_in_pipe(pipefd, command);
+	write_in_pipe(pipefd, command[0]);
+	read_in_pipe(pipefd, command[1]);
 	return (0);
 }
