@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/04 17:42:44 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/07 10:08:56 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,13 @@ int	exec_src_bin(t_command command)
 		return (1);
 	}
 	if (pid == 0)
-		execve(command.path, command.args, NULL);	
+	{
+		if (execve(command.path, command.args, NULL) == -1)
+		{
+			perror("execve faild");
+			return (1);
+		}
+	}
 	wait(NULL);
 	return (0);
 }
