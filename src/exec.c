@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/07 10:08:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/07 13:06:17 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	exec_src_bin(t_command command)
 	{
 		if (execve(command.path, command.args, NULL) == -1)
 		{
-			perror("execve faild");
+			perror("execve faild on exec_src_bin");
 			return (1);
 		}
 	}
