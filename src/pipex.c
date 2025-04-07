@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/07 15:59:57 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:07:13 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int	write_in_pipe(int *pipefd, t_command command)
 	}
 	if (pid == 0)
 	{
-        dup2(pipefd[1], 1);
+        dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[0]);
 		if (execve(command.path, command.args, NULL) == -1)
 		{
 			perror("execve faild on pipe");
@@ -114,7 +115,8 @@ int	read_in_pipe(int *pipefd, t_command command)
 	}
 	if (pid == 0)
 	{
-        dup2(pipefd[0], 1);
+        dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[1]);
 		if (execve(command.path, command.args, NULL))
 		{
 			perror("execve faild on pipe");
