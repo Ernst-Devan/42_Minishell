@@ -61,21 +61,138 @@ void    error_message(int error_code)
     }
 }
 
-t_command parsing(char **env)
+//! Define better delimiter
+
+size_t check_delimiter(char c)
 {
-    char *path;
+    char delimiter[7] = {" <>|-&\0"};
+    int i;
+
+    i = 0;
+    while (delimiter[i])
+    {
+        if (c == delimiter[i])
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+int count_cmds(char **splited_cmds)
+{
+    int i;
+
+    i = 0;
+    while (*splited_cmds)
+    {
+        i++;
+        splited_cmds++;
+    }
+    return (i);
+}
+// Manage space before and after the input 
+// Make a better allocation for the buffer
+
+char    **lexeur(char *input)
+{
     char *buffer;
-    t_command   command;
+    char **splited_cmds;
+    int i;
+    int a;
+
+    i = 0;
+    a = 0;
+    buffer = malloc((ft_strlen(input) * 2) * sizeof(char));
+    while (input[a])
+    {
+        if (check_delimiter(input[a]) == 1)
+        {
+            if (buffer[i - 1] == ':' && input[a] == ' ')
+                a++;
+            else
+            {
+                if (buffer[i - 1] != ':')
+                {
+                    buffer[i] = ':';
+                    i++;
+                }
+                if (input[a] != ' ')
+                {
+                    buffer[i] = input[a];
+                    i++;
+                    a++;
+                }
+            }
+        }
+        else 
+        {
+            buffer[i] = input[a];
+            i++;
+            a++;
+        }
+    }
+    buffer[i] = '\0';
+    splited_cmds = ft_split(buffer, '|');
+    free(buffer);
+    return (splited_cmds);
+}
+
+
+t_command *insert_table(t_command *cmds, char **list_cmds)
+{
+    char **args;
+    int i;
+    i = 0;
+    while (*list_cmds != NULL)
+    {
+        args = ft_split(*list_cmds, ':');
+        cmds[i].type = 0;
+        cmds[i].cmd = args[0];
+        cmds[i].args = args;
+        list_cmds++;
+        i++;
+    }
+    return (cmds);
+}
+
+void    display_table(t_command *cmds, int count)
+{
+    int i;
+
+    i = 0;
+    while (i < count)
+    {
+        ft_printf("type : %d\n", cmds[i].type);
+        ft_printf("cmd  : %s\n", cmds[i].cmd);
+        ft_printf("args : ");
+        while (*cmds[i].args != NULL)
+        {
+            ft_printf("%s ", *cmds[i].args);
+            cmds[i].args++;
+        }
+        ft_printf("\n\n");
+        i++;
+    }
+}
+
+t_command *parsing(char **env)
+{
+    char **splited_cmds; 
+    char *path;
+    char *input;
+    int count;
+    t_command   *command;
+    t_status    status;
+
+    command = (t_command *){0};
+    status = (t_status){0};
 
     path = get_path(env);
-    buffer = readline("-> ");
-    command.args = ft_split(buffer, ' ');
-    command.path = check_command(path, command.args[0]);
-    if (!command.path)
-    {
-        command.path = command.args[0];
-        command.args++;
-    }
+    input = readline("-> ");
+    splited_cmds = lexeur(input);
+    count = count_cmds(splited_cmds);
+    command = malloc(count * sizeof(t_command));
+    insert_table(command, splited_cmds);
     return (command);
-    free(buffer);
+    free(input);
 }
