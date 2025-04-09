@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/07 17:18:30 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:48:25 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ int	exec_src_bin(t_command command)
 
 int	exec(t_command *command)
 {
-	if(command[1] != NULL)
+	if (command[1].path)
 		ms_pipe(command);
-	else if (ft_strncmp(command->path, "cd", 2) == 0) // ligne have to change
+	else if (ft_strncmp(command->path, "cd", 2) == 0)
 		ms_cd(*command);
     else {
         if (exec_src_bin(*command))
