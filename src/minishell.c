@@ -5,12 +5,12 @@
 
 void	minishell(char **env)
 {
-	t_command *command;
+	t_cmd	*cmd;
 
 	while (1)
     {
-		command = parsing(env);
-        //exec(command);
+		cmd = parsing(env);
+		//exec(command);
     }
 }
 
