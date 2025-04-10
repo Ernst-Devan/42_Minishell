@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/10 10:36:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:25:50 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,39 +18,32 @@
 #include "builtins.h"
 #include "libft.h"
 #include "exec.h"
+#include "pipe.h"
 
-int	exec_src_bin(t_cmd command)
+int	exec_bin(t_table table)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("pid faild on exec_src_bin");
-		return (1);
-	}
+		return (perror("pid faild on exec_src_bin"), 1);
 	if (pid == 0)
 	{
-		if (execve(command.path, command.args, NULL) == -1)
-		{
-			perror("execve faild on exec_src_bin");
-			return (1);
-		}
+		if(dup2(table.in, STDIN_FILENO) == -1 || dup2(table.out, STDOUT_FILENO) == -1)
+			return (perror("pid faild on exec_src_bin"), 1);
+		if (execve(table.cmds->path, table.cmds->args, NULL) == -1)
+			return (perror("execve faild on exec_src_bin"), 1);
 	}
 	wait(NULL);
 	return (0);
 }
 
-int	exec(t_cmd *command)
+int	exec(t_table table)
 {
-	if (command[1].path)
-		ms_pipe(command);
-	else if (ft_strncmp(command->path, "cd", 2) == 0)
-		ms_cd(*command);
+	if (table.cmds[1].path)
+		return (ms_pipe(table));
+	else if (ft_strncmp(table.cmds->path, "cd", 2) == 0)
+		return (ms_cd(*table.cmds));
 	else
-	{
-		if (exec_src_bin(*command))
-			return (1);
-	}
-	return (0);
+		return (exec_bin(table));
 }

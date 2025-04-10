@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/09 16:57:04 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/10 13:22:42 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 int	ms_cd(t_cmd command)
 {
 	if (chdir(command.args[0]) == -1)
-	{
-		perror("chdir on ms_cd");
-		return (1);
-	}
+		return (perror("chdir on ms_cd"), 1);
 	return (0);
 }

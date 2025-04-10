@@ -18,6 +18,9 @@ SRCS		=	minishell.c \
 				lexer.c		\
 				env.c		\
 				error.c		\
+				pipe.c		\
+				exec.c		\
+				ms_cd.c		\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)

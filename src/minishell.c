@@ -4,22 +4,29 @@
 #include "exec.h"
 #include "libft.h"
 
-void	minishell(char **env)
+int	minishell(char **env)
 {
 	t_table table;
 
 	while (1)
     {
 		table = parsing(env);
-		//exec(command);
+		if(exec(table))
+		{
+			// fonction qui free tout
+			return (1);
+		}
     }
+	// ici aussi il faut tout free
+	return (0);
 }
 
 int main(int ac, char **argv, char **env)
 {
     (void)ac;
     (void)argv;
-	minishell(env);
+	if (minishell(env))
+		return (1);
 	return (0);
 }
 
