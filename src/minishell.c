@@ -6,7 +6,7 @@
 
 void	minishell(char **env)
 {
-	t_command command;
+	t_cmd	*command;
 
 	while (1)
     {

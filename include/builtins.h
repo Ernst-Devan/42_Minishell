@@ -4,6 +4,6 @@
 
 #include "parsing.h"
 
-int	ms_cd(t_command command);
+int	ms_cd(t_cmd command);
 
 #endif

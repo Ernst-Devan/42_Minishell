@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/07 17:48:25 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:56:24 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "libft.h"
 #include "exec.h"
 
-int	exec_src_bin(t_command command)
+int	exec_src_bin(t_cmd command)
 {
 	pid_t	pid;
 
@@ -41,7 +41,7 @@ int	exec_src_bin(t_command command)
 	return (0);
 }
 
-int	exec(t_command *command)
+int	exec(t_cmd *command)
 {
 	if (command[1].path)
 		ms_pipe(command);

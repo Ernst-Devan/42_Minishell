@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/04 17:32:47 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:57:04 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "parsing.h"
 
-int	ms_cd(t_command command)
+int	ms_cd(t_cmd command)
 {
 	if (chdir(command.args[0]) == -1)
 	{
