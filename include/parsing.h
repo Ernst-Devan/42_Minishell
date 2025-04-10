@@ -12,15 +12,23 @@ typedef struct s_shell {
 } t_shell;
 
 typedef struct s_cmd {
-    size_t	type;
-    char	*path;
-    char	**args;
-    int		in;
-    int		out;
+	size_t	type;
+	char	*path;
+	char	**args;
+	int		in;
+	int		out;
 } t_cmd;
 
+typedef struct s_table
+{
+	int		in ;
+	int		out;
+	t_cmd	*cmds;
+} t_table;
+
+
 //Parsing.c 
-t_cmd		*parsing(char **env);
+t_table		parsing(char **env);
 
 //Init.c
 
