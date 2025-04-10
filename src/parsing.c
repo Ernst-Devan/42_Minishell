@@ -91,13 +91,16 @@ char	**tokenisation(char *input)
 }
 
 
-t_cmd *parsing(char **env)
+t_table parsing(char **env)
 {
-    t_cmd   *cmd;
+	t_table	table;
+    t_cmd	*cmd;
 	char	*path;
-    char    *input;
+    char	*input;
 
+	table = (t_table){0};
 	cmd = 0;
+
     input = readline("-> ");
 
     // Lexer return a str great writed
@@ -106,6 +109,7 @@ t_cmd *parsing(char **env)
 	path = find_env("PATH=", env);
     // Tokenisation splited the lexer string to token
 	insert_cmds(&cmd, tokenisation(input), path);
+	table.cmds = cmd;
 	free(input);
-    return (cmd);
+    return (table);
 }

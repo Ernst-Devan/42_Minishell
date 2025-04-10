@@ -14,9 +14,6 @@ CPPFLAGS = -lreadline
 SRCS		=	minishell.c \
 				parsing.c   \
 				init.c      \
-				exec.c 		\
-				ms_cd.c \
-				pipex.c \
 				utils.c		\
 				lexer.c		\
 				env.c		\
