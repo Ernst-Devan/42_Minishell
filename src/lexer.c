@@ -4,13 +4,24 @@
 #include "libft.h"
 
 
-int ft_strlen_c(char *str, char c)
+int ft_strlen_c(char *str, const char *delimiter)
 {
-    int i;
+    int	i;
+	int	j;
 
     i = 0;
-    while (str[i] && str[i] != c)
-        i++;
+	j = 0;
+    while (str[i])
+	{
+		while (delimiter[j])
+		{
+			if (delimiter[j] == str[i])
+				return(i);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
     return (i);
 }
 
@@ -21,7 +32,7 @@ char *replace_var(char *str, char **env)
     int     count;
 
     buffer = malloc((1024 * 4) * sizeof(char));
-    count = ft_strlen_c(str, ' ');
+    count = ft_strlen_c(str, " ");
     ft_strlcpy(buffer, str + 1, count);
     variable = find_env(buffer, env);
 	if (!variable)
@@ -49,7 +60,7 @@ char *replace_env_variable(char *input, char **env)
     {
         if (input[i] == '$')
         {
-            count = ft_strlen_c(&input[i], ' ');
+            count = ft_strlen_c(&input[i], " ");
             variable = replace_var(&input[i], env);
             buffer = ft_strjoin(buffer, variable);
             j += ft_strlen(variable);
@@ -96,7 +107,15 @@ char    *lexer(char *input, char **env)
     {
         if (check_delimiter(input[a]) == 1)
         {
-            if (buffer[i - 1] == ':' && input[a] == ' ')
+			if (input[a] == '<' || input[a] == '>')
+			{
+				buffer[i] = input[a];
+				a++;
+				i++;
+				while (input[a] == ' ')
+					a++;
+			}
+			else if (buffer[i - 1] == ':' && input[a] == ' ')
                 a++;
             else
             {
