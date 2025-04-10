@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/10 10:32:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/10 10:37:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	ms_pipe(t_cmd *command)
 		save_in = pipefd[0];
 		i++;
 	}
-	while(wait(NULL) > -1)
-	{}
+	while (wait(NULL) > -1)
+	{
+	}
 	return (0);
 }
