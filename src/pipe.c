@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/10 14:44:50 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:09:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	ms_pipe(t_table table)
 	int		in;
 	int		save_in;
 
-	table.in = 0; // ligne a del
-	table.out = 1; // ligne a del
 	i = 0;
 	save_in = table.in;
 	while (table.cmds[i].path)
