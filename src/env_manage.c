@@ -1,58 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_manage.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/14 11:25:20 by njooris          ###   ########.fr       */
+/*   Created: 2025/04/11 15:59:09 by njooris           #+#    #+#             */
+/*   Updated: 2025/04/11 16:07:47 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//! Secure if the env is empty
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "libft.h"
 
-char *find_env(char *str, char **env)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = ft_strlen(str);
-	while (env[i])
-    {
-		if (ft_strncmp(str, env[i], count) == 0)
-			return (env[i] + count + 1);
-		i++;
-    }
-	return (NULL);
-}
-
-int		can_print_env(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '=')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	print_env(char **env)
+int	nb_col_env(char **env)
 {
 	int	i;
 
 	i = 0;
 	while (env[i])
+		i++;
+	return (i);
+}
+
+void	set_env_null(char **env, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
 	{
-		if (can_print_env(env[i]))
-			printf("%s\n", env[i]);
+		env[i] = NULL;
 		i++;
 	}
+}
+
+int	new_env(char **env)
+{
+	char	**temp;
+	int		i;
+	int	size_env;
+	int	nb_row;
+
+	nb_row = size_of_env(env);
+	temp = malloc(nb_row + 1);
+	if (!temp)
+		return (1);
+	set_env_null(temp, nb_row);
+	i = 0;
+	while (i < nb_row)
+	{
+		temp[i] = ft_strdup(env[i]);
+		if (!temp[i])
+		{
+			free_lstr(temp);
+			return (1);
+		}
+		i++; 
+	}
+	return (0);
 }

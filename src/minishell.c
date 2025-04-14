@@ -11,7 +11,7 @@ int	minishell(char **env)
 	while (1)
     {
 		table = parsing(env);
-		if(exec(table))
+		if(exec(table, env))
 		{
 			// fonction qui free tout
 			return (1);
