@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 11:02:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/15 11:30:13 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "exec.h"
 #include "libft.h"
 #include "env_manage.h"
+#include "builtins.h"
 
 int	var_env_len(char *str)
 {

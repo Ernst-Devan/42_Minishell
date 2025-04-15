@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 11:11:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/15 11:45:22 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,19 @@ int	exec_bin(t_table table)
 	return (0);
 }
 
+int	exec_builtins(t_table table, char ***env)
+{
+	export(table, env);
+	return (0);
+}
+
 int	exec(t_table table, char ***env)
 {
-	if(export(table, env))
-		return (1);
-	// (void)env;
-	// if (table.cmds[1].path)
-	// 	return (ms_pipe(table));
-	// else if (ft_strncmp(table.cmds->path, "cd", 2) == 0)
-	// 	return (ms_cd(*table.cmds));
-	// else
-	// 	return (exec_bin(table));
+	if (table.cmds[1].path)
+		return (ms_pipe(table));
+	else if (table.cmds->type == 0)
+		return (exec_bin(table));
+	else if (table.cmds->type == 1)
+		return (exec_builtins(table, env));
 	return (0);
 }

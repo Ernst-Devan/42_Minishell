@@ -16,7 +16,6 @@ int	minishell(char **env)
 		return(1);
 	while (1)
     {
-		print_env(ms_env);
 		table = parsing(ms_env);
 		if (exec(table, &ms_env))
 		{
