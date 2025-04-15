@@ -11,12 +11,14 @@ void free_lstr(char **lstr)
 	}
 	free(lstr);
 }
+
  
 void	free_cmds(t_cmd *cmd)
 {
 		free(cmd->path);
 		free_lstr(cmd->args);
 }
+
 
 void	free_table(t_table *table)
 {
