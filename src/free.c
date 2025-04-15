@@ -18,7 +18,7 @@ void free_lstr(char **lstr)
 		free(lstr);
 	}
 }
-
+ 
 void	free_cmds(t_cmd *cmd)
 {
 	size_t	i;
