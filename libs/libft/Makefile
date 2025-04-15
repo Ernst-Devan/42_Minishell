@@ -187,9 +187,8 @@ $(BIN_D):
 	mkdir -p $(BIN_D)
 
 .PHONY: debug
-debug: $(OBJS) | $(BIN_D)
-	$(CC) $(OBJS) $(CFLAGS) -g -o $(BIN_D)a.out
-	cd bin && ./a.out
+debug:
+	$(MAKE) CFLAGS="-g3"
 
 .PHONY: clean
 clean: 

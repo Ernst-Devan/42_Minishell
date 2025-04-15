@@ -1,28 +1,45 @@
 // DONT FORGET TO ADD THE HEADER
 
 #include "parsing.h"
+#include "libft.h"
 
 void free_lstr(char **lstr)
 {
-	while (*lstr)
+	size_t	i;
+
+	i = 0;
+	if (lstr)
 	{
-		free(*lstr);
-		lstr++;
+		while (lstr[i])
+		{
+			free(lstr[i]);
+			i++;
+		}
+		free(lstr);
 	}
-	free(lstr);
 }
 
 void	free_cmds(t_cmd *cmd)
 {
-		free(cmd->path);
-		free_lstr(cmd->args);
+	size_t	i;
+
+	i = 0;
+	if (cmd)
+	{
+		while (cmd[i].path)
+		{
+			free(cmd[i].path);
+			free_lstr(cmd[i].args);
+			i++;
+		}
+	}
 }
 
-void	free_table(t_table *table)
+void	free_table(t_table table)
 {
-	if (table->cmds)
+	if (table.cmds)
 	{
-		free_cmds(table->cmds);
+		free_cmds(table.cmds);
+		free(table.cmds);
 	}
-	free(table->cmds);
 }

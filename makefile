@@ -11,16 +11,19 @@ CPPFLAGS = -lreadline
 # Main Directories - Paths
 # =======================================
 
-SRCS		=	minishell.c \
-				parsing.c   \
-				init.c      \
-				utils.c		\
-				lexer.c		\
-				env.c		\
-				error.c		\
-				pipe.c		\
-				exec.c		\
-				ms_cd.c		\
+SRCS		=	minishell.c		\
+				parsing.c		\
+				redirection.c	\
+				init.c			\
+				utils.c			\
+				lexer.c			\
+				env.c			\
+				error.c			\
+				pipe.c			\
+				exec.c			\
+				ms_cd.c			\
+				check.c			\
+				free.c			\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
@@ -59,7 +62,8 @@ fclean: clean
 	$(MAKE) fclean -C libs/libft
 
 .PHONY: debug
-debug:
+debug: fclean
+	$(MAKE) debug -C libs/libft
 	$(MAKE) CCFLAGS="-g3"
 
 .PHONY: re
