@@ -6,5 +6,6 @@
 
 char	**new_env(char **env);
 int		size_of_env(char **env);
+void	print_env(char **env);
 
 #endif

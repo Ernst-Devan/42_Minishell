@@ -4,26 +4,10 @@
 #include "libft.h"
 
 
-int ft_strlen_c(char *str, const char *delimiter)
-{
-    int	i;
-	int	j;
 
-    i = 0;
-	j = 0;
-    while (str[i])
-	{
-		while (delimiter[j])
-		{
-			if (delimiter[j] == str[i])
-				return(i);
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-    return (i);
-}
+// $PWD= work also he must dont work
+// Many VARIABLE ALSO BUG IN THE MIDDLE
+
 
 char *replace_var(char *str, char **env)
 {
@@ -40,9 +24,6 @@ char *replace_var(char *str, char **env)
     free(buffer);
     return (variable);
 }
-
-// $PWD= work also he must dont work
-// Many VARIABLE ALSO BUG IN THE MIDDLE
 
 char *replace_env_variable(char *input, char **env)
 {
@@ -75,72 +56,70 @@ char *replace_env_variable(char *input, char **env)
     return (buffer);
 } 
 
-size_t check_delimiter(char c)
-{
-    char delimiter[7] = {" <>|-&\0"};
-    int i;
-
-    i = 0;
-    while (delimiter[i])
-    {
-        if (c == delimiter[i])
-            return (1);
-        i++;
-    }
-    return (0);
-}
-
-
 // Not needed to use ':' We can just use space 
 
-char    *lexer(char *input, char **env)
-{
-    char *buffer;  
-    int i;
-    int a;
 
-    i = 0;
-    a = 0;
-    input = replace_env_variable(input, env);
-    buffer = malloc((ft_strlen(input) * 2) * sizeof(char));
-    while (input[a])
-    {
-        if (check_delimiter(input[a]) == 1)
-        {
-			if (input[a] == '<' || input[a] == '>')
-			{
-				buffer[i] = input[a];
-				a++;
-				i++;
-				while (input[a] == ' ')
-					a++;
-			}
-			else if (buffer[i - 1] == ':' && input[a] == ' ')
-                a++;
-            else
-            {
-                if (buffer[i - 1] != ':')
-                {
-                    buffer[i] = ':';
-                    i++;
-                }
-                if (input[a] != ' ')
-                {
-                    buffer[i] = input[a];
-                    i++;
-                    a++;
-                }
-            }
-        }
-        else 
-        {
-            buffer[i] = input[a];
-            i++;
-            a++;
-        }
-    }
-    buffer[i] = '\0';
-    free(input);
-    return (buffer);
+char	*skip_characters(char *input, char c)
+{
+	while (*input == c && *input)
+		input++;
+	return (input);
 }
 
+char	*check_redirection(char *input, char *buffer, int *i)
+{
+	if (*input == '<' || *input == '>')
+	{
+		buffer[*i] = *input;
+		(*i)++;
+		input++;
+		input = skip_characters(input, ' ');
+		while (*input && check_delimiter(*input)!= 1)
+		{
+			buffer[*i] = *input;
+			(*i)++;
+			input++;
+		}
+		input = skip_characters(input, ' ');
+		buffer[*i] = ':';
+		(*i)++;
+	}
+	return (input);
+}
+
+char	*lexer(char *input, char **env)
+{
+	char	*buffer;
+	char	*input_adress;
+	int		i;
+
+	(void)env;
+	input_adress = input;
+	i = 0;
+
+	buffer = malloc(((ft_strlen(input) + 1) * 5) * sizeof(char));
+	//Protect Malloc!!
+
+	input = skip_characters(input, ' ');
+	while(*input)
+	{
+		if (check_delimiter(*input) == 1)
+		{	
+			buffer[i++] = ':';
+			input = skip_characters(input, ' ');
+			input = check_redirection(input, buffer, &i);
+			if (check_delimiter(*input) == 1)
+			{
+				input = check_redirection(input, buffer, &i);
+				buffer[i++] = *input++;
+				buffer[i++] = ':';
+				input = skip_characters(input, ' ');
+			}
+		}
+		else
+			buffer[i++] = *input++;
+	}
+	buffer[i] = '\0';
+	free(input_adress);
+	return (buffer);
+}
