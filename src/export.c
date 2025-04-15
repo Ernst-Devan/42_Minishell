@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/14 10:59:05 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/15 11:02:13 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 #include "parsing.h"
 #include "exec.h"
 #include "libft.h"
+#include "env_manage.h"
 
 int	var_env_len(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] != '=' && str[i] != '\0')
+	while (str && str[i] != '=' && str[i] != '\0')
 		i++;
 	return (i);
 }
@@ -32,31 +33,30 @@ int	find_env_variable(char **env, char *str)
 
 	len = var_env_len(str) + 1;
 	i = 0;
-	while (env[i])
+	while (env && env[i])
 	{
-		if (!ft_strncmp(env[i], env, len))
+		if (!ft_strncmp(env[i], str, len))
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-int	add_variable_env(char **env, char *data)
+int	add_variable_env(char ***env, char *data)
 {
 	char	**temp;
 	int		i;
-	int	size_env;
 	int	nb_row;
 
-	nb_row = size_of_env(env) + 1;
-	temp = malloc(nb_row + 1);
+	nb_row = size_of_env(*env);
+	temp = malloc(sizeof(char *) * (nb_row + 2));
 	if (!temp)
 		return (1);
-	set_env_null(temp, nb_row);
+	temp[nb_row + 1] = NULL;
 	i = 0;
 	while (i < nb_row)
 	{
-		temp[i] = ft_strdup(env[i]);
+		temp[i] = ft_strdup((*env)[i]);
 		if (!temp[i])
 		{
 			free_lstr(temp);
@@ -64,33 +64,31 @@ int	add_variable_env(char **env, char *data)
 		}
 		i++; 
 	}
-	free_lstr(env);
+	free_lstr(*env);
 	temp[i] = data;
-	env = temp;
+	*env = temp;
 	return (0);
 }
 
-int	edit_variable_env(char **env, char *data)
+int	edit_variable_env(char ***env, char *data)
 {
 	int	i;
-	int	j;
 
-	i = find_env_variable(env, data);
-	free(env[i]);
-	env[i] = data;
+	i = find_env_variable(*env, data);
+	free((*env)[i]);
+	(*env)[i] = data;
 	return (0);
 }
 
-int	export(t_table table, char **env)
+int	export(t_table table, char ***env)
 {
 	int	len;
 	int	check;
-
-	len = var_env_len(table.cmds->args);
-	check = find_env_variable(env, table.cmds->args);
+	len = var_env_len(table.cmds->args[1]);
+	check = find_env_variable(*env, table.cmds->args[1]);
 	if (check == -1)
-		add_variable_env(env, table.cmds->args);
-	else if (table.cmds->args[len] == '=')
-		edit_variable_env(env, table.cmds->args);
+	 	return (add_variable_env(env, table.cmds->args[1]));
+	else if (table.cmds->args[1][len] == '=')
+	 	edit_variable_env(env, table.cmds->args[1]);
 	return (0);
 }

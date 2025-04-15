@@ -4,6 +4,7 @@
 
 #include "parsing.h"
 
-int	new_env(char **env);
+char	**new_env(char **env);
+int		size_of_env(char **env);
 
 #endif

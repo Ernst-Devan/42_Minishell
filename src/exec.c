@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/11 16:03:57 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/15 11:11:40 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ int	exec_bin(t_table table)
 	return (0);
 }
 
-int	exec(t_table table, char **env)
+int	exec(t_table table, char ***env)
 {
-	return (export(table, env));
+	if(export(table, env))
+		return (1);
 	// (void)env;
 	// if (table.cmds[1].path)
 	// 	return (ms_pipe(table));
@@ -48,4 +49,5 @@ int	exec(t_table table, char **env)
 	// 	return (ms_cd(*table.cmds));
 	// else
 	// 	return (exec_bin(table));
+	return (0);
 }

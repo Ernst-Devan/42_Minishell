@@ -23,6 +23,7 @@ SRCS		=	minishell.c \
 				ms_cd.c		\
 				export.c	\
 				env_manage.c\
+				free.c 		\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)

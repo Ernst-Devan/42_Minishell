@@ -38,6 +38,9 @@ char		*find_env(char *str, char **env);
 //Utils.c 
 void		display_table(t_table table);
 int			count_lstr(char **list_str);
+void		free_lstr(char **lstr);
+void		print_env(char **env);
+
 
 //Lexer.c
 size_t		check_delimter(char c);

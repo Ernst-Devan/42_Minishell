@@ -6,15 +6,16 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:59:09 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/11 16:07:47 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:04:44 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "parsing.h"
 #include "libft.h"
 
-int	nb_col_env(char **env)
+int	size_of_env(char **env)
 {
 	int	i;
 
@@ -24,30 +25,17 @@ int	nb_col_env(char **env)
 	return (i);
 }
 
-void	set_env_null(char **env, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size)
-	{
-		env[i] = NULL;
-		i++;
-	}
-}
-
-int	new_env(char **env)
+char **new_env(char **env)
 {
 	char	**temp;
 	int		i;
-	int	size_env;
-	int	nb_row;
+	int		nb_row;
 
 	nb_row = size_of_env(env);
-	temp = malloc(nb_row + 1);
+	temp = malloc(sizeof(char *) * (nb_row + 1));
 	if (!temp)
-		return (1);
-	set_env_null(temp, nb_row);
+		return (NULL);
+	temp[nb_row] = NULL;
 	i = 0;
 	while (i < nb_row)
 	{
@@ -55,9 +43,9 @@ int	new_env(char **env)
 		if (!temp[i])
 		{
 			free_lstr(temp);
-			return (1);
+			return (NULL);
 		}
 		i++; 
 	}
-	return (0);
+	return (temp);
 }

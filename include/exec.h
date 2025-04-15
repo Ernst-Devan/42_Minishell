@@ -18,9 +18,9 @@ int	exec_bin(t_table table);
  * @param table A table struct that contains the path and the command(s) / bin(s) used to execute the code.
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
-int	exec(t_table table, char **env);
+int	exec(t_table table, char ***env);
 
-int	export(t_table table, char **env);
+int	export(t_table table, char ***env);
 
 
 #endif

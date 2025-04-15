@@ -6,13 +6,14 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/14 11:25:20 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:06:12 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //! Secure if the env is empty
 
 #include "libft.h"
+#include <stdio.h>
 
 char *find_env(char *str, char **env)
 {
@@ -51,7 +52,7 @@ void	print_env(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (can_print_env(env[i]))
+		if (!can_print_env(env[i]))
 			printf("%s\n", env[i]);
 		i++;
 	}
