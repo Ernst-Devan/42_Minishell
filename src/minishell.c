@@ -10,6 +10,7 @@ int	minishell(char **env)
 {
 	t_table table;
 	char	**ms_env;
+	int		val_return;
 
 	ms_env = new_env(env);
 	if (!ms_env)
@@ -17,7 +18,8 @@ int	minishell(char **env)
 	while (1)
     {
 		table = parsing(ms_env);
-		if (exec(table, &ms_env))
+		val_return = exec(table, &ms_env);
+		if (val_return || val_return == -1)
 		{
 			// fonction qui free tout
 			return (1);

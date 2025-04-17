@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 13:11:31 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:10:41 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "libft.h"
 #include "exec.h"
 #include "pipe.h"
+#include "env_manage.h"
 
 int	exec_bin(t_table table)
 {
@@ -38,19 +39,27 @@ int	exec_bin(t_table table)
 	return (0);
 }
 
-int	exec_builtins(t_table table, char ***env)
+int	exec_builtins(t_cmd cmd, char ***env)
 {
-	export(table, env);
+	int	len;
+
+	len = ft_strlen(cmd.args[0]);
+	if (!ft_strncmp("export", cmd.args[0], len + 1))
+		export(cmd, env);
+	else if (!ft_strncmp("env", cmd.args[0], len + 1))
+	 	print_env(*env);
 	return (0);
 }
 
 int	exec(t_table table, char ***env)
 {
+	if (!ft_strncmp("env",  table.cmds[1].args[0], ft_strlen(table.cmds[1].args[0]) + 1))
+		table.cmds[1].type = 1;
 	if (table.cmds[1].path)
-		return (ms_pipe(table));
+		return (ms_pipe(table, env));
 	else if (table.cmds->type == 0)
 		return (exec_bin(table));
 	else if (table.cmds->type == 1)
-		return (exec_builtins(table, env));
+		return (exec_builtins(table.cmds[0], env));
 	return (0);
 }

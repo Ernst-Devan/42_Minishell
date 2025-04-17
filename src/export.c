@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 11:30:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/15 14:40:38 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,20 @@ int	edit_variable_env(char ***env, char *data)
 	return (0);
 }
 
-int	export(t_table table, char ***env)
+int	export(t_cmd cmd, char ***env)
 {
 	int	len;
 	int	check;
-	len = var_env_len(table.cmds->args[1]);
-	check = find_env_variable(*env, table.cmds->args[1]);
+	if (!cmd.args[1])
+	{
+		printf("Export need param\n");
+		return (0);
+	}
+	len = var_env_len(cmd.args[1]);
+	check = find_env_variable(*env, cmd.args[1]);
 	if (check == -1)
-	 	return (add_variable_env(env, table.cmds->args[1]));
-	else if (table.cmds->args[1][len] == '=')
-	 	edit_variable_env(env, table.cmds->args[1]);
+	 	return (add_variable_env(env, cmd.args[1]));
+	else if (cmd.args[1][len] == '=')
+	 	edit_variable_env(env, cmd.args[1]);
 	return (0);
 }

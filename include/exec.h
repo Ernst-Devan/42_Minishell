@@ -20,7 +20,8 @@ int	exec_bin(t_table table);
  */
 int	exec(t_table table, char ***env);
 
-int	export(t_table table, char ***env);
+int	export(t_cmd cmd, char ***env);
 
+int	exec_builtins(t_cmd cmd, char ***env);
 
 #endif
