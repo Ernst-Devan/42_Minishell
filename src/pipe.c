@@ -47,15 +47,15 @@ int	ms_pipe(t_table table)
 	int		save_in;
 
 	i = 0;
-	save_in = table.in;
+	//save_in = table.in;
 	while (table.cmds[i].path)
 	{
 		if (i == 0)
-			in = table.in;
+			//in = table.in;
 		if (pipe(pipefd) == -1 && table.cmds[i + 1].path)
 			return (perror("pipe error"), 1);
 		if (!table.cmds[i + 1].path)
-			pipefd[1] = table.out;
+			//pipefd[1] = table.out;
 		in = save_in;
 		if (use_pipe(table.cmds[i], in, pipefd))
 			return (1);

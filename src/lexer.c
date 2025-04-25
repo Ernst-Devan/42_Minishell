@@ -1,120 +1,134 @@
-// DONT FORGOT TO ADD THE HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 11:13:07 by dernst            #+#    #+#             */
+/*   Updated: 2025/04/22 11:13:55 by dernst           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "parsing.h"
 #include "libft.h"
+#include "parsing.h"
+#include <readline/readline.h>
+#include <stddef.h>
 
+// $$ SEGFAULT
 
+char *replace_var(char *str, char **env) {
+	char *variable;
+	char *buffer;
 
-// $PWD= work also he must dont work
-// Many VARIABLE ALSO BUG IN THE MIDDLE
-
-
-char *replace_var(char *str, char **env)
-{
-    char    *buffer;
-    char    *variable;
-    int     count;
-
-    buffer = malloc((1024 * 4) * sizeof(char));
-    count = ft_strlen_c(str, " ");
-    ft_strlcpy(buffer, str + 1, count);
-    variable = find_env(buffer, env);
+	variable = find_env(str, env);
 	if (!variable)
 		return ("\0");
-    free(buffer);
-    return (variable);
+	buffer = ft_strdup(variable);
+	if (!buffer)
+		return ("\0");
+	return (buffer);
 }
 
-char *replace_env_variable(char *input, char **env)
-{
-    char    *buffer;
-    char    *variable;
-    int     count;
-    int     i;
-    int     j;
+char **insert_list_env(char *input, char **env) {
+  char **list_env;
+  char temp[ENV_MAX];
+  char *variable;
+  size_t count_env;
+  size_t i;
+  size_t increase;
 
-    buffer = malloc((1024 * 4) * sizeof(char));
-    i = 0;
-    j = 0;
-    count = 0;
-    while (input[i])
-    {
-        if (input[i] == '$')
-        {
-            count = ft_strlen_c(&input[i], " ");
-            variable = replace_var(&input[i], env);
-            buffer = ft_strjoin(buffer, variable);
-            j += ft_strlen(variable);
-            i += count;
-        }
-        buffer[j] = input[i];
-        j++;
-        i++;
+  count_env = count_characters(input, "$");
+  list_env = malloc((count_env + 1) * sizeof(char *));
+  if (!list_env)
+    return (NULL);
+  i = 0;
+
+  while (i < count_env) {
+    input = ft_strchr(input, '$');
+    input++;
+    increase = ft_strccpy(temp, input, ' ');
+    input += increase;
+	ft_strlcat(temp, "=" , ENV_MAX);
+    variable = replace_var(temp, env);
+	list_env[i] = ft_strdup(variable);
+    ft_strlcpy(temp, "\0", 1);
+    i++;
+  }
+  list_env[i] = NULL;
+  return (list_env);
+}
+
+// Not needed to use ':' We can just use space
+
+char *skip_characters(char *input, char c) {
+  while (*input == c && *input)
+    input++;
+  return (input);
+}
+
+char *check_redirection(char *input, char *buffer, size_t *i) {
+  input = skip_characters(input, ' ');
+  if (*input == '<' || *input == '>') {
+    buffer[*i] = *input;
+    (*i)++;
+    input++;
+    input = skip_characters(input, ' ');
+    while (*input && check_delimiter(*input, DELIMITER) != 1) {
+      buffer[*i] = *input;
+      (*i)++;
+      input++;
     }
-    buffer[j] = '\0';
-    free(input);
-    return (buffer);
-} 
-
-// Not needed to use ':' We can just use space 
-
-
-char	*skip_characters(char *input, char c)
-{
-	while (*input == c && *input)
-		input++;
-	return (input);
+    buffer[*i] = ':';
+    (*i)++;
+  }
+  return (input);
 }
 
-char	*check_redirection(char *input, char *buffer, int *i)
+void	check_var_env(char **list_env,char *buffer, size_t *i, size_t *j, size_t buffer_size)
 {
-	if (*input == '<' || *input == '>')
-	{
-		buffer[*i] = *input;
-		(*i)++;
-		input++;
-		input = skip_characters(input, ' ');
-		while (*input && check_delimiter(*input)!= 1)
-		{
-			buffer[*i] = *input;
-			(*i)++;
-			input++;
-		}
-		input = skip_characters(input, ' ');
-		buffer[*i] = ':';
-		(*i)++;
-	}
-	return (input);
+	buffer[*i] = '\0';
+	ft_strlcat(buffer, list_env[*j], buffer_size);
+	*i += ft_strlen(list_env[*j]);
+	*j += 1;
 }
 
-char	*lexer(char *input, char **env)
+char *lexer(char *input, char **env) 
 {
+	char	**list_env;
 	char	*buffer;
 	char	*input_adress;
-	int		i;
+	size_t	i;
+	size_t	j;
+	size_t	buffer_size;
 
-	(void)env;
-	input_adress = input;
+	list_env = insert_list_env(input, env);
+	buffer_size = lstrlen(list_env) + ft_strlen(input) + count_characters(input, DELIMITER) * 2 + 1;
 	i = 0;
-
-	buffer = malloc(((ft_strlen(input) + 1) * 5) * sizeof(char));
-	//Protect Malloc!!
-
+	j = 0;
+	buffer = malloc(buffer_size * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	input_adress = input;
 	input = skip_characters(input, ' ');
-	while(*input)
+	while (*input) 
 	{
-		if (check_delimiter(*input) == 1)
-		{	
+		if (*input == '$')
+		{
+			input += ft_strlen_c(input, " ");
+			check_var_env(list_env, buffer, &i,&j, buffer_size);
+		}
+		if (*input == '\0')
+			break;
+		if (check_delimiter(*input, "<>| ") == 1)
+		{
 			buffer[i++] = ':';
 			input = skip_characters(input, ' ');
-			input = check_redirection(input, buffer, &i);
-			if (check_delimiter(*input) == 1)
-			{
-				input = check_redirection(input, buffer, &i);
+			while(check_delimiter(*input, "<>|") == 1)
 				buffer[i++] = *input++;
+			if (buffer[i - 1] != ':')
 				buffer[i++] = ':';
-				input = skip_characters(input, ' ');
-			}
+			input = skip_characters(input, ' ');
 		}
 		else
 			buffer[i++] = *input++;
