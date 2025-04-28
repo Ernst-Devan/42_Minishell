@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/28 11:32:59 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:06:02 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	exec_builtins(t_cmd cmd, char ***env)
 	 	print_env(*env);
 	else if (!ft_strncmp("cd", cmd.args[0], len + 1))
 	 	cd(cmd, env);
+	else if (!ft_strncmp("echo", cmd.args[0], len + 1))
+	 	echo(cmd);
 	return (0);
 }
 
