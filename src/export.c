@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 14:40:38 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/22 11:54:18 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	find_env_variable(char **env, char *str)
 	i = 0;
 	while (env && env[i])
 	{
-		if (!ft_strncmp(env[i], str, len))
+		if (ft_strncmp(env[i], str, len) == 0)
 			return (i);
 		i++;
 	}

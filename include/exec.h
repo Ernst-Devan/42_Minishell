@@ -21,6 +21,11 @@ int	exec_bin(t_table table);
 int	exec(t_table table, char ***env);
 
 int	export(t_cmd cmd, char ***env);
+int	find_env_variable(char **env, char *str);
+int	edit_variable_env(char ***env, char *data);
+int	add_variable_env(char ***env, char *data);
+
+int	cd(t_cmd cmd, char ***env);
 
 int	exec_builtins(t_cmd cmd, char ***env);
 
