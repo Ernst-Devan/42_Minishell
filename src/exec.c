@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/28 11:19:17 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/28 11:32:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	exec_bin(t_table table)
 		return (perror("pid faild on exec_src_bin"), 1);
 	if (pid == 0)
 	{
-		if(dup2(table.in, STDIN_FILENO) == -1 || dup2(table.out, STDOUT_FILENO) == -1)
+		if(dup2(table.cmds->in, STDIN_FILENO) == -1 || dup2(table.cmds->out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
 		if (execve(table.cmds->path, table.cmds->args, NULL) == -1)
 			return (perror("execve faild on exec_src_bin"), 1);
@@ -55,7 +55,7 @@ int	exec_builtins(t_cmd cmd, char ***env)
 
 int	exec(t_table table, char ***env)
 {
-	if (table.cmds[1].path)
+	if (table.cmd_len > 1)
 		return (ms_pipe(table, env));
 	else if (table.cmds->type == 0)
 		return (exec_bin(table));
