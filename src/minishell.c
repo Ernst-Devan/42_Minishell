@@ -1,10 +1,9 @@
 
 #include "minishell.h"
-#include "parsing.h"
-#include "exec.h"
-#include "libft.h"
 #include "env_manage.h"
-#include <stdio.h>
+#include "libft.h"
+#include "exec.h"
+#include "parsing.h"
 
 int	minishell(char **env)
 {
@@ -29,12 +28,10 @@ int	minishell(char **env)
 	return (0);
 }
 
-int main(int ac, char **argv, char **env)
-{
-    (void)ac;
-    (void)argv;
-	if (minishell(env))
-		return (1);
-	return (0);
+int main(int ac, char **argv, char **env) {
+  (void)ac;
+  (void)argv;
+  if (minishell(env))
+    return (1);
+  return (0);
 }
-

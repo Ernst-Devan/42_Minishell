@@ -3,7 +3,7 @@
 # =======================================
 
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra
+CCFLAGS		?=	-Wall -Werror -Wextra
 CPPFLAGS	=  $(INCLUDES_D)
 NAME		=	libft.a
 

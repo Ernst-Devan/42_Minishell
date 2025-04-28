@@ -11,22 +11,22 @@ CPPFLAGS = -lreadline
 # Main Directories - Paths
 # =======================================
 
-SRCS		=	minishell.c		\
-				parsing.c		\
-				redirection.c	\
-				init.c			\
-				utils.c			\
-				lexer.c			\
+SRCS		=	minishell.c \
+				parsing.c   \
+				init.c      \
+				exec.c 		\
+				ms_cd.c 	\
+				check.c		\
+				env_manage.c \
+				free.c		\
+				lexer.c		\
+				redirection.c \
 				env.c			\
 				error.c			\
+				export.c		\
+				parser.c		\
 				pipe.c			\
-				exec.c			\
-				ms_cd.c			\
-				check.c			\
-				free.c			\
-				env_manage.c 	\
-				export.c 		\
-				
+				utils.c			\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
@@ -65,9 +65,24 @@ fclean: clean
 	$(MAKE) fclean -C libs/libft
 
 .PHONY: debug
-debug: fclean
-	$(MAKE) debug -C libs/libft
+debug:
+	@if ! readelf --debug-dump=info obj/init.o | grep -q "Version"; then \
+		$(MAKE) fclean; \
+		$(MAKE) debug -C libs/libft; \
+	fi
 	$(MAKE) CCFLAGS="-g3"
+	bash -c "echo -en '\033c\033[3J'"
+	bash -c "valgrind --leak-check=full ./minishell"
+	
+.PHONY: debuga 
+debuga:
+	@if ! readelf --debug-dump=info obj/init.o | grep -q "Version"; then \
+		$(MAKE) fclean; \
+		$(MAKE) debug -C libs/libft; \
+	fi
+	$(MAKE) CCFLAGS="-g3"
+	bash -c "echo -en '\033c\033[3J'"
+	bash -c "valgrind --leak-check=full --track-fds=yes --trace-children=yes ./minishell"
 
 .PHONY: re
 re:	fclean all
