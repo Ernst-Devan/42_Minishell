@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/28 15:06:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/29 11:22:21 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ int	exec_builtins(t_cmd cmd, char ***env)
 	 	cd(cmd, env);
 	else if (!ft_strncmp("echo", cmd.args[0], len + 1))
 	 	echo(cmd);
+	else if(!ft_strncmp("pwd", cmd.args[0], len + 1))
+		pwd(cmd, *env);
+	else if(!ft_strncmp("unset", cmd.args[0], len + 1))
+		unset(cmd, env);
 	return (0);
 }
 

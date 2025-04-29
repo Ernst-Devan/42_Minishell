@@ -27,6 +27,8 @@ int	add_variable_env(char ***env, char *data);
 
 int	cd(t_cmd cmd, char ***env);
 int	echo(t_cmd command);
+int	pwd(t_cmd cmd, char **env);
+int	unset(t_cmd cmd, char ***env);
 
 int	exec_builtins(t_cmd cmd, char ***env);
 
