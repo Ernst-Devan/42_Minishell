@@ -12,11 +12,12 @@
 
 #include "parsing.h"
 #include <stddef.h>
+#include <stdlib.h>
 #include "libft.h"
 
 int insert_cmds(t_cmd *cmd, char **list_cmds, char *path) 
 {
-	int	i;
+	size_t	i;
 	size_t	type;
 	char	**args;
 	char	*path_command;
@@ -30,9 +31,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 			return (1);
 		cmd[i].args = args;
 		if (!args[0])
-		{
 			break;
-		}
 		path_command = valid_command(path, args[0], &type);
 		cmd[i].path = path_command;
 		if (!path_command)

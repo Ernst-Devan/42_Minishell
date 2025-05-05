@@ -27,7 +27,8 @@ SRCS		=	minishell.c \
 				parser.c		\
 				pipe.c			\
 				utils.c			\
-
+				quotes.c		\
+				
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
 SRC_D		=	src/

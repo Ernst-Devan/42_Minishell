@@ -64,6 +64,10 @@ char	*valid_command(char *path, char *command, size_t *type);
 void	manage_redirection(t_cmd *cmd, char **split_cmd);
 char	*ft_ignore_str(char *str, char *ignore);
 
+//Quotes.c
+size_t	inside_quote(char c, char *quote);
+char	*skip_space(char *input);
+
 // Lexer.c
 char *lexer(char *input, char **env);
 

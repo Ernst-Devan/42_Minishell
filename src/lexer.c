@@ -15,8 +15,6 @@
 #include <readline/readline.h>
 #include <stddef.h>
 
-// $$ SEGFAULT
-
 char *replace_var(char *str, char **env) {
 	char *variable;
 	char *buffer;
@@ -59,8 +57,6 @@ char **insert_list_env(char *input, char **env) {
   return (list_env);
 }
 
-// Not needed to use ':' We can just use space
-
 char *skip_characters(char *input, char c) {
   while (*input == c && *input)
     input++;
@@ -95,43 +91,44 @@ void	check_var_env(char **list_env,char *buffer, size_t *i, size_t *j, size_t bu
 
 char *lexer(char *input, char **env) 
 {
-	char	**list_env;
 	char	*buffer;
 	char	*input_adress;
 	size_t	i;
-	size_t	j;
 	size_t	buffer_size;
+	char	quote;
+	(void)env;
 
-	list_env = insert_list_env(input, env);
-	buffer_size = lstrlen(list_env) + ft_strlen(input) + count_characters(input, DELIMITER) * 2 + 1;
+
+	quote = 0;
+	buffer_size = ft_strlen(input) + count_characters(input, DELIMITER) * 10 + 1;
 	i = 0;
-	j = 0;
 	buffer = malloc(buffer_size * sizeof(char));
 	if (!buffer)
 		return (NULL);
 	input_adress = input;
-	input = skip_characters(input, ' ');
-	while (*input) 
+	while (*input)
 	{
-		if (*input == '$')
+		if (inside_quote(*input, &quote) == 1)
 		{
-			input += ft_strlen_c(input, " ");
-			check_var_env(list_env, buffer, &i,&j, buffer_size);
-		}
-		if (*input == '\0')
-			break;
-		if (check_delimiter(*input, "<>| ") == 1)
-		{
-			buffer[i++] = ':';
-			input = skip_characters(input, ' ');
-			while(check_delimiter(*input, "<>|") == 1)
-				buffer[i++] = *input++;
-			if (buffer[i - 1] != ':')
-				buffer[i++] = ':';
-			input = skip_characters(input, ' ');
+			buffer[i++] = *input++;
 		}
 		else
-			buffer[i++] = *input++;
+		{
+			if (check_delimiter(*input, "<>| ") == 1)
+			{
+				if (*input == ' ')
+					input++;
+				buffer[i++] = ':';
+				while(check_delimiter(*input, "<>|") == 1)
+					buffer[i++] = *input++;
+				if (buffer[i - 1] != ':')
+					buffer[i++] = ':';
+				if (*input == ' ')
+					input++;
+			}
+			if (*input != '\'' && *input != '\"')
+				buffer[i++] = *input++;
+		}
 	}
 	buffer[i] = '\0';
 	free(input_adress);

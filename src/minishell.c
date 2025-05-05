@@ -14,7 +14,6 @@ int minishell(char **env) {
     return (1);
   while (1) {
     table = parsing(ms_env);
-    display_table(table);
 	//if (exec(table, &ms_env))
     //{
     // Free all the malloc

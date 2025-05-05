@@ -29,7 +29,7 @@ int	exec_bin(t_table table)
 		return (perror("pid faild on exec_src_bin"), 1);
 	if (pid == 0)
 	{
-		if(dup2(table.in, STDIN_FILENO) == -1 || dup2(table.out, STDOUT_FILENO) == -1)
+		//if(dup2(table.in, STDIN_FILENO) == -1 || dup2(table.out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
 		if (execve(table.cmds->path, table.cmds->args, NULL) == -1)
 			return (perror("execve faild on exec_src_bin"), 1);
