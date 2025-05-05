@@ -1,51 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_manage.c                                       :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/11 15:59:09 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 11:24:55 by njooris          ###   ########.fr       */
+/*   Created: 2025/04/28 15:02:38 by njooris           #+#    #+#             */
+/*   Updated: 2025/04/28 15:46:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "parsing.h"
+#include "exec.h"
 #include "libft.h"
 
-int	size_of_env(char **env)
+
+int	echo(t_cmd command)
 {
-	int	i;
-
-	i = 0;
-	while (env[i])
-		i++;
-	return (i);
-}
-
-char	**new_env(char **env)
-{
-	char	**temp;
-	int		i;
-	int		nb_row;
-
-	nb_row = size_of_env(env);
-	temp = malloc(sizeof(char *) * (nb_row + 1));
-	if (!temp)
-		return (NULL);
-	temp[nb_row] = NULL;
-	i = 0;
-	while (i < nb_row)
+	if (ft_strncmp("-n", command.args[1], 3) == 0)
 	{
-		temp[i] = ft_strdup(env[i]);
-		if (!temp[i])
-		{
-			free_lstr(temp);
-			return (NULL);
-		}
-		i++;
+		if (command.args[2])
+			printf("%s", command.args[2]);
 	}
-	return (temp);
+	else
+		printf("%s\n", command.args[1]);
+	return (0);
 }
+
+
+

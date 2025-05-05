@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/15 11:30:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/05 11:24:20 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	find_env_variable(char **env, char *str)
 	i = 0;
 	while (env && env[i])
 	{
-		if (!ft_strncmp(env[i], str, len))
+		if (ft_strncmp(env[i], str, len) == 0)
 			return (i);
 		i++;
 	}
@@ -47,7 +47,7 @@ int	add_variable_env(char ***env, char *data)
 {
 	char	**temp;
 	int		i;
-	int	nb_row;
+	int		nb_row;
 
 	nb_row = size_of_env(*env);
 	temp = malloc(sizeof(char *) * (nb_row + 2));
@@ -63,7 +63,7 @@ int	add_variable_env(char ***env, char *data)
 			free_lstr(temp);
 			return (1);
 		}
-		i++; 
+		i++;
 	}
 	free_lstr(*env);
 	temp[i] = data;
@@ -81,15 +81,31 @@ int	edit_variable_env(char ***env, char *data)
 	return (0);
 }
 
-int	export(t_table table, char ***env)
+int	export(t_cmd cmd, char ***env, t_shell *shell)
 {
 	int	len;
+	int	i;
 	int	check;
-	len = var_env_len(table.cmds->args[1]);
-	check = find_env_variable(*env, table.cmds->args[1]);
-	if (check == -1)
-	 	return (add_variable_env(env, table.cmds->args[1]));
-	else if (table.cmds->args[1][len] == '=')
-	 	edit_variable_env(env, table.cmds->args[1]);
+
+	if (!cmd.args[1] || ft_isdigit(cmd.args[1][0]))
+	{
+		shell->error_code = 1;
+		printf("Bad param(s)\n");
+		return (0);
+	}
+	i = 1;
+	while (cmd.args[i])
+	{
+		len = var_env_len(cmd.args[i]);
+		check = find_env_variable(*env, cmd.args[i]);
+		if (check == -1)
+		{
+			if (add_variable_env(env, cmd.args[i]))
+				return (1);
+		}
+		else if (cmd.args[i][len] == '=')
+			edit_variable_env(env, cmd.args[i]);
+		i++;
+	}
 	return (0);
 }

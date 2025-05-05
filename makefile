@@ -28,7 +28,13 @@ SRCS		=	minishell.c \
 				pipe.c			\
 				utils.c			\
 				quotes.c		\
-				
+				echo.c 			\
+				pwd.c			\
+				unset.c 		\
+				exit.c 			\
+				remove_cd.c     \
+				pwd_manage.c 	\
+
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
 SRC_D		=	src/
@@ -73,7 +79,7 @@ debug:
 	fi
 	$(MAKE) CCFLAGS="-g3"
 	bash -c "echo -en '\033c\033[3J'"
-	bash -c "valgrind --leak-check=full ./minishell"
+	bash -c "valgrind --leak-check=full --error-exitcode=0 ./minishell"
 	
 .PHONY: debuga 
 debuga:

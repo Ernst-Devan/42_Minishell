@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/14 16:06:12 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/05 11:20:32 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "libft.h"
 #include <stdio.h>
 
-char *find_env(char *str, char **env)
+char	*find_env(char *str, char **env)
 {
 	int	count;
 	int	i;
@@ -23,15 +23,15 @@ char *find_env(char *str, char **env)
 	i = 0;
 	count = ft_strlen(str);
 	while (env[i])
-    {
+	{
 		if (ft_strncmp(str, env[i], count) == 0)
 			return (env[i] + count + 1);
 		i++;
-    }
+	}
 	return (NULL);
 }
 
-int		can_print_env(char *str)
+int	can_print_env(char *str)
 {
 	int	i;
 
