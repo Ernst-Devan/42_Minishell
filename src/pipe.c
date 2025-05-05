@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/28 13:43:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:14:48 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	use_pipe_bin(t_cmd command, int in, int pipefd[2]) // faire la gestion d'err
 	return (0);
 }
 
-int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env) // faire la gestion d'erreur des dup2
+int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell, t_table table) // faire la gestion d'erreur des dup2
 {
 	pid_t	pid;
 
@@ -72,7 +72,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env) // fair
 			execve(command.path, command.args, NULL);
 			return (perror("execve error in use pipe"), 1);
 		}
-		exec_builtins(command, env);
+		exec_builtins(command, env, shell, table);
 		return (-1);
 	}
 	if (in != STDIN_FILENO)
@@ -82,7 +82,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env) // fair
 	return (0);
 }
 
-int	ms_pipe(t_table table, char ***env)
+int	ms_pipe(t_table table, char ***env, t_shell *shell)
 {
 	int		i;
 	int		pipefd[2];
@@ -98,7 +98,7 @@ int	ms_pipe(t_table table, char ***env)
 			return (perror("pipe error"), 1);
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
-		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env);
+		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env, shell, table);
 		if (val_return == 1 || val_return == -1)
 			return (val_return);
 		i++;

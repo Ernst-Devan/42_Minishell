@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/29 10:49:47 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/05 11:24:20 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	add_variable_env(char ***env, char *data)
 {
 	char	**temp;
 	int		i;
-	int	nb_row;
+	int		nb_row;
 
 	nb_row = size_of_env(*env);
 	temp = malloc(sizeof(char *) * (nb_row + 2));
@@ -63,7 +63,7 @@ int	add_variable_env(char ***env, char *data)
 			free_lstr(temp);
 			return (1);
 		}
-		i++; 
+		i++;
 	}
 	free_lstr(*env);
 	temp[i] = data;
@@ -81,18 +81,20 @@ int	edit_variable_env(char ***env, char *data)
 	return (0);
 }
 
-int	export(t_cmd cmd, char ***env)
+int	export(t_cmd cmd, char ***env, t_shell *shell)
 {
 	int	len;
 	int	i;
 	int	check;
-	if (!cmd.args[1])
+
+	if (!cmd.args[1] || ft_isdigit(cmd.args[1][0]))
 	{
-		printf("Export need param\n");
+		shell->error_code = 1;
+		printf("Bad param(s)\n");
 		return (0);
 	}
 	i = 1;
-	while(cmd.args[i])
+	while (cmd.args[i])
 	{
 		len = var_env_len(cmd.args[i]);
 		check = find_env_variable(*env, cmd.args[i]);
@@ -102,7 +104,7 @@ int	export(t_cmd cmd, char ***env)
 				return (1);
 		}
 		else if (cmd.args[i][len] == '=')
-	 		edit_variable_env(env, cmd.args[i]);
+			edit_variable_env(env, cmd.args[i]);
 		i++;
 	}
 	return (0);

@@ -8,21 +8,25 @@
 int	minishell(char **env)
 {
 	t_table table;
-	char	**ms_env;
+	t_shell shell;
 	int		val_return;
+	char	**ms_env;
 
 	ms_env = new_env(env);
 	if (!ms_env)
 		return(1);
+	shell.error_code = 0;
 	while (1)
     {
+		shell.env = ms_env;
 		table = parsing(ms_env);
-		val_return = exec(table, &ms_env);
-		if (val_return || val_return == -1)
-		{
-			// fonction qui free tout
-			return (1);
-		}
+		shell = exec(table, &ms_env, shell);
+		// REFAIRE LA GESTION D'ERREUR EN DESSOUS
+		// if (shell.error_code == ???)
+		// {
+		// 	// fonction qui free tout
+		// 	return (1);
+		// }
     }
 	// ici aussi il faut tout free
 	return (0);

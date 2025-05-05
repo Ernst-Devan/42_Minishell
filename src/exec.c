@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/29 11:22:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:17:06 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	exec_bin(t_table table)
 		return (perror("pid faild on exec_src_bin"), 1);
 	if (pid == 0)
 	{
-		if(dup2(table.cmds->in, STDIN_FILENO) == -1 || dup2(table.cmds->out, STDOUT_FILENO) == -1)
+		if (dup2(table.cmds->in, STDIN_FILENO) == -1
+			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
 		if (execve(table.cmds->path, table.cmds->args, NULL) == -1)
 			return (perror("execve faild on exec_src_bin"), 1);
@@ -39,33 +40,35 @@ int	exec_bin(t_table table)
 	return (0);
 }
 
-int	exec_builtins(t_cmd cmd, char ***env)
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
 {
 	int	len;
 
 	len = ft_strlen(cmd.args[0]);
 	if (!ft_strncmp("export", cmd.args[0], len + 1))
-		export(cmd, env);
+		export(cmd, env, shell);
 	else if (!ft_strncmp("env", cmd.args[0], len + 1))
-	 	print_env(*env);
+		print_env(*env);
 	else if (!ft_strncmp("cd", cmd.args[0], len + 1))
-	 	cd(cmd, env);
+		cd(cmd, env);
 	else if (!ft_strncmp("echo", cmd.args[0], len + 1))
-	 	echo(cmd);
-	else if(!ft_strncmp("pwd", cmd.args[0], len + 1))
+		echo(cmd);
+	else if (!ft_strncmp("pwd", cmd.args[0], len + 1))
 		pwd(cmd, *env);
-	else if(!ft_strncmp("unset", cmd.args[0], len + 1))
+	else if (!ft_strncmp("unset", cmd.args[0], len + 1))
 		unset(cmd, env);
+	else if (!ft_strncmp("exit", cmd.args[0], len + 1))
+		ms_exit(cmd, *env, *shell, table);
 	return (0);
 }
 
-int	exec(t_table table, char ***env)
+t_shell	exec(t_table table, char ***env, t_shell shell)
 {
 	if (table.cmd_len > 1)
-		return (ms_pipe(table, env));
+		shell.error_code = ms_pipe(table, env, &shell);
 	else if (table.cmds->type == 0)
-		return (exec_bin(table));
+		shell.error_code = exec_bin(table);
 	else if (table.cmds->type == 1)
-		return (exec_builtins(table.cmds[0], env));
-	return (0);
+		shell.error_code = exec_builtins(table.cmds[0], env, &shell, table);
+	return (shell);
 }

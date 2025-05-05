@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/29 13:35:12 by njooris          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:16:46 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 
 int	del_env_var(char ***env, char *str, char **new_env)
 {
-	int	i;
-	int	j;
-	char **env2;
+	int		i;
+	int		j;
+	char	**env2;
 
 	i = 0;
 	j = 0;
@@ -46,10 +46,10 @@ int	del_env_var(char ***env, char *str, char **new_env)
 
 int	unset(t_cmd cmd, char ***env)
 {
-	int	i;
-	int	check;
-	char **new_env;
-	char *str;
+	int		i;
+	int		check;
+	char	**new_env;
+	char	*str;
 
 	if (!cmd.args[1])
 	{
