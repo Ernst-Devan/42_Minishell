@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/06 15:14:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:18:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,20 @@ int	manage_ctrl_c_var(int val)
 	return (var);
 }
 
-int	sig_hung(int sig)
+void	sig_hand(int sig)
 {
+	(void)sig;
 	manage_ctrl_c_var(1);
 	rl_done = 1;
+	return ;
+}
+
+int	useless_function(void)
+{
 	return (0);
 }
 
-int	useless_function()
+void	useless_function2(int sig)
 {
-	return (0);
+	printf("%d\n", sig);
 }

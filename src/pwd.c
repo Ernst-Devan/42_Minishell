@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:13:22 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/28 16:51:27 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:51:24 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "exec.h"
 #include "libft.h"
 
-int	pwd(t_cmd command, char **env)
+int	pwd(char **env)
 {
 	int	i;
 	

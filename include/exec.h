@@ -27,13 +27,13 @@ int	add_variable_env(char ***env, char *data);
 
 int		cd(t_cmd cmd, char ***env);
 int		echo(t_cmd command);
-int		pwd(t_cmd cmd, char **env);
+int		pwd(char **env);
 int		unset(t_cmd cmd, char ***env);
-void	ms_exit(t_cmd cmd, char **env, t_shell shell, t_table table);
-void	child_exit(char **env, t_table table);
+void	ms_exit(t_cmd cmd, char **env, t_shell shell);
+void	child_exit(char **env);
 
 
-int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table);
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell);
 
 char	*remove_consecutiv_slash(char *path);
 char	*remove_dot_slash(char *path);
@@ -45,8 +45,9 @@ char	*build_pwd(char *pwd, char *path);
 int		set_pwd(char *pwd, char ***env);
 
 int	manage_ctrl_c_var(int val);
-int	sig_hung(int sig);
-int	useless_function();
+void	sig_hand(int sig);
+int		useless_function(void);
+void	useless_function2(int sig);
 
 
 #endif

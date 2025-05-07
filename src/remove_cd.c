@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 10:30:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:59:56 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*remove_dot_slash(char *path)
 	return (new_path);
 }
 
-char	*strljoin(char const *s1, char const *s2, int len)
+char	*strljoin(char const *s1, char const *s2, size_t len)
 {
 	char	*str;
 	size_t	i;

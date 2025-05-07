@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/04/29 15:16:46 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:55:04 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "parsing.h"
 #include "exec.h"
 #include "libft.h"
+#include "env_manage.h"
 
 int	del_env_var(char ***env, char *str, char **new_env)
 {

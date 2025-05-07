@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 11:27:22 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:18:22 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,17 @@ int	minishell(char **env)
 {
 	t_table table;
 	t_shell shell;
-	int		val_return;
 	char	**ms_env;
 
 	rl_event_hook = &useless_function;
-	signal(SIGINT, &sig_hung);
-	signal(SIGQUIT, &useless_function);
+	signal(SIGINT, sig_hand);
+	signal(SIGQUIT, SIG_IGN);
 	ms_env = new_env(env);
 	if (!ms_env)
 		return(1);
 	shell.error_code = 0;
 	while (1)
-    {
+	{
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		table = parsing(ms_env);

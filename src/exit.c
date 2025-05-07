@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 08:54:45 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:56:19 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ unsigned char	ms_atoi(const char *nptr)
 }
 
 
-void	ms_exit(t_cmd cmd, char **env, t_shell shell, t_table table) // donner toutes la data a exit pour tous free
+void	ms_exit(t_cmd cmd, char **env, t_shell shell) // donner toutes la data a exit pour tous free
 {
 	unsigned char	ret;
 
@@ -60,7 +60,7 @@ void	ms_exit(t_cmd cmd, char **env, t_shell shell, t_table table) // donner tout
 	exit(ret);
 }
 
-void	child_exit(char **env, t_table table)
+void	child_exit(char **env)
 {
 	free_lstr(env);
 //	free_table(table);

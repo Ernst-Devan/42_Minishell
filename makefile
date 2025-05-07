@@ -4,7 +4,7 @@
 
 CC			=	cc
 NAME		=	minishell
-CCFLAGS ?=	-Wall -Werror -Wextra -MMD -MP
+CCFLAGS ?=	-g3 -Wall -Werror -Wextra -MMD -MP
 CPPFLAGS = -lreadline
 
 # =======================================

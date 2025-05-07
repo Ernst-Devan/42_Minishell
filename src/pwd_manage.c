@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:12:48 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 11:13:50 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 14:01:21 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 
 char	*update_pwd(char *pwd)
 {
-	char	*new_pwd;
 	char	*pwd_cpy;
 
+	pwd_cpy = NULL;
 	ft_strlcpy(pwd_cpy, pwd, ft_strlen(pwd) + 1);
 	if (!pwd_cpy)
 		return (NULL);
@@ -69,7 +69,6 @@ char	*build_pwd(char *pwd, char *path)
 
 int	set_pwd(char *pwd, char ***env)
 {
-	char	*new_pwd;
 	int		check;
 
 	check = find_env_variable(*env, pwd);

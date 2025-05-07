@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 10:11:14 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:58:33 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	exec_bin(t_table table, char **env)
 	return (0);
 }
 
-int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 {
 	int	len;
 
@@ -60,11 +60,11 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
 	else if (!ft_strncmp("echo", cmd.args[0], len + 1))
 		echo(cmd);
 	else if (!ft_strncmp("pwd", cmd.args[0], len + 1))
-		pwd(cmd, *env);
+		pwd(*env);
 	else if (!ft_strncmp("unset", cmd.args[0], len + 1))
 		unset(cmd, env);
 	else if (!ft_strncmp("exit", cmd.args[0], len + 1))
-		ms_exit(cmd, *env, *shell, table);
+		ms_exit(cmd, *env, *shell);
 	return (0);
 }
 
@@ -75,6 +75,6 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	else if (table.cmds->type == 0)
 		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
-		shell.error_code = exec_builtins(table.cmds[0], env, &shell, table);
+		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 	return (shell);
 }
