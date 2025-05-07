@@ -24,6 +24,11 @@ typedef struct s_cmd {
   int		out;
 } t_cmd;
 
+typedef struct s_lst_child{
+	int	pid;
+	struct s_lst_child *next;
+}	t_lst_child;
+
 typedef struct s_table {
   t_cmd		*cmds;
   size_t	cmd_len;

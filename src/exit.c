@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 14:16:06 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 08:54:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,21 @@ void	ms_exit(t_cmd cmd, char **env, t_shell shell, t_table table) // donner tout
 {
 	unsigned char	ret;
 
+	printf("exit\n");
 	ret = 0;
 	free_lstr(env);
 //	free_table(table);
 	if (!cmd.args[1])
+	{
 		exit(shell.error_code);
-	ret = ms_atoi(cmd.args[1]);
+		ret = ms_atoi(cmd.args[1]);
+	}
 	exit(ret);
+}
+
+void	child_exit(char **env, t_table table)
+{
+	free_lstr(env);
+//	free_table(table);
+	exit(0);
 }

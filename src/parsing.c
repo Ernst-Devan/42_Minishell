@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
 /*   Updated: 2025/05/06 12:23:03 by dernst           ###   ########.fr       */
@@ -48,7 +48,11 @@ char	*get_command(char *input, t_shell *shell)
 	}
 	input = readline(prompt);
 	if (!input)
-		exit(1);
+	{
+		free_lstr(shell->env);
+		printf("exit\n");
+		exit(0);
+	}
 	shell->error_code = 0;
 	return (input);
 }
@@ -64,11 +68,9 @@ t_table parsing(t_shell *shell)
 	input = get_command(input, shell);
 	input = skip_space(input, &shell->error_code);
 	input = lexer(input, shell->env);
-	if (!input)
-		exit(1);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
 	if (parser(&table, shell->env,input))
-		free_table(table);
+		//free_table(table);
 	return (table);
 }

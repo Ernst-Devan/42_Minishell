@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 13:14:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:27:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <signal.h>
 #include "parsing.h"
 #include "pipe.h"
 #include "exec.h"
@@ -79,7 +80,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 		close(in);
 	if (pipefd[1] != STDOUT_FILENO)
 		close(pipefd[1]);
-	return (0);
+	return (pid);
 }
 
 int	ms_pipe(t_table table, char ***env, t_shell *shell)
@@ -88,7 +89,9 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 	int		pipefd[2];
 	int		save_in;
 	int		val_return;
+	int		*tab_child;
 
+	tab_child = malloc(sizeof(int) * table.cmd_len);
 	i = 0;
 	pipefd[0] = table.cmds[0].in;
 	while (i < table.cmd_len)
@@ -99,12 +102,25 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
 		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env, shell, table);
+		tab_child[i] = val_return;
 		if (val_return == 1 || val_return == -1)
 			return (val_return);
 		i++;
 	}
 	while (wait(NULL) > -1)
 	{
+		if (manage_ctrl_c_var(3) == 1)
+		{
+			i = 0;
+			while (i < table.cmd_len)
+			{
+				kill(SIGINT, tab_child[i]);
+				i++;
+			}
+		}
 	}
+	if(manage_ctrl_c_var(3) == 1)
+		printf("\n");
+	
 	return (0);
 }

@@ -73,17 +73,24 @@ char	**remove_quotes(char **splited_cmds)
 		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
 		while (splited_cmds[i][j])
 		{
-			if (inside_quote(splited_cmds[i][j], &quote) == 3 || splited_cmds[i][j] == quote)
-				j++;
-			if (!splited_cmds[i][j])
-				break;
 			if (inside_quote(splited_cmds[i][j], &quote) > 1)
+			{
 				j++;
-			if (!splited_cmds[i][j])
-				break;
-			temp[k] = splited_cmds[i][j];
-			k++;
-			j++;
+				if (!splited_cmds[i][j])
+					break;
+				if (splited_cmds[i][j] == quote)
+				{
+					quote = 0;
+					j++;
+				}
+
+			}
+			else
+			{
+				temp[k] = splited_cmds[i][j];
+				k++;
+				j++;
+			}
 		}
 		temp[k] = '\0';
 		k = 0;

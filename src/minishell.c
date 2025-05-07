@@ -1,9 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
+/*   Updated: 2025/05/07 11:27:22 by njooris          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "minishell.h"
 #include "env_manage.h"
 #include "libft.h"
 #include "exec.h"
 #include "parsing.h"
+#include <signal.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 int	minishell(char **env)
 {
@@ -12,23 +27,20 @@ int	minishell(char **env)
 	int		val_return;
 	char	**ms_env;
 
+	rl_event_hook = &useless_function;
+	signal(SIGINT, &sig_hung);
+	signal(SIGQUIT, &useless_function);
 	ms_env = new_env(env);
 	if (!ms_env)
 		return(1);
 	shell.error_code = 0;
 	while (1)
     {
+		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		table = parsing(&shell);
-		display_table(table);
-		if (shell.error_code == 0)
+		if (manage_ctrl_c_var(3) != 1 && shell.error_code == 0)
 			shell = exec(table, &ms_env, shell);
-		// REFAIRE LA GESTION D'ERREUR EN DESSOUS
-		// if (shell.error_code == ???)
-		// {
-		// 	// fonction qui free tout
-		// 	return (1);
-		// }
     }
 	// ici aussi il faut tout free
 	return (0);

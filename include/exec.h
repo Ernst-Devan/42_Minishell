@@ -10,7 +10,7 @@
  * @param table A table struct containing the path and the command/binary used for execution. It executes only one binary or command.
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
-int	exec_bin(t_table table);
+int	exec_bin(t_table table, char **env);
 
 /** 
  * The main function for the execution part.
@@ -30,6 +30,8 @@ int		echo(t_cmd command);
 int		pwd(t_cmd cmd, char **env);
 int		unset(t_cmd cmd, char ***env);
 void	ms_exit(t_cmd cmd, char **env, t_shell shell, t_table table);
+void	child_exit(char **env, t_table table);
+
 
 int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table);
 
@@ -40,6 +42,11 @@ char	*remove_if_dotdot(char *path);
 char	*update_pwd(char *pwd);
 char	*get_pwd(char **env);
 char	*build_pwd(char *pwd, char *path);
-int	set_pwd(char *pwd, char ***env);
+int		set_pwd(char *pwd, char ***env);
+
+int	manage_ctrl_c_var(int val);
+int	sig_hung(int sig);
+int	useless_function();
+
 
 #endif
