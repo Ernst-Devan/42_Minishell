@@ -19,8 +19,10 @@ int	minishell(char **env)
 	while (1)
     {
 		shell.env = ms_env;
-		table = parsing(ms_env);
-		shell = exec(table, &ms_env, shell);
+		table = parsing(&shell);
+		display_table(table);
+		if (shell.error_code == 0)
+			shell = exec(table, &ms_env, shell);
 		// REFAIRE LA GESTION D'ERREUR EN DESSOUS
 		// if (shell.error_code == ???)
 		// {

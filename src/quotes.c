@@ -22,7 +22,7 @@ size_t	inside_quote(char c, char *quote)
 		if (c == '\"' || c == '\'')
 		{
 			*quote = c;
-			return(1);
+			return(2);
 		}
 		return (0);
 	}
@@ -31,13 +31,13 @@ size_t	inside_quote(char c, char *quote)
 		if (c == *quote)
 		{
 			*quote = 0;
-			return(1);
+			return(3);
 		}
 		return (1);
 	}	
 }
 
-char *skip_space(char *input)
+char *skip_space(char *input, int *error_code)
 {
 	char	*buffer;
 	char	quote;
@@ -67,12 +67,12 @@ char *skip_space(char *input)
 		buffer[i++] = input[j];
 		j++;
 	}
+	buffer[i] = '\0';
 	if (quote != 0)
 	{
-		ft_printf("Unclosed quotes\n");
-		
+		ft_printf("Unclosed quotes : %s\n", buffer);
+		*error_code = 2;	
 	}
-	buffer[i] = '\0';
 	free(input);
 	return (buffer);
 }

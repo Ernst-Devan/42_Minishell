@@ -35,7 +35,7 @@ int		open_in(t_cmd *cmd, char in[NAME_MAX]);
 int		open_out(t_cmd *cmd, char out[NAME_MAX]);
 
 // Parsing.c
-t_table parsing(char **env);
+t_table parsing(t_shell *shell);
 
 // Init.c
 void init_cmd(t_cmd *cmd, int nb_cmd);
@@ -48,6 +48,11 @@ void free_table(t_table table);
 
 // Env.c
 char *find_env(char *str, char **env);
+
+// Command_split.c
+size_t	count_split(char *input, char c);
+size_t	nb_letter(char *input, char c);
+char	**split_cmd(char *input, char c);
 
 // Utils.c
 int ft_strlen_c(char *str, const char *delimiter);
@@ -66,7 +71,7 @@ char	*ft_ignore_str(char *str, char *ignore);
 
 //Quotes.c
 size_t	inside_quote(char c, char *quote);
-char	*skip_space(char *input);
+char	*skip_space(char *input, int *error_code);
 
 // Lexer.c
 char *lexer(char *input, char **env);

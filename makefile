@@ -34,6 +34,7 @@ SRCS		=	minishell.c \
 				exit.c 			\
 				remove_cd.c     \
 				pwd_manage.c 	\
+				command_split.c \
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)

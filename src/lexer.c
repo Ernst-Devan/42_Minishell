@@ -42,7 +42,8 @@ char **insert_list_env(char *input, char **env) {
     return (NULL);
   i = 0;
 
-  while (i < count_env) {
+  while (i < count_env) 
+	{
     input = ft_strchr(input, '$');
     input++;
     increase = ft_strccpy(temp, input, ' ');
@@ -108,10 +109,8 @@ char *lexer(char *input, char **env)
 	input_adress = input;
 	while (*input)
 	{
-		if (inside_quote(*input, &quote) == 1)
-		{
+		if (inside_quote(*input, &quote))
 			buffer[i++] = *input++;
-		}
 		else
 		{
 			if (check_delimiter(*input, "<>| ") == 1)
@@ -126,7 +125,7 @@ char *lexer(char *input, char **env)
 				if (*input == ' ')
 					input++;
 			}
-			if (*input != '\'' && *input != '\"')
+			if (*input && *input != '\'' && *input != '\"')
 				buffer[i++] = *input++;
 		}
 	}

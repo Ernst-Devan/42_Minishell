@@ -69,7 +69,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 			close(pipefd[1]);
 		if (command.type == 0)
 		{
-			execve(command.path, command.args, NULL);
+			execve(command.path, command.args,*env);
 			return (perror("execve error in use pipe"), 1);
 		}
 		exec_builtins(command, env, shell, table);

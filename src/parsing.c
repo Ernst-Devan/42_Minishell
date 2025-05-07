@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/04/22 11:15:29 by dernst           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:23:03 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
 // DONT FORGOT TO ADD THE HEADER
@@ -28,36 +29,46 @@
 // IF PRECEDENT ERROR CODE FALSE SO MAKE THE MAN NOT HAPPY
 
 
-char	*get_command(char *input, char **env)
+char	*get_command(char *input, t_shell *shell)
 {
 	char	prompt[PATH_MAX];
 
 	ft_strlcpy(prompt, "\0", PATH_MAX);	
-	ft_strlcat(prompt, "\e[0;36m", PATH_MAX);
-	ft_strlcat(prompt, find_env("PWD", env), PATH_MAX);
-	ft_strlcat(prompt, "\e[0;37m : (づ｡◕‿‿◕｡)づ ➡️ \e[0;37m", PATH_MAX);
+	if (!shell->error_code)
+	{
+		ft_strlcat(prompt, "\e[0;36m", PATH_MAX);
+		ft_strlcat(prompt, find_env("PWD", shell->env), PATH_MAX);
+		ft_strlcat(prompt, "\e[0;37m : (づ◕‿‿◕)づ🩵 \e[0;37m", PATH_MAX);
+	}
+	if (shell->error_code)
+	{
+		ft_strlcat(prompt, "\e[0;91m", PATH_MAX);
+		ft_strlcat(prompt, find_env("PWD", shell->env), PATH_MAX);
+		ft_strlcat(prompt, "\e[0;37m : (づಠ__ಠ)づ💢 \e[0;37m", PATH_MAX);
+	}
 	input = readline(prompt);
 	if (!input)
 		exit(1);
+	shell->error_code = 0;
 	return (input);
 }
 
-t_table parsing(char **env) 
+
+t_table parsing(t_shell *shell) 
 {
 	t_table table;
 	char	*input;
 
 	input = (char *){0};
 
-	input = get_command(input, env);
-	input = skip_space(input);
-	input = lexer(input, env);
-	ft_printf("%s\n", input);
+	input = get_command(input, shell);
+	input = skip_space(input, &shell->error_code);
+	input = lexer(input, shell->env);
 	if (!input)
 		exit(1);
-	if (init_table(&table, count_characters(input, "|")))
+	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
-	if (parser(&table, env,input))
+	if (parser(&table, shell->env,input))
 		free_table(table);
 	return (table);
 }
