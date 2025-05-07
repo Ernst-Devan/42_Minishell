@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/04/22 11:15:29 by dernst           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:53:01 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ t_table parsing(char **env)
  
 	input = readline("-> ");
 	if (!input)
-		exit(1);
+	{
+		free_lstr(env);
+		printf("exit\n");
+		exit(0);
+	}
 	input = lexer(input, env);
 	if (!input)
 		exit(1);

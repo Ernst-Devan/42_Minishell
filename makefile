@@ -11,16 +11,16 @@ CPPFLAGS = -lreadline
 # Main Directories - Paths
 # =======================================
 
-SRCS		=	minishell.c \
-				parsing.c   \
-				init.c      \
-				exec.c 		\
-				ms_cd.c 	\
-				check.c		\
-				env_manage.c \
-				free.c		\
-				lexer.c		\
-				redirection.c \
+SRCS		=	minishell.c 	\
+				parsing.c   	\
+				init.c      	\
+				exec.c 			\
+				ms_cd.c 		\
+				check.c			\
+				env_manage.c 	\
+				free.c			\
+				lexer.c			\
+				redirection.c	\
 				env.c			\
 				error.c			\
 				export.c		\
@@ -33,6 +33,7 @@ SRCS		=	minishell.c \
 				exit.c 			\
 				remove_cd.c     \
 				pwd_manage.c 	\
+				ctrl_c.c 		\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
@@ -78,7 +79,7 @@ debug:
 	fi
 	$(MAKE) CCFLAGS="-g3"
 	bash -c "echo -en '\033c\033[3J'"
-	bash -c "valgrind --leak-check=full --error-exitcode=0 ./minishell"
+	bash -c "valgrind --leak-check=full ./minishell"
 	
 .PHONY: debuga 
 debuga:

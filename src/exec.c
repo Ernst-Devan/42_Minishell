@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 13:17:06 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:11:14 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 #include "exec.h"
 #include "pipe.h"
 #include "env_manage.h"
+#include <signal.h>
 
-int	exec_bin(t_table table)
+int	exec_bin(t_table table, char **env)
 {
 	pid_t	pid;
 
@@ -33,10 +34,15 @@ int	exec_bin(t_table table)
 		if (dup2(table.cmds->in, STDIN_FILENO) == -1
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
-		if (execve(table.cmds->path, table.cmds->args, NULL) == -1)
+		if (execve(table.cmds->path, table.cmds->args, env) == -1)
 			return (perror("execve faild on exec_src_bin"), 1);
 	}
 	wait(NULL);
+	if(manage_ctrl_c_var(3) == 1)
+	{
+		kill(SIGINT, pid);
+		printf("\n");
+	}
 	return (0);
 }
 
@@ -67,7 +73,7 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	if (table.cmd_len > 1)
 		shell.error_code = ms_pipe(table, env, &shell);
 	else if (table.cmds->type == 0)
-		shell.error_code = exec_bin(table);
+		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
 		shell.error_code = exec_builtins(table.cmds[0], env, &shell, table);
 	return (shell);
