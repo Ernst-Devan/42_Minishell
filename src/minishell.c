@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 14:18:22 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:58:04 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,9 @@ int	minishell(char **env)
 	{
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
-		table = parsing(ms_env);
-		if (manage_ctrl_c_var(3) != 1)
+		table = parsing(&shell);
+		if (manage_ctrl_c_var(3) != 1 && shell.error_code == 0 && table.cmd_len > 0)
 			shell = exec(table, &ms_env, shell);
-		// REFAIRE LA GESTION D'ERREUR EN DESSOUS
-		// if (shell.error_code == ???)
-		// {
-		// 	// fonction qui free tout
-		// 	return (1);
-		// }
     }
 	// ici aussi il faut tout free
 	return (0);

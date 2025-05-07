@@ -11,6 +11,7 @@
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
 int	exec_bin(t_table table, char **env);
+int	exec_bin(t_table table, char **env);
 
 /** 
  * The main function for the execution part.

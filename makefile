@@ -27,12 +27,14 @@ SRCS		=	minishell.c 	\
 				parser.c		\
 				pipe.c			\
 				utils.c			\
+				quotes.c		\
 				echo.c 			\
 				pwd.c			\
 				unset.c 		\
 				exit.c 			\
 				remove_cd.c     \
 				pwd_manage.c 	\
+				command_split.c \
 				ctrl_c.c 		\
 
 OBJS		= $(SRCS:.c=.o)
@@ -77,8 +79,8 @@ debug:
 		$(MAKE) fclean; \
 		$(MAKE) debug -C libs/libft; \
 	fi
-	$(MAKE) CCFLAGS="-g3"
 	bash -c "echo -en '\033c\033[3J'"
+	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
 	bash -c "valgrind --leak-check=full ./minishell"
 	
 .PHONY: debuga 
@@ -87,8 +89,8 @@ debuga:
 		$(MAKE) fclean; \
 		$(MAKE) debug -C libs/libft; \
 	fi
-	$(MAKE) CCFLAGS="-g3"
 	bash -c "echo -en '\033c\033[3J'"
+	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
 	bash -c "valgrind --leak-check=full --track-fds=yes --trace-children=yes ./minishell"
 
 .PHONY: re

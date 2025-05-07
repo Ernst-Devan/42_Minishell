@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 13:59:14 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:34:43 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <signal.h>
 #include <signal.h>
 #include "parsing.h"
 #include "pipe.h"
@@ -70,7 +71,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 			close(pipefd[1]);
 		if (command.type == 0)
 		{
-			execve(command.path, command.args, NULL);
+			execve(command.path, command.args,*env);
 			return (perror("execve error in use pipe"), 1);
 		}
 		exec_builtins(command, env, shell);
@@ -80,6 +81,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 		close(in);
 	if (pipefd[1] != STDOUT_FILENO)
 		close(pipefd[1]);
+	return (pid);
 	return (pid);
 }
 
@@ -121,6 +123,5 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 	}
 	if(manage_ctrl_c_var(3) == 1)
 		printf("\n");
-	
 	return (0);
 }

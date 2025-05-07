@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 13:58:33 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:31:33 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "exec.h"
 #include "pipe.h"
 #include "env_manage.h"
+#include <signal.h>
 #include <signal.h>
 
 int	exec_bin(t_table table, char **env)
@@ -35,9 +36,15 @@ int	exec_bin(t_table table, char **env)
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
 		if (execve(table.cmds->path, table.cmds->args, env) == -1)
+		if (execve(table.cmds->path, table.cmds->args, env) == -1)
 			return (perror("execve faild on exec_src_bin"), 1);
 	}
 	wait(NULL);
+	if(manage_ctrl_c_var(3) == 1)
+	{
+		kill(SIGINT, pid);
+		printf("\n");
+	}
 	if(manage_ctrl_c_var(3) == 1)
 	{
 		kill(SIGINT, pid);
