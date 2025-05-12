@@ -21,8 +21,10 @@ void display_table(t_table table) {
 			j++;	
 		}
 		j = 0;
-		ft_printf("\nin : %s\n", table.cmds[i].in);
-		ft_printf("out : %s\n", table.cmds[i].out);
+		ft_printf("\nin : %d\n", table.cmds[i].in);
+		ft_printf("out : %d\n", table.cmds[i].out);
+		ft_printf("str_in : %s\n", table.cmds[i].str_in);
+		ft_printf("str_out : %s\n", table.cmds[i].str_out);
 		ft_printf("\n\n");
 		i++;
   }
