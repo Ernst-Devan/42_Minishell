@@ -21,8 +21,8 @@ void display_table(t_table table) {
 			j++;	
 		}
 		j = 0;
-		ft_printf("\nin  :  %d\n", table.cmds[i].in);
-		ft_printf("out : %d\n", table.cmds[i].out);
+		ft_printf("\nin : %s\n", table.cmds[i].in);
+		ft_printf("out : %s\n", table.cmds[i].out);
 		ft_printf("\n\n");
 		i++;
   }
@@ -63,6 +63,13 @@ size_t count_characters(char *s, char *cs) {
 	}
 	return (count);
 }
+
+char *skip_characters(char *input, char c) {
+  while (*input == c && *input)
+    input++;
+  return (input);
+}
+
 
 size_t check_delimiter(char c, char *delimter) {
 	int		i;
@@ -109,21 +116,16 @@ size_t lstrlen(char **lstr) {
   return (count);
 }
 
-int ft_strlen_c(char *str, const char *delimiter) {
+int ft_strlen_c(char *str, char delimiter) {
   int i;
-  int j;
 
   i = 0;
-  j = 0;
-  while (str[i]) {
-    while (delimiter[j]) {
-      if (delimiter[j] == str[i])
-        return (i);
-      j++;
-    }
-    j = 0;
-    i++;
-  }
+  while (str[i]) 
+	{
+		if (delimiter == str[i])
+			return (i);
+		i++;
+	}
   return (i);
 }
 
@@ -137,4 +139,24 @@ size_t ft_strccpy(char *dest, const char *src, char c) {
   }
   dest[i] = '\0';
   return (i);
+}
+
+size_t	ft_strccat(char *dest, char *src, char c)
+{
+	size_t	dest_len;
+	size_t	src_len;
+	size_t	i;
+
+	dest_len = ft_strlen(dest);
+	src_len = ft_strlen_c(src, c);
+	if (src == NULL || dest == NULL)
+		return (0);
+	i = 0;
+	while (src[i] && src[i] != c)
+	{
+		dest[dest_len + i] = src[i];
+		i++;
+	}
+	dest[dest_len + i] = '\0';
+	return (src_len);
 }

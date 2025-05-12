@@ -37,6 +37,44 @@ size_t	inside_quote(char c, char *quote)
 	}	
 }
 
+char	**remove_quotes(char **splited_cmds)
+{
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	char	*temp;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	quote = 0;
+	while(splited_cmds[i])
+	{
+		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
+		while (splited_cmds[i][j])
+		{
+			if (inside_quote(splited_cmds[i][j], &quote) > 1)
+			{
+				j++;
+				if (splited_cmds[i][j] && splited_cmds[i][j] == quote)
+				{
+					quote = 0;
+					j++;
+				}
+			}
+			else
+				temp[k++] = splited_cmds[i][j++];
+		}
+		temp[k] = '\0';
+		k = 0;
+		j = 0;
+		free(splited_cmds[i]);
+		splited_cmds[i++] = temp;
+	}
+	return (splited_cmds);
+}
+
 char *skip_space(char *input, int *error_code)
 {
 	char	*buffer;
