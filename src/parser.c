@@ -40,6 +40,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 		cmd[i].type = type;
 		list_cmds++;
 		i++;
+	
 	}
   return (0);
 }
@@ -60,9 +61,9 @@ size_t	parser(t_table *table, char **env, char *input)
 	char **splited_cmds;
 
 	splited_cmds = tokenisation(input);
-	manage_redirection(&table->cmds, splited_cmds);
 	splited_cmds = remove_quotes(splited_cmds);
 	splited_cmds = skip_redirection(splited_cmds);
+	manage_redirection(&table->cmds, splited_cmds);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
 		return (1);
 	free_lstr(splited_cmds);

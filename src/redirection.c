@@ -157,8 +157,8 @@ void manage_redirection(t_cmd **cmds, char **split_cmd)
 			}
 			j++;
 		}
-		cmds[i]->str_in = remove_quote(in);
-		cmds[i]->str_out = remove_quote(out);
+		(*cmds)[i].str_in = remove_quote(in);
+		(*cmds)[i].str_out = remove_quote(out);
 		ft_strlcpy(in, "\0", NAME_MAX);
 		ft_strlcpy(out, "\0", NAME_MAX);
 		j = 0;

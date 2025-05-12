@@ -25,7 +25,9 @@ int	minishell(char **env)
 	t_table table;
 	t_shell shell;
 	char	**ms_env;
+	t_cmd	cmd;
 
+	table.cmds = &cmd;
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
 	signal(SIGQUIT, SIG_IGN);
