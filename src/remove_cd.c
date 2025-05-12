@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 13:59:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/09 12:45:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ char	*remove_if_dotdot(char *path)
 		if (path[i] == '.' && path[i + 1] == '.')
 		{
 			j = i - 2;
-			while (j != 0 && path[j] && path[j] != '/')
+			while (j >= 3 && path[j] && path[j] != '/')
 				j--;
 			temp = path;
 			path = strljoin(path, &path[i + 2], j);
