@@ -20,8 +20,10 @@ typedef struct s_cmd {
   size_t	type;
   char		*path;
   char		**args;
-  char		*in;
-  char		*out;
+  char		*str_in;
+  char		*str_out;
+  int		in;
+  int		out;
 }	t_cmd;
 
 typedef struct s_lst_child{

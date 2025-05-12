@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/07 17:07:39 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/12 13:43:25 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ t_table parsing(t_shell *shell)
 	input = (char *){0};
 	input = get_command(input, shell);
 	input = skip_space(input, &shell->error_code);
-	if (shell->error_code)
-		return(table);
+//	if (shell->error_code)
+	//	return (table);
 	input = lexer(input, shell->env);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);

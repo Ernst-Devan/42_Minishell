@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/12 13:28:58 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/12 13:47:47 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,6 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 	return (0);
 }
 
-typedef struct s_cmd2 {
-  size_t	type;
-  char		*path;
-  char		**args;
-  
-  int		in;
-  int		out;
-  char		*str_in;
-  char		*str_out;
-} t_cmd2;
-
 int	open_heredoc(char *str, char **eof)
 {
 	int		n;
@@ -135,7 +124,7 @@ void	heredoc(int	fd, char *eof)
 	}
 }
 
-int	open_in_heredoc_cmd(t_cmd2 *cmd)
+int	open_in_heredoc_cmd(t_cmd *cmd)
 {
 	int	i;
 	int	fd;
@@ -160,7 +149,7 @@ int	open_in_heredoc_cmd(t_cmd2 *cmd)
 	return (fd);
 }
 
-int	open_in_cmd(t_cmd2 *cmd)
+int	open_in_cmd(t_cmd *cmd)
 {
 	int	i;
 	int	fd;
@@ -190,7 +179,7 @@ int	open_in_cmd(t_cmd2 *cmd)
 	return (fd);
 }
 
-int	manage_in(t_cmd2 *cmds)
+int	manage_in(t_cmd *cmds)
 {
 	int		i;
 	int		check;
@@ -222,30 +211,8 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 {
 	(void)env;
 	(void)shell;
-	(void)table;
-
-	t_cmd2 cmds[] = {
-	{
-		.path = "/usr/bin/cat",
-		.args = (char *[]){"cat", "-e", NULL},
-		.in = 0,
-		.out = 1,
-		.str_in = "<<:EOF:<:2:<<:IOA:<:1",
-		.str_out = ">toto"
-	},
-	{
-		.path = "/usr/bin/cat",
-		.args = (char *[]){"cat", "-e", NULL},
-		.in = 0,
-		.out = 1,
-		.str_in = "<<:POPI:<<:PAPA",
-		.str_out = ">toto"
-	},
-	{0}
-};
-	manage_in(cmds);
-	printf("%d\n", cmds[0].in);
-	printf("%d\n", cmds[1].in);
+	manage_in(table.cmds);
+	printf("in : %d\n", table.cmds[0].in);
 	//ouverture de tous les files
 
 	// if (table.cmd_len > 1)
