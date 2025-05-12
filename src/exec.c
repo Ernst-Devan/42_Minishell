@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/12 13:53:08 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:04:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,20 +178,20 @@ int	open_in_cmd(t_cmd *cmd)
 	return (fd);
 }
 
-int	manage_in(t_cmd *cmds)
+int	manage_in(t_cmd *cmds, t_table table)
 {
-	int		i;
+	size_t		i;
 	int		check;
 
 	check = 0;
 	i = 0;
-	while (cmds[i].path)
+	while (i < table.cmd_len)
 	{
 		cmds[i].in = open_in_heredoc_cmd(&cmds[i]);
 		i++;
 	}
 	i = 0;
-	while (cmds[i].path)
+	while (i < table.cmd_len)
 	{
 		check = open_in_cmd(&cmds[i]);
 		if (check == -1)
@@ -200,6 +200,7 @@ int	manage_in(t_cmd *cmds)
 			perror("Error in manage in");
 			return (1);
 		}
+		cmds[i].out = 1;
 		i++;
 	}
 	return (0);
@@ -207,17 +208,19 @@ int	manage_in(t_cmd *cmds)
 
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
-	(void)env;
-	(void)shell;
-	manage_in(table.cmds);
+	printf("toto : %s\n", table.cmds[0].str_in);
+	display_table(table);
+	manage_in(table.cmds, table);
 	//printf("in : %d\n", table.cmds[0].in);
 	//ouverture de tous les files
+	display_table(table);
+	
 
-	if (table.cmd_len > 1)
-	 	shell.error_code = ms_pipe(table, env, &shell);
-	else if (table.cmds->type == 0)
-		shell.error_code = exec_bin(table, *env);
-	else if (table.cmds->type == 1)
-		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
+	// if (table.cmd_len > 1)
+	//  	shell.error_code = ms_pipe(table, env, &shell);
+	// else if (table.cmds->type == 0)
+	// 	shell.error_code = exec_bin(table, *env);
+	// else if (table.cmds->type == 1)
+	// 	shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 	return (shell);
 }
