@@ -41,7 +41,6 @@ int	minishell(char **env)
 		if (manage_ctrl_c_var(3) != 1 && shell.error_code == 0 && table.cmd_len > 0)
 			shell = exec(table, &ms_env, shell);
     }
-	// ici aussi il faut tout free
 	return (0);
 }
 

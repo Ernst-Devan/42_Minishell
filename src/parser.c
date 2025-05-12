@@ -55,60 +55,14 @@ char **tokenisation(char *input)
 	return (splited_cmds);
 }
 
-
-char	**remove_quotes(char **splited_cmds)
-{
-	size_t	i;
-	size_t	j;
-	size_t	k;
-	char	*temp;
-	char	quote;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	quote = 0;
-	while(splited_cmds[i])
-	{
-		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
-		while (splited_cmds[i][j])
-		{
-			if (inside_quote(splited_cmds[i][j], &quote) > 1)
-			{
-				j++;
-				if (!splited_cmds[i][j])
-					break;
-				if (splited_cmds[i][j] == quote)
-				{
-					quote = 0;
-					j++;
-				}
-
-			}
-			else
-			{
-				temp[k] = splited_cmds[i][j];
-				k++;
-				j++;
-			}
-		}
-		temp[k] = '\0';
-		k = 0;
-		splited_cmds[i] = temp;
-		j = 0;
-		i++;
-	}
-	return (splited_cmds);
-}
-
-
 size_t	parser(t_table *table, char **env, char *input)
 {
 	char **splited_cmds;
 
 	splited_cmds = tokenisation(input);
-	remove_quotes(splited_cmds);
-	manage_redirection(table->cmds, splited_cmds);
+	manage_redirection(&table->cmds, splited_cmds);
+	splited_cmds = remove_quotes(splited_cmds);
+	splited_cmds = skip_redirection(splited_cmds);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
 		return (1);
 	free_lstr(splited_cmds);
