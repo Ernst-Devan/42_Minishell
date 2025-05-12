@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/12 13:47:47 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/12 13:53:08 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void	heredoc(int	fd, char *eof)
 {
 	char	*input;
 
-	printf("eof : %s\n", eof);
 	input = readline("heredoc>");
 	while (ft_strncmp(eof, input, ft_strlen(eof)))
 	{
@@ -189,7 +188,6 @@ int	manage_in(t_cmd *cmds)
 	while (cmds[i].path)
 	{
 		cmds[i].in = open_in_heredoc_cmd(&cmds[i]);
-		printf("in : %d\n", cmds[i].in);
 		i++;
 	}
 	i = 0;
@@ -212,14 +210,14 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	(void)env;
 	(void)shell;
 	manage_in(table.cmds);
-	printf("in : %d\n", table.cmds[0].in);
+	//printf("in : %d\n", table.cmds[0].in);
 	//ouverture de tous les files
 
-	// if (table.cmd_len > 1)
-	//  	shell.error_code = ms_pipe(table, env, &shell);
-	// else if (table.cmds->type == 0)
-	// 	shell.error_code = exec_bin(table, *env);
-	// else if (table.cmds->type == 1)
-	// 	shell.error_code = exec_builtins(table.cmds[0], env, &shell);
+	if (table.cmd_len > 1)
+	 	shell.error_code = ms_pipe(table, env, &shell);
+	else if (table.cmds->type == 0)
+		shell.error_code = exec_bin(table, *env);
+	else if (table.cmds->type == 1)
+		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 	return (shell);
 }
