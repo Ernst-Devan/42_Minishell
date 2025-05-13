@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/12 16:04:35 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/13 13:41:02 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 int	exec_bin(t_table table, char **env)
 {
 	pid_t	pid;
-
+	display_table(table);
 	pid = fork();
 	if (pid == -1)
 		return (perror("pid faild on exec_src_bin"), 1);
@@ -39,8 +39,7 @@ int	exec_bin(t_table table, char **env)
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 			return (perror("pid faild on exec_src_bin"), 1);
 		if (execve(table.cmds->path, table.cmds->args, env) == -1)
-		if (execve(table.cmds->path, table.cmds->args, env) == -1)
-			return (perror("execve faild on exec_src_bin"), 1);
+			return (perror("execve faild on exekc_src_bin"), 1);
 	}
 	wait(NULL);
 	if(manage_ctrl_c_var(3) == 1)
@@ -78,18 +77,22 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 	return (0);
 }
 
-int	open_heredoc(char *str, char **eof)
+int	open_heredoc(char *str, char **eof, char **name)
 {
 	int		n;
+	static int i;
 
+	i = 0;
 	n = 0;
+	*name = ft_strjoin(".EOF", ft_itoa(i));
+	i++;
 	while (str[n] && str[n] != ':')
 		n++;
 	*eof = malloc(sizeof(char) * (n + 1));
-	if (!eof)
+	if (!*eof)
 		return (-1);
 	ft_strlcpy(*eof, str, n + 1);
-	n = open(*eof, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	n = open(*name, O_CREAT | O_RDWR, 0600);
 	return (n);
 }
 
@@ -99,7 +102,7 @@ int	open_in_file(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] != ':')
+	while (str[n] && str[n] != ':')
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -128,6 +131,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd)
 	int	i;
 	int	fd;
 	char	*eof;
+	char	*name;
 
 	eof = NULL;
 	i = 0;
@@ -136,11 +140,12 @@ int	open_in_heredoc_cmd(t_cmd *cmd)
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == ':')
 		{
-			fd = open_heredoc(&cmd->str_in[i + 3], &eof);
+			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
 			heredoc(fd, eof);
-			// gerer l ecriture des heredoc ici
 			if (fd == -1)
 				return (1);
+			close(fd);
+			fd = open_in_file(name);
 		}
 		i++;
 	}
@@ -166,7 +171,6 @@ int	open_in_cmd(t_cmd *cmd)
 			}
 			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == ':')
 			{
-				printf("open de file\n");
 				fd = open_in_file(&cmd->str_in[i + 2]);
 				if (fd == -1)
 					return (-1);
@@ -205,22 +209,101 @@ int	manage_in(t_cmd *cmds, t_table table)
 	}
 	return (0);
 }
+int	open_append(char *str)
+{
+	char	*new_str;
+	int		n;
+
+	n = 0;
+	while (str[n] && str[n] != ':')
+		n++;
+	new_str = malloc(sizeof(char) * (n + 1));
+	if (!new_str)
+		return (-1);
+	ft_strlcpy(new_str, str, n + 1);
+	n = open(new_str, O_CREAT | O_RDWR | O_APPEND, 0600);
+	free(new_str);
+	return (n);
+}
+
+int	open_out_file(char *str)
+{
+	char	*new_str;
+	int		n;
+
+	n = 0;
+	while (str[n] && str[n] != ':')
+		n++;
+	new_str = malloc(sizeof(char) * (n + 1));
+	if (!new_str)
+		return (-1);
+	ft_strlcpy(new_str, str, n + 1);
+	n = open(new_str, O_CREAT | O_RDWR | O_TRUNC, 0600);
+	free(new_str);
+	return (n);
+}
+
+int	open_out_cmd(t_cmd *cmd)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	fd = 0;
+	while (cmd->str_in[i])
+	{
+		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '>')
+		{
+			if (cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i + 1] == '>' && cmd->str_in[i + 2] == ':')
+			{
+				i+=2;
+				fd = open_append(&cmd->str_in[i + 3]);
+			}
+			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == ':')
+			{
+				fd = open_out_file(&cmd->str_in[i + 2]);
+				if (fd == -1)
+					return (-1);
+			}
+		}
+		i++;
+	}
+	cmd->in = fd;
+	return (fd);
+}
+
+int	manage_out(t_cmd *cmds, t_table table)
+{
+	size_t		i;
+	int		check;
+
+	i = 0;
+	while (i < table.cmd_len)
+	{
+		check = open_in_cmd(&cmds[i]);
+		if (check == -1)
+		{
+			cmds[i].in = -1;
+			perror("Error in manage in");
+			return (1);
+		}
+		cmds[i].out = 1;
+		i++;
+	}
+	return (0);
+}
 
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
-	printf("toto : %s\n", table.cmds[0].str_in);
-	display_table(table);
 	manage_in(table.cmds, table);
-	//printf("in : %d\n", table.cmds[0].in);
 	//ouverture de tous les files
-	display_table(table);
 	
 
-	// if (table.cmd_len > 1)
-	//  	shell.error_code = ms_pipe(table, env, &shell);
-	// else if (table.cmds->type == 0)
-	// 	shell.error_code = exec_bin(table, *env);
-	// else if (table.cmds->type == 1)
-	// 	shell.error_code = exec_builtins(table.cmds[0], env, &shell);
+	if (table.cmd_len > 1)
+	 	shell.error_code = ms_pipe(table, env, &shell);
+	else if (table.cmds->type == 0)
+		shell.error_code = exec_bin(table, *env);
+	else if (table.cmds->type == 1)
+		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 	return (shell);
 }

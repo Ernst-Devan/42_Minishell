@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 16:34:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/13 09:30:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 	if (pipefd[1] != STDOUT_FILENO)
 		close(pipefd[1]);
 	return (pid);
-	return (pid);
 }
 
 int	ms_pipe(t_table table, char ***env, t_shell *shell)
@@ -106,7 +105,10 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env, shell);
 		tab_child[i] = val_return;
 		if (val_return == 1 || val_return == -1)
+		{
+			free(tab_child);
 			return (val_return);
+		}
 		i++;
 	}
 	while (wait(NULL) > -1)
@@ -121,6 +123,7 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 			}
 		}
 	}
+	free(tab_child);
 	if(manage_ctrl_c_var(3) == 1)
 		printf("\n");
 	return (0);

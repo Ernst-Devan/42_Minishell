@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/06 14:15:07 by dernst           ###   ########.fr       */
+/*   Updated: 2025/05/12 16:13:18 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ size_t	parser(t_table *table, char **env, char *input)
 
 	splited_cmds = tokenisation(input);
 	splited_cmds = remove_quotes(splited_cmds);
-	splited_cmds = skip_redirection(splited_cmds);
 	manage_redirection(&table->cmds, splited_cmds);
+	splited_cmds = skip_redirection(splited_cmds);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
 		return (1);
 	free_lstr(splited_cmds);
