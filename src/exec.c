@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 13:57:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 14:39:10 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	open_heredoc(char *str, char **eof, char **name)
 		return (-1);
 	ft_strlcpy(*eof, str, n + 1);
 	n = open(*name, O_CREAT | O_RDWR, 0600);
+
 	return (n);
 }
 
@@ -123,11 +124,10 @@ void	heredoc(int	fd, char *eof)
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		input = readline("heredoc>");
-		printf("%s\n", input);
 	}
 }
 
-int	open_in_heredoc_cmd(t_cmd *cmd)
+int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 {
 	int	i;
 	int	fd;
@@ -142,6 +142,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd)
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == ':')
 		{
 			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
+			(*nb_files)++;
 			heredoc(fd, eof);
 			if (fd == -1)
 				return (1);
@@ -183,7 +184,7 @@ int	open_in_cmd(t_cmd *cmd)
 	return (fd);
 }
 
-int	manage_in(t_cmd *cmds, t_table table)
+int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 {
 	size_t		i;
 	int		check;
@@ -192,7 +193,7 @@ int	manage_in(t_cmd *cmds, t_table table)
 	i = 0;
 	while (i < table.cmd_len)
 	{
-		cmds[i].in = open_in_heredoc_cmd(&cmds[i]);
+		cmds[i].in = open_in_heredoc_cmd(&cmds[i], nb_files);
 		i++;
 	}
 	i = 0;
@@ -296,17 +297,51 @@ int	manage_out(t_cmd *cmds, t_table table)
 	return (0);
 }
 
+int	close_files(int nb_files)
+{
+	char	*str;
+	char	*nb;
+
+	nb = NULL;
+
+	
+	if (nb_files < 1)
+		return;
+	while (nb_files > 0)
+	{
+		nb_files--;
+		nb = ft_itoa(nb_files);
+		if (!nb)
+			return (1);
+		str = ft_strjoin("EOF", nb);
+		if (!str)
+			return (free(nb), 1);
+		unlink(str);
+		free (str);
+		free(nb);
+	}
+	return (0);
+}
+
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
 	int original_stdin;
 	int original_stdout;
+	int	nb_files;
 
+	nb_files = 0;
 	if (!table.cmds->path)
 		return (shell);
 	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
-	manage_in(table.cmds, table);
+	manage_in(table.cmds, table, &nb_files);
 	manage_out(table.cmds, table);
+	if (manage_ctrl_c_var(3) == 1)
+	{
+		close_files(nb_files);
+		shell.error_code = 130;
+		return (shell);
+	}
 	if (table.cmd_len > 1)
 	 	shell.error_code = ms_pipe(table, env, &shell);
 	else if (table.cmds->type == 0)
@@ -315,12 +350,16 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	{
 		if (dup2(table.cmds->in, STDIN_FILENO) == -1
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
-			return (perror("pid faild on exec_src_bin"), shell);
+			{
+				close_files(nb_files);
+				return (perror("pid faild on exec_src_bin"), shell);
+			}
 		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 		dup2(original_stdin, STDIN_FILENO);
 		dup2(original_stdout, STDOUT_FILENO);
 		close(original_stdin);
 		close(original_stdout);
 	}
+	close_files(nb_files);
 	return (shell);
 }
