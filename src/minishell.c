@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 13:43:52 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:45:27 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	minishell(char **env)
 	shell.error_code = 0;
 	while (1)
 	{
+		printf("%d\n", shell.error_code);
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		table = parsing(&shell);

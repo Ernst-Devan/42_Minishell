@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 14:39:10 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:38:53 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ int	open_heredoc(char *str, char **eof, char **name)
 	int		n;
 	static int i;
 
-	i = 0;
 	n = 0;
+	if (*name == NULL)
+		i = 0;
 	*name = ft_strjoin(".EOF", ft_itoa(i));
 	i++;
 	while (str[n] && str[n] != ':')
@@ -93,7 +94,6 @@ int	open_heredoc(char *str, char **eof, char **name)
 		return (-1);
 	ft_strlcpy(*eof, str, n + 1);
 	n = open(*name, O_CREAT | O_RDWR, 0600);
-
 	return (n);
 }
 
@@ -137,6 +137,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 	eof = NULL;
 	i = 0;
 	fd = 0;
+	name = NULL;
 	while (cmd->str_in[i])
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == ':')
@@ -306,14 +307,14 @@ int	close_files(int nb_files)
 
 	
 	if (nb_files < 1)
-		return;
+		return (0);
 	while (nb_files > 0)
 	{
 		nb_files--;
 		nb = ft_itoa(nb_files);
 		if (!nb)
 			return (1);
-		str = ft_strjoin("EOF", nb);
+		str = ft_strjoin(".EOF", nb);
 		if (!str)
 			return (free(nb), 1);
 		unlink(str);
@@ -350,10 +351,10 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	{
 		if (dup2(table.cmds->in, STDIN_FILENO) == -1
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
-			{
-				close_files(nb_files);
-				return (perror("pid faild on exec_src_bin"), shell);
-			}
+		{
+			close_files(nb_files);
+			return (perror("pid faild on exec_src_bin"), shell);
+		}
 		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
 		dup2(original_stdin, STDIN_FILENO);
 		dup2(original_stdout, STDOUT_FILENO);
