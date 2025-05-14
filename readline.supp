@@ -1,8 +1,0 @@
-{
-   readline_internal_leak
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:malloc
-   fun:xmalloc
-   fun:_rl_add_history
-}

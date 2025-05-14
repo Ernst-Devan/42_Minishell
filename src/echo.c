@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 15:02:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 16:35:20 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 13:42:33 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,25 @@
 #include "exec.h"
 #include "libft.h"
 
+int	check_n(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	while_echo(char **lstr)
 {
 	int	i;
 
 	i = 0;
-	
 	while(lstr[i])
 	{
 		write(1, lstr[i], ft_strlen(lstr[i]));
@@ -41,7 +53,8 @@ int	echo(t_cmd command)
 		write(1, "\n", 1);
 		return (0);
 	}
-	if (ft_strncmp("-n", command.args[1], 3) == 0)
+	if (command.args[1][1] && command.args[1][0] == '-' 
+		&& !check_n(&command.args[1][1]))
 	{
 		if (command.args[2])
 			while_echo(&command.args[2]);

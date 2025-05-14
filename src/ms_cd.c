@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/05 11:19:57 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 10:22:00 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int	cd(t_cmd cmd, char ***env)
 	else
 	{
 		temp = get_home(*env);
+		check = chdir(&temp[5]);
+		if (check != 0)
+			return (perror("Error in chdir2"), 1);
 		new_pwd = ft_strjoin("PWD=", &temp[5]);
 	}
 	if (set_pwd(new_pwd, env))

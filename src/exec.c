@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/13 13:41:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/14 13:57:43 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 int	exec_bin(t_table table, char **env)
 {
 	pid_t	pid;
-	display_table(table);
+	
 	pid = fork();
 	if (pid == -1)
 		return (perror("pid faild on exec_src_bin"), 1);
@@ -118,11 +118,12 @@ void	heredoc(int	fd, char *eof)
 	char	*input;
 
 	input = readline("heredoc>");
-	while (ft_strncmp(eof, input, ft_strlen(eof)))
+	while (ft_strncmp(eof, input, ft_strlen(eof) && input && manage_ctrl_c_var(3) != 1))
 	{
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		input = readline("heredoc>");
+		printf("%s\n", input);
 	}
 }
 
@@ -250,25 +251,27 @@ int	open_out_cmd(t_cmd *cmd)
 
 	i = 0;
 	fd = 0;
-	while (cmd->str_in[i])
+	while (cmd->str_out[i])
 	{
-		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '>')
+		if (cmd->str_out[i] && cmd->str_out[i + 1] && cmd->str_out[i] == '>')
 		{
-			if (cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i + 1] == '>' && cmd->str_in[i + 2] == ':')
-			{
+			if (cmd->str_out[i + 1] && cmd->str_out[i + 2] && cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == ':')
+			{	
+				fd = open_append(&cmd->str_out[i + 3]);
 				i+=2;
-				fd = open_append(&cmd->str_in[i + 3]);
 			}
-			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == ':')
+			else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == ':')
 			{
-				fd = open_out_file(&cmd->str_in[i + 2]);
+				fd = open_out_file(&cmd->str_out[i + 2]);
 				if (fd == -1)
 					return (-1);
 			}
 		}
 		i++;
 	}
-	cmd->in = fd;
+	if (fd == 0)
+		fd++;
+	cmd->out = fd;
 	return (fd);
 }
 
@@ -278,16 +281,16 @@ int	manage_out(t_cmd *cmds, t_table table)
 	int		check;
 
 	i = 0;
+	check = 1;
 	while (i < table.cmd_len)
 	{
-		check = open_in_cmd(&cmds[i]);
+		check = open_out_cmd(&cmds[i]);
 		if (check == -1)
 		{
-			cmds[i].in = -1;
+			cmds[i].in = 0;
 			perror("Error in manage in");
 			return (1);
 		}
-		cmds[i].out = 1;
 		i++;
 	}
 	return (0);
@@ -295,15 +298,29 @@ int	manage_out(t_cmd *cmds, t_table table)
 
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
-	manage_in(table.cmds, table);
-	//ouverture de tous les files
-	
+	int original_stdin;
+	int original_stdout;
 
+	if (!table.cmds->path)
+		return (shell);
+	original_stdin = dup(STDIN_FILENO);
+	original_stdout = dup(STDOUT_FILENO);
+	manage_in(table.cmds, table);
+	manage_out(table.cmds, table);
 	if (table.cmd_len > 1)
 	 	shell.error_code = ms_pipe(table, env, &shell);
 	else if (table.cmds->type == 0)
 		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
+	{
+		if (dup2(table.cmds->in, STDIN_FILENO) == -1
+			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
+			return (perror("pid faild on exec_src_bin"), shell);
 		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
+		dup2(original_stdin, STDIN_FILENO);
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdin);
+		close(original_stdout);
+	}
 	return (shell);
 }

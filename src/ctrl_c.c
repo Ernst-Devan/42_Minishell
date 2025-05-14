@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 16:27:16 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/13 14:46:46 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,3 @@ int	useless_function(void)
 	return (0);
 }
 
-void	useless_function2(int sig)
-{
-	printf("%d\n", sig);
-}

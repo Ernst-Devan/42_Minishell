@@ -31,8 +31,6 @@ int		echo(t_cmd command);
 int		pwd(char **env);
 int		unset(t_cmd cmd, char ***env);
 void	ms_exit(t_cmd cmd, char **env, t_shell shell);
-void	child_exit(char **env);
-
 
 int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell);
 
@@ -48,7 +46,6 @@ int		set_pwd(char *pwd, char ***env);
 int	manage_ctrl_c_var(int val);
 void	sig_hand(int sig);
 int		useless_function(void);
-void	useless_function2(int sig);
 
 
 #endif
