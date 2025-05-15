@@ -38,6 +38,8 @@ SRCS		=	minishell.c 	\
 				ctrl_c.c 		\
 				expand.c		\
 				prompt.c		\
+				manage_in.c 	\
+				manage_out.c 	\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
