@@ -6,10 +6,6 @@
 #include <stddef.h>
 
 
-// Understand that we can have command like this
-// ls >test1 >test2 >test3 >test4 
-// and the ls command is execute and create all the file
-// So we need to send the list of redirection to the exec
 // We can too send the command if there are not valid
 // and same if just have not command
 
@@ -40,8 +36,6 @@ char	*ft_ignore_str(char *str, char *ignore)
 	return (temp);
 }
 
-// Create a function who just skip the number of character asked
-
 char	*remove_quote(char *str)
 {
 	size_t	i;
@@ -68,6 +62,7 @@ char	*remove_quote(char *str)
 			temp[j++] = str[i++];
 	}
 	temp[j] = '\0';
+	free(str);
 	return (temp);
 }
 
@@ -77,20 +72,26 @@ char **skip_redirection(char **split_cmd)
 	size_t	j;
 	size_t	k;
 	char	*temp;
+	char	quote;
 	
 	i = 0;
 	j = 0;
+	quote = 0;
 	while (split_cmd[i])
 	{
 		k = 0;
 		temp = malloc((ft_strlen(split_cmd[i]) + 1 ) * sizeof(char));
 		while(split_cmd[i][j])
 		{
-			if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
+			inside_quote(split_cmd[i][j], &quote);
+			if (quote == 0)
 			{
-				j += ft_strlen_c(&split_cmd[i][j], ':');
-				j++;
-				j += ft_strlen_c(&split_cmd[i][j], ':');
+				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
+				{
+					j += ft_strlen_c(&split_cmd[i][j], ':');
+					j++;
+					j += ft_strlen_c(&split_cmd[i][j], ':');
+				}
 			}
 			if (!split_cmd[i][j])
 				break;
@@ -100,6 +101,7 @@ char **skip_redirection(char **split_cmd)
 		}
 		j = 0;
 		temp[k] = '\0';
+		free(split_cmd[i]);
 		split_cmd[i] = temp;
 		i++;
 	}
@@ -110,58 +112,69 @@ char **skip_redirection(char **split_cmd)
 // Patch the bug with adding the name max of a redirection
 // ADDING max for all other category like Path_max Name_max Command_max etc..
 
+
+char	*redirection_in(char *in, char **split_cmd, size_t *i, size_t *j, char *quote)
+{
+		if (split_cmd[*i][*j] == '<')
+		{
+			(*j) += ft_strccat(in, &split_cmd[*i][*j], ':');
+			ft_strlcat(in, ":", ft_strlen(split_cmd[*i]) + 1);
+			inside_quote(split_cmd[*i][*j], quote);
+			if (*quote != 0)
+				ft_strlcat(in, ":", ft_strlen(split_cmd[*i]) + 1);
+			(*j)++;
+			(*j) += ft_strccat(in, &split_cmd[*i][*j], ':');
+			ft_strlcat(in, ":", ft_strlen(split_cmd[*i] + 1));
+	}
+	return (in);
+}
+
+char	*redirection_out(char *out, char **split_cmd, size_t *i, size_t *j, char *quote)
+{
+	if (split_cmd[*i][*j] == '>')
+	{
+			(*j) += ft_strccat(out, &split_cmd[*i][*j], ':');
+			ft_strlcat(out, ":", ft_strlen(split_cmd[*i]) + 1);
+			inside_quote(split_cmd[*i][*j], quote);
+			if (*quote != 0)
+				ft_strlcat(out, ":", ft_strlen(split_cmd[*i]) + 1);
+			(*j)++;
+			(*j) += ft_strccat(out, &split_cmd[*i][*j], ':');
+			ft_strlcat(out, ":", ft_strlen(split_cmd[*i] + 1));
+	}
+	return (out);
+}
+
 void manage_redirection(t_cmd **cmds, char **split_cmd)
 {
 	size_t	i;
 	size_t	j;
-	char	in[NAME_MAX];
-	char	out[NAME_MAX];
+	char	*in;
+	char	*out;
 	char	quote;
 
 	i = 0;
-	j = 0;
-	in[0] = '\0';
-	out[0] = '\0';
 	quote = 0;
 	while (split_cmd[i])
 	{
+		in = malloc(ft_strlen(split_cmd[i]) + 1);
+		out = malloc(ft_strlen(split_cmd[i]) + 1);
+		in[0] = '\0';
+		out[0] = '\0';
+		j = 0;
 		while (split_cmd[i][j])
 		{
 			inside_quote(split_cmd[i][j], &quote);
 			if (quote == 0)
 			{
-				if (split_cmd[i][j] == '<')
-				{
-					j += ft_strccat(in, &split_cmd[i][j], ':');
-					ft_strlcat(in, ":", NAME_MAX);
-					inside_quote(split_cmd[i][j], &quote);
-					if (quote != 0)
-						ft_strlcat(in, ":", NAME_MAX);
-					j++;
-					j += ft_strccat(in, &split_cmd[i][j], ':');
-					ft_strlcat(in, ":", NAME_MAX);
-				}
-				else if (split_cmd[i][j] == '>')
-				{
-					j += ft_strccat(out, &split_cmd[i][j], ':');
-					ft_strlcat(out, ":", NAME_MAX);
-					inside_quote(split_cmd[i][j], &quote);
-					if (quote != 0)
-						ft_strlcat(out, ":", NAME_MAX);
-					j++;
-					j += ft_strccat(out, &split_cmd[i][j], ':');
-					ft_strlcat(out, ":", NAME_MAX);
-				}
-				if (!split_cmd[i][j])
-					break;
+				in = redirection_in(in, split_cmd, &i, &j, &quote);
+				out = redirection_out(out, split_cmd, &i, &j, &quote);
 			}
+			if (!split_cmd[i][j])
+				break;
 			j++;
 		}
 		(*cmds)[i].str_in = remove_quote(in);
-		(*cmds)[i].str_out = remove_quote(out);
-		ft_strlcpy(in, "\0", NAME_MAX);
-		ft_strlcpy(out, "\0", NAME_MAX);
-		j = 0;
-		i++;
+		(*cmds)[i++].str_out = remove_quote(out);
 	}
 }

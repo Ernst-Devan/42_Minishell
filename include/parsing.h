@@ -54,7 +54,7 @@ char	**remove_quotes(char **splited_cmd);
 
 // Free.c
 void	free_lstr(char **lstr);
-void	free_cmds(t_cmd *cmd);
+void	free_cmds(t_table table);
 void	free_table(t_table table);
 
 // Env.c
@@ -76,6 +76,9 @@ size_t	ft_strccpy(char *dest, const char *src, char c);
 size_t	lstrlen(char **lstr);
 char	*skip_characters(char *input, char c);
 size_t	ft_strccat(char *dest, char *src, char c);
+
+// Expand.c
+char	*expand_env(char *input, char **env);
 
 // Check.c
 char	*valid_command(char *path, char *command, size_t *type);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 15:38:53 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/15 11:22:58 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,17 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 int	open_heredoc(char *str, char **eof, char **name)
 {
 	int		n;
+	char	*nb;
 	static int i;
 
 	n = 0;
 	if (*name == NULL)
 		i = 0;
-	*name = ft_strjoin(".EOF", ft_itoa(i));
+	else
+		free (*name);
+	nb = ft_itoa(i);
+	*name = ft_strjoin(".EOF", nb);
+	free(nb);
 	i++;
 	while (str[n] && str[n] != ':')
 		n++;
@@ -123,8 +128,10 @@ void	heredoc(int	fd, char *eof)
 	{
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
+		free (input);
 		input = readline("heredoc>");
 	}
+	free (input);
 }
 
 int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
@@ -145,6 +152,8 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
 			(*nb_files)++;
 			heredoc(fd, eof);
+			if (eof)
+				free (eof);
 			if (fd == -1)
 				return (1);
 			close(fd);
@@ -152,6 +161,8 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 		}
 		i++;
 	}
+	if (name)
+		free(name);
 	cmd->in = fd;
 	return (fd);
 }
@@ -305,7 +316,6 @@ int	close_files(int nb_files)
 
 	nb = NULL;
 
-	
 	if (nb_files < 1)
 		return (0);
 	while (nb_files > 0)
@@ -361,6 +371,6 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 		close(original_stdin);
 		close(original_stdout);
 	}
-	close_files(nb_files);
+//	close_files(nb_files);
 	return (shell);
 }

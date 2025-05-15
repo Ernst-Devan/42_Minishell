@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/12 16:13:18 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/15 12:19:16 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 		cmd[i].type = type;
 		list_cmds++;
 		i++;
-	
 	}
-  return (0);
+  	return (0);
 }
 
 char **tokenisation(char *input) 
@@ -61,9 +60,10 @@ size_t	parser(t_table *table, char **env, char *input)
 	char **splited_cmds;
 
 	splited_cmds = tokenisation(input);
-	splited_cmds = remove_quotes(splited_cmds);
 	manage_redirection(&table->cmds, splited_cmds);
 	splited_cmds = skip_redirection(splited_cmds);
+	splited_cmds = remove_quotes(splited_cmds);
+	display_table(*table);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
 		return (1);
 	free_lstr(splited_cmds);

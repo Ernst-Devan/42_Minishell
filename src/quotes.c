@@ -87,7 +87,7 @@ char *skip_space(char *input, int *error_code)
 	i = 0;
 	j = 0;
 	quote = 0;
-	buffer = malloc((ft_strlen(input) + 1) * sizeof(char));
+	buffer = ft_calloc(ft_strlen(input) + 1, sizeof(char));
 	while(input[j])
 	{
 		if (inside == 0)

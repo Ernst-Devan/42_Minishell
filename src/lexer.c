@@ -27,7 +27,7 @@ char *lexer(char *input, char **env)
 	quote = 0;
 	buffer_size = ft_strlen(input) + count_characters(input, DELIMITER) * 10 + 1;
 	i = 0;
-	buffer = malloc(buffer_size * sizeof(char));
+	buffer = ft_calloc(buffer_size, sizeof(char));
 	if (!buffer)
 		return (NULL);
 	input_adress = input;

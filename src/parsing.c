@@ -21,7 +21,7 @@
 // DONT FORGOT TO ADD THE HEADER
 // ERROR IN THIS CASE : $(NOT_VALID_ENV) | ls
 // MANAGE IF NAME FILE ARE TWO LONG
-
+  
 // NOT JUST SPACE BE CAREFUL TO ALL delimiter
 // SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
 
@@ -36,6 +36,7 @@ t_table parsing(t_shell *shell)
 //	if (shell->error_code)
 	//	return (table);
 	input = lexer(input, shell->env);
+	input = expand_env(input, shell->env);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
 	if (parser(&table, shell->env,input))
