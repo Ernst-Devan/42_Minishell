@@ -83,7 +83,7 @@ debug:
 	fi
 	bash -c "echo -en '\033c\033[3J'"
 	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
-	bash -c "valgrind --leak-check=full ./minishell"
+	bash -c "valgrind --leak-check=full --suppressions=valgrind_readline.supp ./minishell"
 	
 .PHONY: debuga 
 debuga:
