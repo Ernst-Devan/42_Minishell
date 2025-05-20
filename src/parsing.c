@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/14 16:01:45 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/16 15:13:26 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <libft.h>
 #include <unistd.h>
+#include <stdio.h>
+
 // DONT FORGOT TO ADD THE HEADER
 // ERROR IN THIS CASE : $(NOT_VALID_ENV) | ls
 // MANAGE IF NAME FILE ARE TWO LONG
@@ -35,7 +37,7 @@ t_table parsing(t_shell *shell)
 	input = skip_space(input, &shell->error_code);
 //	if (shell->error_code)
 	//	return (table);
-	input = lexer(input, shell->env);
+	input = lexer(input);
 	input = expand_env(input, shell->env);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);

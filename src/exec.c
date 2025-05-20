@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/15 13:02:42 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/20 10:05:40 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 
 	len = ft_strlen(cmd.args[0]);
 	if (!ft_strncmp("export", cmd.args[0], len + 1))
-		export(cmd, env, shell);
+		return (export(cmd, env));
 	else if (!ft_strncmp("env", cmd.args[0], len + 1))
-		print_env(*env);
+		return (env_builtin(*env, cmd));
 	else if (!ft_strncmp("cd", cmd.args[0], len + 1))
-		cd(cmd, env);
+		return (cd(cmd, env));
 	else if (!ft_strncmp("echo", cmd.args[0], len + 1))
 		echo(cmd);
 	else if (!ft_strncmp("pwd", cmd.args[0], len + 1))
-		pwd(*env);
+		return pwd(cmd);
 	else if (!ft_strncmp("unset", cmd.args[0], len + 1))
 		unset(cmd, env);
 	else if (!ft_strncmp("exit", cmd.args[0], len + 1))
-		ms_exit(cmd, *env, *shell);
+		ms_exit(cmd, *env, shell);
 	return (0);
 }
 
@@ -99,15 +99,13 @@ int	close_files(int nb_files)
 
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
-	int original_stdin;
-	int original_stdout;
 	int	nb_files;
 
 	nb_files = 0;
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
 	manage_in(table.cmds, table, &nb_files);
 	manage_out(table.cmds, table);
+	if (!table.cmds->path)
+		return (shell);
 	if (manage_ctrl_c_var(3) == 1)
 	{
 		close_files(nb_files);
@@ -126,12 +124,10 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 			close_files(nb_files);
 			return (perror("pid faild on exec_src_bin"), shell);
 		}
-		shell.error_code = exec_builtins(table.cmds[0], env, &shell);
-		dup2(original_stdin, STDIN_FILENO);
-		dup2(original_stdout, STDOUT_FILENO);
-		close(original_stdin);
-		close(original_stdout);
+		shell.error_code =  exec_builtins(table.cmds[0], env, &shell);
+		dup2(0, STDIN_FILENO);
+		dup2(1, STDOUT_FILENO);
 	}
-//	close_files(nb_files);
+	close_files(nb_files);
 	return (shell);
 }

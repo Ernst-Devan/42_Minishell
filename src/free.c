@@ -15,6 +15,7 @@ void free_lstr(char **lstr)
 		{
 			temp = lstr[i];
 			free(temp);
+			temp = NULL;
 			i++;
 		}
 		free(lstr);
@@ -49,11 +50,10 @@ void	free_cmds(t_table table)
 
 void	free_table(t_table table)
 {
-	printf("ttest\n");
 	display_table(table);
-	// if (table.cmds)
-	// {
-	// 	free_cmds(table);
-	// 	table.cmds = NULL;
-	// }
+	if (table.cmds)
+	{
+		free_cmds(table);
+		table.cmds = NULL;
+	}
 }

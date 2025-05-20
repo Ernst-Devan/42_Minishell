@@ -2,6 +2,8 @@
 #include <parsing.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stddef.h>
+#include <stdio.h>
 
 char *replace_var(char *str, char **env) {
 	char *variable;
@@ -69,24 +71,31 @@ char	find_env_end(char *str, char *characters, char quote)
 
 char *detect_full_variable(char *input)
 {
-	char	*temp;
+	char	*buffer;
 
 	size_t	i;
 
 	i = 0;
-	temp = malloc(ft_strlen(input) + 1);
-	if (!temp)
+	buffer = malloc(ft_strlen(input) + 2);
+	if (!buffer)
 		return (NULL);
 	while (*input)
 	{
 		if (!ft_isalpha(*input))
 			break;
-		temp[i] = *input;
+		buffer[i] = *input;
 		i++;
 		input++;
 	}
-	temp[i] = '\0';
-	return (temp);
+	buffer[i] = '=';
+	buffer[i + 1] = '\0';
+	if (ft_strlen(buffer) == 1)
+	{
+		ft_printf("No EXPAND");
+		free(buffer);
+		return (NULL);
+	}
+	return (buffer);
 }
 
 
@@ -107,13 +116,13 @@ char *detect_full_variable(char *input)
 
 char *expand_env(char *input, char **env)
 {
-	char	*temp;
+	char	*buffer;
 	char	*variable;
 	char	quote;
 	size_t	i;
 	size_t	j;
 
-	temp = ft_calloc(500, sizeof(char)); // Make a function count the allocation needed
+	buffer = ft_calloc(500, sizeof(char)); // Make a function count the allocation needed
 	quote = 0;
 	i = 0;
 	j = 0;
@@ -128,19 +137,24 @@ char *expand_env(char *input, char **env)
 				//	break;
 				if (input[i] != '$')
 					break;
-				variable = replace_var(detect_full_variable(&input[++i]), env);
+				i++;
+				if (replace_var(&input[i], env) == NULL)
+				{
+					ft_printf("test");
+				}
+				variable = replace_var(detect_full_variable(&input[i]), env);
 				i += ft_strlen_c(&input[i], find_env_end(&input[i], ":$-|<>", quote));
-				ft_strlcat(temp, variable, 500);
+				ft_strlcat(buffer, variable, 500);
 				j += ft_strlen(variable);
 			}
 			if (!input[i])
 				break;
 		}
-		temp[j] = input[i];
+		buffer[j] = input[i];
 		j++;
 		i++;
 	}
-	temp[j] = '\0';
+	buffer[j] = '\0';
 	free(input);
-	return (temp);
+	return (buffer);
 }

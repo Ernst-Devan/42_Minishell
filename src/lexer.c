@@ -15,16 +15,16 @@
 #include <readline/readline.h>
 #include <stddef.h>
 
-char *lexer(char *input, char **env) 
+char *lexer(char *input) 
 {
 	char	*buffer;
 	char	*input_adress;
 	size_t	i;
 	size_t	buffer_size;
 	char	quote;
-	(void)env;
 
 	quote = 0;
+	// Find a better allocation size
 	buffer_size = ft_strlen(input) + count_characters(input, DELIMITER) * 10 + 1;
 	i = 0;
 	buffer = ft_calloc(buffer_size, sizeof(char));
@@ -41,15 +41,15 @@ char *lexer(char *input, char **env)
 			{
 				if (*input == ' ')
 					input++;
-				buffer[i++] = ':';
+				buffer[i++] = SEPARATOR;
 				while(check_delimiter(*input, "<>|") == 1)
 					buffer[i++] = *input++;
-				if (buffer[i - 1] != ':')
-					buffer[i++] = ':';
+				if (buffer[i - 1] != SEPARATOR)
+					buffer[i++] = SEPARATOR;
 				if (*input == ' ')
 					input++;
 			}
-			if (*input && *input != '\'' && *input != '\"')
+			else if (*input && *input != '\'' && *input != '\"')
 				buffer[i++] = *input++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 15:02:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 13:42:33 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/16 14:05:44 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ void	while_echo(char **lstr)
 
 int	echo(t_cmd command)
 {
+	int	i;
+
+	i = 1;
 	if (!command.args[1])
 	{
 		write(1, "\n", 1);
@@ -56,8 +59,11 @@ int	echo(t_cmd command)
 	if (command.args[1][1] && command.args[1][0] == '-' 
 		&& !check_n(&command.args[1][1]))
 	{
-		if (command.args[2])
-			while_echo(&command.args[2]);
+		while (command.args[i][1] && command.args[i][0] == '-' 
+		&& !check_n(&command.args[i][1]))
+			i++;
+		if (command.args[i])
+			while_echo(&command.args[i]);
 	}
 	else
 	{

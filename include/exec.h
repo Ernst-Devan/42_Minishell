@@ -21,16 +21,17 @@ int	exec_bin(t_table table, char **env);
  */
 t_shell	exec(t_table table, char ***env, t_shell shell);
 
-int	export(t_cmd cmd, char ***env, t_shell *shell);
+int	export(t_cmd cmd, char ***env);
 int	find_env_variable(char **env, char *str);
 int	edit_variable_env(char ***env, char *data);
 int	add_variable_env(char ***env, char *data);
 
 int		cd(t_cmd cmd, char ***env);
 int		echo(t_cmd command);
-int		pwd(char **env);
+int		pwd(t_cmd cmd);
 int		unset(t_cmd cmd, char ***env);
-void	ms_exit(t_cmd cmd, char **env, t_shell shell);
+void	ms_exit(t_cmd cmd, char **env, t_shell *shell);
+int		env_builtin(char **env, t_cmd cmd);
 
 int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell);
 

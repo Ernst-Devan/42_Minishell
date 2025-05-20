@@ -10,7 +10,7 @@ void display_table(t_table table) {
 
 	i = 0;
 	j = 0;
-	while (i < table.cmd_len && table.cmds[i].path) 
+	while (i < table.cmd_len) 
 	{
 		ft_printf("type : %d\n", table.cmds[i].type);
 		ft_printf("cmd  : %s\n", table.cmds[i].path);

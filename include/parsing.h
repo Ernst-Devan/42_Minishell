@@ -8,6 +8,7 @@
 #define NAME_MAX 255
 #define ENV_MAX 32760
 #define DELIMITER " -<>|"
+#define SEPARATOR ':'
 
 typedef struct s_shell {
   size_t	status;
@@ -92,7 +93,7 @@ size_t	inside_quote(char c, char *quote);
 char	*skip_space(char *input, int *error_code);
 
 // Lexer.c
-char	*lexer(char *input, char **env);
+char	*lexer(char *input);
 
 // Parser.c
 size_t	parser(t_table *table, char **env, char *lexer);

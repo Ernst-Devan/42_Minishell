@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:13:22 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 13:51:24 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/20 10:04:49 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,22 @@
 #include "exec.h"
 #include "libft.h"
 
-int	pwd(char **env)
+int	pwd(t_cmd cmd)
 {
-	int	i;
-	
-	i = find_env_variable(env, "PWD=");
-	if (i == -1)
+	char	*str;
+
+	if (cmd.args[1])
+	{
+		printf("pwd : too many arguments\n");
 		return (1);
-	printf("%s\n", &env[i][4]);
+	}
+	str = getcwd(NULL, 0);
+	if (!str)
+	{
+		perror("getcwd");
+		return (1);
+	}
+	printf("%s\n", str);
+	free(str);
 	return (0);
 }

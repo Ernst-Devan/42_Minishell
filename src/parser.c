@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/15 12:19:16 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/20 09:02:25 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ size_t	parser(t_table *table, char **env, char *input)
 	manage_redirection(&table->cmds, splited_cmds);
 	splited_cmds = skip_redirection(splited_cmds);
 	splited_cmds = remove_quotes(splited_cmds);
-	display_table(*table);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
 		return (1);
 	free_lstr(splited_cmds);

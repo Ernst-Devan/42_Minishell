@@ -14,20 +14,20 @@ char	*get_command(char *input, t_shell *shell)
 	{
 		ft_strlcat(prompt, "\001\e[0;36m\002", PATH_MAX);
 		ft_strlcat(prompt, find_env("PWD", shell->env), PATH_MAX);
-		ft_strlcat(prompt, "\001\e[0;37m\002 : Il arrive... \001\e[0;37m\002", PATH_MAX);
+		ft_strlcat(prompt, "\001\e[0;37m\002 : \001\e[0;37m\002", PATH_MAX);
 		i = 1;
 	}
 	else if (!shell->error_code)
 	{
 		ft_strlcat(prompt, "\001\e[0;36m\002", PATH_MAX);
 		ft_strlcat(prompt, find_env("PWD", shell->env), PATH_MAX);
-		ft_strlcat(prompt, "\001\e[0;37m\002 : (づ◕‿‿◕)づ🩵 \001\e[0;37m\002", PATH_MAX);
+		ft_strlcat(prompt, "\001\e[0;37m\002 : \001\e[0;37m\002", PATH_MAX);
 	}
 	else
 	{
 		ft_strlcat(prompt, "\001\e[0;91m\002", PATH_MAX);
 		ft_strlcat(prompt, find_env("PWD", shell->env), PATH_MAX);
-		ft_strlcat(prompt, "\001\e[0;37m\002 : (づಠ__ಠ)づ💢 \001\e[0;37m\002", PATH_MAX);
+		ft_strlcat(prompt, "\001\e[0;37m\002 : \001\e[0;37m\002", PATH_MAX);
 	}
 	input = readline(prompt);
 	if (!input)

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 13:09:18 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/15 15:12:41 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,6 @@
 #include "exec.h"
 #include "libft.h"
 
-int	use_pipe_bin(t_cmd command, int in, int pipefd[2]) // faire la gestion d'erreur des dup2
-{
-	pid_t	pid;
-
-	
-
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork error in use pipe"), 1);
-	if (pid == 0)
-	{
-		close(pipefd[0]);
-		if(dup2(in, STDIN_FILENO) == -1 || dup2(pipefd[1], STDOUT_FILENO) == -1)
-			return (perror("dup2 faild in usepipe"), 1);
-		execve(command.path, command.args, NULL);
-		return (perror("execve error in use pipe"), 1);
-	}
-	if (in != 0)
-		close(in);
-	if (pipefd[1] != 1)
-		close(pipefd[1]);
-	return (0);
-}
-
 int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2
 {
 	pid_t	pid;
@@ -56,7 +32,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 	{
 		if (pipefd[0] != STDIN_FILENO && pipefd[0] != in)
 			close(pipefd[0]);
-		if (command.in != STDIN_FILENO)
+		if (command.in != STDIN_FILENO && in != command.in)
 		{
 			close(in);
 			in = command.in;
@@ -66,8 +42,10 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 			close(pipefd[1]);
 			pipefd[1] = command.out;
 		}
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
+		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 			return (perror("dup2 faild in usepipe"), 1);
+		if (dup2(in, STDIN_FILENO) == -1)
+			return (perror("dup2 faild in usepipe2"), 1);
 		if (in != STDIN_FILENO)
 			close(in);
 		if (pipefd[1] != STDOUT_FILENO)
@@ -80,8 +58,10 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 		exec_builtins(command, env, shell);
 		return (-1);
 	}
-	if (in != STDIN_FILENO)
+	if (in != STDIN_FILENO && in != command.in)
+	{
 		close(in);
+	}
 	if (pipefd[1] != STDOUT_FILENO)
 		close(pipefd[1]);
 	return (pid);
