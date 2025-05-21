@@ -60,4 +60,6 @@ int	open_out_cmd(t_cmd *cmd);
 int	open_out_file(char *str);
 int	open_append(char *str);
 
+int	lexical_analyser(char *input);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/16 15:13:26 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/20 16:42:38 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <libft.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "exec.h"
 
 // DONT FORGOT TO ADD THE HEADER
 // ERROR IN THIS CASE : $(NOT_VALID_ENV) | ls
@@ -38,6 +39,14 @@ t_table parsing(t_shell *shell)
 //	if (shell->error_code)
 	//	return (table);
 	input = lexer(input);
+	if (lexical_analyser(input) == 1)
+	{
+		free(input);
+		table.cmd_len = 0;
+		table.cmds = NULL;
+		shell->error_code = 2;
+		return (table);
+	}
 	input = expand_env(input, shell->env);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
