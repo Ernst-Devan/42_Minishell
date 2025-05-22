@@ -102,7 +102,6 @@ char	*skip_space(char *input, int *error_code);
 
 // Lexer.c
 char	*lexer(char *input);
-char	*lexer(char *input);
 
 // Parser.c
 size_t	parser(t_table *table, char **env, char *lexer);

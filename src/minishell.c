@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 11:15:10 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 11:48:43 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <signal.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int	minishell(char **env)
 {

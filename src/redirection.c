@@ -154,8 +154,8 @@ void manage_redirection(t_cmd **cmds, char **split_cmd)
 	char	*in;
 	char	*out;
 	char	quote;
-	
-	i = 0;
+
+	i = 0;	
 	quote = 0;
 	while (split_cmd[i])
 	{

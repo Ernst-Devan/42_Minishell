@@ -56,6 +56,7 @@ char  *check_command(char *path, char *command)
 		}
 		i++;
 	}
+	free_lstr(splited_path);
 	return (NULL);
 }
 

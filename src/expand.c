@@ -69,11 +69,15 @@ char	*detect_full_variable(char *input)
 	return (buffer);
 }
 
-char	*adding_expand(t_expand *expand, char *variable, char **env)
+char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 {
 	char	*expanded;
-
+	int		error;
+	
+	error = 0;
 	expanded = replace_var(variable, env);
+	if (quote == 0)
+		expanded = skip_space(expanded, &error);
 	expand->i += ft_strlen(variable);
 	ft_strlcat(expand->buffer, expanded, 500);
 	expand->j += ft_strlen(expanded);
@@ -88,13 +92,13 @@ char	*special_expand(t_shell shell, t_expand *expand)
 
 	error = ft_itoa(shell.error_code);
 	ft_strlcat(expand->buffer, error, 500);
-	free(error);
 	expand->j += ft_strlen(error);
 	expand->i += 2;
+	free(error);
 	return (expand->buffer);
 }
 
-char	*need_expand(char *input, t_expand *expand, t_shell shell)
+char	*need_expand(char *input, t_expand *expand, t_shell shell, char quote)
 {
 	char *variable;
 
@@ -104,7 +108,7 @@ char	*need_expand(char *input, t_expand *expand, t_shell shell)
 	else if (variable[0] == '?')
 		expand->buffer = special_expand(shell, expand);
 	else
-		expand->buffer = adding_expand(expand, variable, shell.env);
+		expand->buffer = adding_expand(expand, variable, shell.env, quote);
 	free(variable);
 	return (expand->buffer);
 
@@ -126,7 +130,7 @@ char *manage_expand(char *input, t_shell shell)
 		{
 			while (input[expand.i] == '$')
 			{
-				test = need_expand(input, &expand, shell);
+				test = need_expand(input, &expand, shell, quote);
 				if (!test)
 					break;
 			}

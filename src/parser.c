@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/21 13:04:27 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 12:26:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,33 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 
 	i = 0;
 	type = 0;
+	args = NULL;
 	while (*list_cmds != NULL) 
 	{
-		args = ft_split(*list_cmds, SEPARATOR);
-		if (!args)
-			return (1);
-		cmd[i].args = args;
-		if (!args[0])
-			break;
-		path_command = valid_command(path, args[0], &type);
-		cmd[i].path = path_command;
-		if (!path_command)
-			ft_printf("\n%s: command not found\n", args[0]);
-		cmd[i].type = type;
+		if (**list_cmds)
+		{
+			args = ft_split(*list_cmds, SEPARATOR);
+			if (!args)
+				return (1);
+			cmd[i].args = args;
+		}
+		if (args && args[0])
+		{
+			path_command = valid_command(path, args[0], &type);
+			cmd[i].path = path_command;
+			if (!path_command)
+				ft_printf("\n%s: command not found\n", args[0]);
+			cmd[i].type = type;
+			i++;
+		}
+		else 
+		{
+			cmd[i].type = 2;
+			free_lstr(args);
+			i++;
+		}
 		list_cmds++;
-		i++;
+		
 	}
   	return (0);
 }

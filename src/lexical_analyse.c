@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 15:25:12 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 12:29:39 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	*lexical_analyser_define(char *input, int *len)
 				i += 2;
 			define = choose_define(&input[i], &i);
 			new_tab = malloc(sizeof(int) * (*len + 1));
+			if (!new_tab)
+				return (NULL);
 			j = 0;
 			while (j < *len)
 			{
@@ -130,6 +132,7 @@ int	lexical_analyser(char *input)
 
 	tab = lexical_analyser_define(input, &len);
 	check = check_lexical(tab, len);
+	free(tab);
 	if (check == 1)
 		printf("syntax error\n");
 	return (check);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 16:50:30 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 12:34:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	exec_bin(t_table table, char **env)
 	pid_t	pid;
 	int		status;
 
+	status = 0;
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed in exec_bin"), 1);

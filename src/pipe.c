@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 16:32:01 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 12:45:11 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,20 +96,8 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 		}
 		i++;
 	}
-	while (wait(NULL) > -1)
-	{
-		if (waitpid(tab_child[table.cmd_len - 1], &status, 0) == -1)
-			return (perror("waitpid failed in exec_bin"), 1);
-		if (manage_ctrl_c_var(3) == 1)
-		{
-			i = 0;
-			while (i < table.cmd_len)
-			{
-				kill(SIGINT, tab_child[i]);
-				i++;
-			}
-		}
-	}
+	while (wait(&status) > -1)
+	{}
 	if (WIFEXITED(status))
 		return WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
