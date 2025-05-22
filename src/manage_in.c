@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/15 12:54:37 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:34:04 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	open_heredoc(char *str, char **eof, char **name)
 	*name = ft_strjoin(".EOF", nb);
 	free(nb);
 	i++;
-	while (str[n] && str[n] != ':')
+	while (str[n] && str[n] != SEPARATOR)
 		n++;
 	*eof = malloc(sizeof(char) * (n + 1));
 	if (!*eof)
@@ -57,7 +57,7 @@ int	open_in_file(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != ':')
+	while (str[n] && str[n] != SEPARATOR)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -96,7 +96,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 	name = NULL;
 	while (cmd->str_in[i])
 	{
-		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == ':')
+		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
 		{
 			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
 			(*nb_files)++;
@@ -127,12 +127,12 @@ int	open_in_cmd(t_cmd *cmd)
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '<')
 		{
-			if (cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == ':')
+			if (cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
 			{
 				i+=2;
 				fd = cmd->in;
 			}
-			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == ':')
+			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == SEPARATOR)
 			{
 				fd = open_in_file(&cmd->str_in[i + 2]);
 				if (fd == -1)

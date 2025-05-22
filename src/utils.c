@@ -15,7 +15,7 @@ void display_table(t_table table) {
 		ft_printf("type : %d\n", table.cmds[i].type);
 		ft_printf("cmd  : %s\n", table.cmds[i].path);
 		ft_printf("args : ");
-		while (table.cmds[i].args[j])
+		while (table.cmds[i].args && table.cmds[i].args[j])
 		{
 			ft_printf("%s ", table.cmds[i].args[j]);
 			j++;	

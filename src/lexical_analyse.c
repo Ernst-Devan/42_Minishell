@@ -6,13 +6,14 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 12:31:10 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 15:25:12 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "parsing.h"
 
 #define CMD 0
 #define LESSLESS 1
@@ -78,7 +79,7 @@ int	*lexical_analyser_define(char *input, int *len)
 	tab = NULL;
 	while (input[i])
 	{
-		while (input[i] == ':')
+		while (input[i] == SEPARATOR)
 			i++;
 		if (input[i])
 		{
@@ -114,7 +115,7 @@ int	check_lexical(int *tab, int len)
 		if ((tab[i] == GREAT || tab[i] == GREATGREAT || tab[i] == LESS || tab[i] == LESSLESS)
 			&& (i + 1 == len || tab[i + 1] != CMD))
 			return (1);
-		if (tab[i] == PIPE && (i + 1 < len && tab[i + 1] == PIPE))
+		if (tab[i] == PIPE && ((i + 1 == len)|| ((i + 1 < len && tab[i + 1] == PIPE))))
 			return (1);
 		i++;
 	}

@@ -8,7 +8,8 @@
 #define NAME_MAX 255
 #define ENV_MAX 32760
 #define DELIMITER " -<>|"
-#define SEPARATOR ':'
+#define SEPARATOR '\x1F'
+#define SEPARATOR2 "\x1F"
 
 typedef struct s_shell {
   size_t	status;
@@ -36,6 +37,12 @@ typedef struct s_table {
   t_cmd		*cmds;
   size_t	cmd_len;
 }	t_table;
+
+typedef struct s_expand{
+	size_t	i;
+	size_t	j;
+	char	*buffer;
+}	t_expand;
 
 // Redirection.command
 void	manage_redirection(t_cmd **cmd, char **split_cmd);
@@ -79,7 +86,8 @@ char	*skip_characters(char *input, char c);
 size_t	ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
-char	*expand_env(char *input, char **env);
+char	*manage_expand(char *input, t_shell shell);
+int	init_expand(t_expand *expand);
 
 // Check.c
 char	*valid_command(char *path, char *command, size_t *type);
@@ -93,6 +101,7 @@ size_t	inside_quote(char c, char *quote);
 char	*skip_space(char *input, int *error_code);
 
 // Lexer.c
+char	*lexer(char *input);
 char	*lexer(char *input);
 
 // Parser.c

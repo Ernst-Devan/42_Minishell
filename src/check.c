@@ -26,6 +26,8 @@ size_t check_bultin(char *command)
 return(0);
 }
 
+
+#include <stdio.h>
 char  *check_command(char *path, char *command)
 {
 	char    **splited_path;
@@ -37,6 +39,8 @@ char  *check_command(char *path, char *command)
 	if (command == NULL)
 		return(NULL);
 	splited_path = ft_split(path, ':');
+	if (!splited_path)
+		return(NULL);
 	while(splited_path[i] != NULL)
 	{
 		ft_strlcpy(temp_path, splited_path[i], PATH_MAX);
@@ -50,7 +54,6 @@ char  *check_command(char *path, char *command)
 				return (NULL);
 			return (final_path);
 		}
-
 		i++;
 	}
 	return (NULL);
@@ -74,3 +77,5 @@ char	*valid_command(char *path, char *command, size_t *type)
 	*type = 3;
 	return (command);
 }
+
+

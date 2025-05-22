@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 12:32:49 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 16:50:30 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,34 @@
 int	exec_bin(t_table table, char **env)
 {
 	pid_t	pid;
-	
+	int		status;
+
 	pid = fork();
 	if (pid == -1)
-		return (perror("pid faild on exec_src_bin"), 1);
-	if (pid == 0)
+		return (perror("fork failed in exec_bin"), 1);
+	if (pid == 0 && table.cmds->path)
 	{
 		if (dup2(table.cmds->in, STDIN_FILENO) == -1
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
-			return (perror("pid faild on exec_src_bin"), 1);
+		{
+			perror("dup2 failed in exec_bin");
+			exit(1);
+		}
 		if (execve(table.cmds->path, table.cmds->args, env) == -1)
-			return (perror("execve faild on exekc_src_bin"), 1);
+		{
+			perror("Command not found");
+			exit(1);
+		}
 	}
-	wait(NULL);
-	if(manage_ctrl_c_var(3) == 1)
-	{
-		kill(SIGINT, pid);
+	if (waitpid(pid, &status, 0) == -1)
+		return (perror("waitpid failed in exec_bin"), 1);
+	if (manage_ctrl_c_var(3) == 1)
 		printf("\n");
-	}
-	return (0);
+	if (WIFEXITED(status))
+		return WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		return 128 + WTERMSIG(status);
+	return (status);
 }
 
 int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
@@ -104,8 +113,6 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	nb_files = 0;
 	manage_in(table.cmds, table, &nb_files);
 	manage_out(table.cmds, table);
-	if (!table.cmds->path)
-		return (shell);
 	if (manage_ctrl_c_var(3) == 1)
 	{
 		close_files(nb_files);
@@ -114,7 +121,7 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	}
 	if (table.cmd_len > 1)
 	 	shell.error_code = ms_pipe(table, env, &shell);
-	else if (table.cmds->type == 0)
+	else if (table.cmds->type != 1 && table.cmds->path)
 		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
 	{

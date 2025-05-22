@@ -5,9 +5,34 @@
 #include <stddef.h>
 #include <stdio.h>
 
-char *replace_var(char *str, char **env) {
-	char *variable;
-	char *buffer;
+// QUESTION ABOUT THIS CASE $$PWD
+// echo "$PWD" Not WORK
+// echo $"PWD" Must print PWD
+// echo $PWD-n 
+// echo $PWD -n WORK
+// ls FILE -la work test it
+// $$ ERROR
+// $? MANAGE IT
+// Test expand with all other delimiter
+//!!!!! FOR TODAY
+// echo $$PWD -> return nothing 
+// echo $$$PWD -> return PWD
+// echo $'PWD' return PWD
+// echo $ -> return $
+// echo $PWD$ -> return the pwd + $
+// echo $$$$$$$$$$$ -> ERROR
+// echo$PWD -> LEAK INSIDE CHECK_COMMAND -> FT_SPLIT
+// echo $_ -> alphanumeric
+// echo $0 -> minishell
+// echo $012 MUST DISPLAY SOMETHING !!
+// the first bytes must be not a digit
+// echo$PWD$PWD -> LEAKS !!!! 
+// Change the : by the new separator inside all the command (unwritable char)
+
+char	*replace_var(char *str, char **env)
+{
+	char	*variable;
+	char	*buffer;
 
 	variable = find_env(str, env);
 	if (!variable)
@@ -18,61 +43,9 @@ char *replace_var(char *str, char **env) {
 	return (buffer);
 }
 
-void	check_var_env(char **list_env,char *buffer, size_t *i, size_t *j, size_t buffer_size)
-{
-	buffer[*i] = '\0';
-	ft_strlcat(buffer, list_env[*j], buffer_size);
-	*i += ft_strlen(list_env[*j]);
-	*j += 1;
-}
-// 
-// CHECK WITH THE QUOTES CAUSE I THINK IT DONT WORK
-
-
-
-// echo "$PWD" Not WORK
-// echo $"PWD" Must print PWD
-// echo $PWD-n 
-// echo $PWD -n WORK
-// ls FILE -la work test it
-// $$ ERROR
-// $? MANAGE IT
-// Test expand with all other delimiter
-
-//!!!!! FOR TODAY
-// echo $$PWD -> return nothing 
-// echo $$$PWD -> return PWD
-// echo $'PWD' return PWD
-// echo $ -> return $
-// echo $PWD$ -> return the pwd + $
-
-char	find_env_end(char *str, char *characters, char quote)
-{
-	size_t	i;
-
-	i = 0;
-	while (*str)
-	{
-		if (*str == quote)
-			return (*str);
-		while (characters[i])
-		{
-			if (*str == characters[i])
-				return (*str);
-			i++;
-		}
-		i = 0;
-		str++;
-	}
-	return (*str);
-}
-
-// Change the : by the new separator inside all the command (unwritable char)
-
-char *detect_full_variable(char *input)
+char	*detect_full_variable(char *input)
 {
 	char	*buffer;
-
 	size_t	i;
 
 	i = 0;
@@ -81,80 +54,87 @@ char *detect_full_variable(char *input)
 		return (NULL);
 	while (*input)
 	{
-		if (!ft_isalpha(*input))
-			break;
-		buffer[i] = *input;
-		i++;
 		input++;
+		if (!ft_isalnum(*input) && *input != '?' && *input != '_')
+			break ;
+		buffer[i++] = *input;
 	}
 	buffer[i] = '=';
 	buffer[i + 1] = '\0';
-	if (ft_strlen(buffer) == 1)
+	if (ft_strlen(buffer) == 1 || ft_isdigit(buffer[0]))
 	{
-		ft_printf("No EXPAND");
 		free(buffer);
 		return (NULL);
 	}
 	return (buffer);
 }
 
-
-//size_t	detect_others_expand(char *input, size_t *i)
-//{
-//	if (ft_strlen(&input[*i]) <= 1)
-//		return (1);
-	//if (ft_strlen(&input[*i]) <= 1)
-	//	return (2);
-	//if (input[*i + 1] && check_delimiter(input[*i + 1], "\"\'$-!0_#@*"))
-	//{
-	//	*i += 2;
-	//	if (check_delimiter(input[*i - 1], "\'\""))
-	//		return (1);
-	//}
-	//return (0);
-//}
-
-char *expand_env(char *input, char **env)
+char	*adding_expand(t_expand *expand, char *variable, char **env)
 {
-	char	*buffer;
-	char	*variable;
-	char	quote;
-	size_t	i;
-	size_t	j;
+	char	*expanded;
 
-	buffer = ft_calloc(500, sizeof(char)); // Make a function count the allocation needed
+	expanded = replace_var(variable, env);
+	expand->i += ft_strlen(variable);
+	ft_strlcat(expand->buffer, expanded, 500);
+	expand->j += ft_strlen(expanded);
+	if (expanded && ft_strlen(expanded) > 0)
+		free(expanded);
+	return (expand->buffer);
+}
+
+char	*special_expand(t_shell shell, t_expand *expand)
+{
+	char	*error;
+
+	error = ft_itoa(shell.error_code);
+	ft_strlcat(expand->buffer, error, 500);
+	free(error);
+	expand->j += ft_strlen(error);
+	expand->i += 2;
+	return (expand->buffer);
+}
+
+char	*need_expand(char *input, t_expand *expand, t_shell shell)
+{
+	char *variable;
+
+	variable = detect_full_variable(&input[expand->i]);
+	if (!variable)
+		return (NULL);	
+	else if (variable[0] == '?')
+		expand->buffer = special_expand(shell, expand);
+	else
+		expand->buffer = adding_expand(expand, variable, shell.env);
+	free(variable);
+	return (expand->buffer);
+
+}
+
+char *manage_expand(char *input, t_shell shell)
+{
+	t_expand	expand;
+	char		*test;
+	char		quote;
+
+	if (init_expand(&expand))
+		return(NULL);
 	quote = 0;
-	i = 0;
-	j = 0;
-	while (input[i])
-	{
-		inside_quote(input[i], &quote);
+	while (input[expand.i])
+	{	
+		inside_quote(input[expand.i], &quote);
 		if (quote != '\'')
-		{	
-			while (input[i] == '$')
+		{
+			while (input[expand.i] == '$')
 			{
-				//if (detect_others_expand(input, &i) == 1 || detect_others_expand(input, &i) == 2)
-				//	break;
-				if (input[i] != '$')
+				test = need_expand(input, &expand, shell);
+				if (!test)
 					break;
-				i++;
-				if (replace_var(&input[i], env) == NULL)
-				{
-					ft_printf("test");
-				}
-				variable = replace_var(detect_full_variable(&input[i]), env);
-				i += ft_strlen_c(&input[i], find_env_end(&input[i], ":$-|<>", quote));
-				ft_strlcat(buffer, variable, 500);
-				j += ft_strlen(variable);
 			}
-			if (!input[i])
-				break;
 		}
-		buffer[j] = input[i];
-		j++;
-		i++;
+		if (input[expand.i])
+			expand.buffer[expand.j++] = input[expand.i++];
 	}
-	buffer[j] = '\0';
+	expand.buffer[expand.j] = '\0';
 	free(input);
-	return (buffer);
+	return (expand.buffer);
 }

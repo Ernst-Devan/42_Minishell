@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/15 12:56:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:35:13 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	open_append(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != ':')
+	while (str[n] && str[n] != SEPARATOR)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -49,7 +49,7 @@ int	open_out_file(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != ':')
+	while (str[n] && str[n] != SEPARATOR)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -71,12 +71,12 @@ int	open_out_cmd(t_cmd *cmd)
 	{
 		if (cmd->str_out[i] && cmd->str_out[i + 1] && cmd->str_out[i] == '>')
 		{
-			if (cmd->str_out[i + 1] && cmd->str_out[i + 2] && cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == ':')
+			if (cmd->str_out[i + 1] && cmd->str_out[i + 2] && cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == SEPARATOR)
 			{	
 				fd = open_append(&cmd->str_out[i + 3]);
 				i+=2;
 			}
-			else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == ':')
+			else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == SEPARATOR)
 			{
 				fd = open_out_file(&cmd->str_out[i + 2]);
 				if (fd == -1)

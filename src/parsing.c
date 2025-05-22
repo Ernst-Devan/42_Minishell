@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/20 16:42:38 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:49:22 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_table parsing(t_shell *shell)
 		shell->error_code = 2;
 		return (table);
 	}
-	input = expand_env(input, shell->env);
+	input = manage_expand(input, *shell);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
 	if (parser(&table, shell->env,input))

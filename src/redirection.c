@@ -88,9 +88,9 @@ char **skip_redirection(char **split_cmd)
 			{
 				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
 				{
-					j += ft_strlen_c(&split_cmd[i][j], ':');
+					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
 					j++;
-					j += ft_strlen_c(&split_cmd[i][j], ':');
+					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
 				}
 			}
 			if (!split_cmd[i][j])
@@ -117,14 +117,14 @@ char	*redirection_in(char *in, char **split_cmd, size_t *i, size_t *j, char *quo
 {
 		if (split_cmd[*i][*j] == '<')
 		{
-			(*j) += ft_strccat(in, &split_cmd[*i][*j], ':');
-			ft_strlcat(in, ":", ft_strlen(split_cmd[*i]) + 1);
+			(*j) += ft_strccat(in, &split_cmd[*i][*j], SEPARATOR);
+			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
 			inside_quote(split_cmd[*i][*j], quote);
 			if (*quote != 0)
-				ft_strlcat(in, ":", ft_strlen(split_cmd[*i]) + 1);
+				ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
 			(*j)++;
-			(*j) += ft_strccat(in, &split_cmd[*i][*j], ':');
-			ft_strlcat(in, ":", ft_strlen(split_cmd[*i] + 1));
+			(*j) += ft_strccat(in, &split_cmd[*i][*j], SEPARATOR);
+			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i] + 1));
 	}
 	return (in);
 }
@@ -133,17 +133,19 @@ char	*redirection_out(char *out, char **split_cmd, size_t *i, size_t *j, char *q
 {
 	if (split_cmd[*i][*j] == '>')
 	{
-			(*j) += ft_strccat(out, &split_cmd[*i][*j], ':');
-			ft_strlcat(out, ":", ft_strlen(split_cmd[*i]) + 1);
+			(*j) += ft_strccat(out, &split_cmd[*i][*j], SEPARATOR);
+			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
 			inside_quote(split_cmd[*i][*j], quote);
 			if (*quote != 0)
-				ft_strlcat(out, ":", ft_strlen(split_cmd[*i]) + 1);
+				ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
 			(*j)++;
-			(*j) += ft_strccat(out, &split_cmd[*i][*j], ':');
-			ft_strlcat(out, ":", ft_strlen(split_cmd[*i] + 1));
+			(*j) += ft_strccat(out, &split_cmd[*i][*j], SEPARATOR);
+			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i] + 1));
 	}
 	return (out);
 }
+
+#include "stdio.h"
 
 void manage_redirection(t_cmd **cmds, char **split_cmd)
 {

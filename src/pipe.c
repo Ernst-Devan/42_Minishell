@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/15 15:12:41 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 16:32:01 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork error in use pipe"), 1);
-	if (pid == 0)
+	if (pid == 0 && command.path)
 	{
 		if (pipefd[0] != STDIN_FILENO && pipefd[0] != in)
 			close(pipefd[0]);
@@ -42,10 +42,11 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 			close(pipefd[1]);
 			pipefd[1] = command.out;
 		}
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-			return (perror("dup2 faild in usepipe"), 1);
-		if (dup2(in, STDIN_FILENO) == -1)
-			return (perror("dup2 faild in usepipe2"), 1);
+		if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
+		{
+			perror("dup2 faild in usepipe");
+			exit(1);
+		}
 		if (in != STDIN_FILENO)
 			close(in);
 		if (pipefd[1] != STDOUT_FILENO)
@@ -53,15 +54,15 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 		if (command.type == 0)
 		{ 
 			execve(command.path, command.args,*env);
-			return (perror("execve error in use pipe"), 1);
+			perror("Commande not found");
+			exit(1);
 		}
 		exec_builtins(command, env, shell);
-		return (-1);
+		// free all
+		exit(1);
 	}
 	if (in != STDIN_FILENO && in != command.in)
-	{
 		close(in);
-	}
 	if (pipefd[1] != STDOUT_FILENO)
 		close(pipefd[1]);
 	return (pid);
@@ -74,6 +75,7 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 	int		save_in;
 	int		val_return;
 	int		*tab_child;
+	int		status;
 
 	tab_child = malloc(sizeof(int) * table.cmd_len);
 	i = 0;
@@ -96,6 +98,8 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 	}
 	while (wait(NULL) > -1)
 	{
+		if (waitpid(tab_child[table.cmd_len - 1], &status, 0) == -1)
+			return (perror("waitpid failed in exec_bin"), 1);
 		if (manage_ctrl_c_var(3) == 1)
 		{
 			i = 0;
@@ -106,8 +110,12 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 			}
 		}
 	}
+	if (WIFEXITED(status))
+		return WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		return 128 + WTERMSIG(status);
 	free(tab_child);
 	if(manage_ctrl_c_var(3) == 1)
 		printf("\n");
-	return (0);
+	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/20 09:02:25 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:04:27 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 	type = 0;
 	while (*list_cmds != NULL) 
 	{
-		args = ft_split(*list_cmds, ':');
+		args = ft_split(*list_cmds, SEPARATOR);
 		if (!args)
 			return (1);
 		cmd[i].args = args;
