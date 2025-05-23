@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 12:29:39 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/23 13:18:31 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	choose_define(char *input, int *i)
 	int	j;
 
 	j = 0;
-	if ((input[0] == '"' && input[1] == '"') || (input[0] == '\'' && input[0] == '\''))
+	if ((input[0] == '"' && input[1] == '"') || (input[0] == '\'' && input[1] == '\''))
 	{
 		(*i) += 2;
 		return (ERROR);
@@ -134,6 +134,6 @@ int	lexical_analyser(char *input)
 	check = check_lexical(tab, len);
 	free(tab);
 	if (check == 1)
-		printf("syntax error\n");
+		write(2, "Syntax error\n", ft_strlen("Syntax error\n"));
 	return (check);
 }

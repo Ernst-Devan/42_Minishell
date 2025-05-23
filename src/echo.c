@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 15:02:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 16:50:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/23 11:39:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	echo(t_cmd command)
 	if (command.args[1][1] && command.args[1][0] == '-' 
 		&& !check_n(&command.args[1][1]))
 	{
-		while (command.args[i][1] && command.args[i][0] == '-' 
+		while (command.args[i] && command.args[i][0] && command.args[i][1] 
+		&& command.args[i][1] && command.args[i][0] == '-' 
 		&& !check_n(&command.args[i][1]))
 			i++;
 		if (command.args[i])

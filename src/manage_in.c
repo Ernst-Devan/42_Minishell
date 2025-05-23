@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/21 13:34:04 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 15:01:06 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,16 @@ int	open_heredoc(char *str, char **eof, char **name)
 		free (*name);
 	nb = ft_itoa(i);
 	*name = ft_strjoin(".EOF", nb);
-	free(nb);
+	if (!*name)
+		return (-1);
+	while (!access(*name, F_OK))
+	{
+		free(*name);
+		i++;
+		nb = ft_itoa(i);
+		*name = ft_strjoin(".EOF", nb);
+		free(nb);
+	}
 	i++;
 	while (str[n] && str[n] != SEPARATOR)
 		n++;
@@ -107,6 +116,8 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 				return (1);
 			close(fd);
 			fd = open_in_file(name);
+			if (fd != -1)
+				unlink(name);
 		}
 		i++;
 	}

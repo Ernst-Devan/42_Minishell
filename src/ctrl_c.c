@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/14 16:28:09 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/23 12:47:30 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,16 @@ int	manage_ctrl_c_var(int val)
 
 void	sig_hand(int sig)
 {
-	(void)sig;
-	manage_ctrl_c_var(1);
-	rl_done = 1;
+	if (sig == SIGINT)
+	{
+		manage_ctrl_c_var(1);
+		printf("^C\n");
+		if (rl_readline_state & RL_STATE_COMPLETING)
+			rl_pending_input = 'n';
+		rl_replace_line("", 0);
+		rl_done = 1;
+	}
+	// faire crtlc
 	return ;
 }
 

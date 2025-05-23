@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 12:34:35 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/22 15:01:24 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@ int	exec_bin(t_table table, char **env)
 			|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed in exec_bin");
+			//free_table(table);
 			exit(1);
 		}
 		if (execve(table.cmds->path, table.cmds->args, env) == -1)
 		{
 			perror("Command not found");
+			//free_table(table);
 			exit(1);
 		}
 	}
@@ -100,7 +102,6 @@ int	close_files(int nb_files)
 		str = ft_strjoin(".EOF", nb);
 		if (!str)
 			return (free(nb), 1);
-		unlink(str);
 		free (str);
 		free(nb);
 	}
@@ -110,7 +111,11 @@ int	close_files(int nb_files)
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
 	int	nb_files;
+	int	save_stdin;
+	int	save_stdout;
 
+	save_stdin = dup(STDIN_FILENO);
+	save_stdout = dup(STDOUT_FILENO);
 	nb_files = 0;
 	manage_in(table.cmds, table, &nb_files);
 	manage_out(table.cmds, table);
@@ -133,9 +138,11 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 			return (perror("pid faild on exec_src_bin"), shell);
 		}
 		shell.error_code =  exec_builtins(table.cmds[0], env, &shell);
-		dup2(0, STDIN_FILENO);
-		dup2(1, STDOUT_FILENO);
+		dup2(save_stdin, STDIN_FILENO);
+		dup2(save_stdout, STDOUT_FILENO);
 	}
 	close_files(nb_files);
+	close(save_stdin);
+	close(save_stdout);
 	return (shell);
 }

@@ -6,10 +6,9 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 11:48:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/23 13:06:21 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 #include "env_manage.h"
@@ -30,6 +29,7 @@ int	minishell(char **env)
 	t_cmd	cmd;
 
 	table.cmds = &cmd;
+	rl_catch_signals = 0;
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
 	signal(SIGQUIT, SIG_IGN);
