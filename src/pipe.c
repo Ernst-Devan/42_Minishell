@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 12:45:11 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 15:08:09 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,17 @@
 #include "exec.h"
 #include "libft.h"
 
-int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2
-{
+int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2 /
+{// FAIRE LES FREE ALL DANS LES FORKS
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork error in use pipe"), 1);
-	if (pid == 0 && command.path)
+	if (pid == 0)
 	{
+		if (!command.path)
+			exit(0);
 		if (pipefd[0] != STDIN_FILENO && pipefd[0] != in)
 			close(pipefd[0]);
 		if (command.in != STDIN_FILENO && in != command.in)
@@ -61,6 +63,10 @@ int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell
 		// free all
 		exit(1);
 	}
+	if (command.out != 1)
+		close(command.out);
+	if (command.in != 0)
+		close(command.in);
 	if (in != STDIN_FILENO && in != command.in)
 		close(in);
 	if (pipefd[1] != STDOUT_FILENO)
@@ -74,10 +80,10 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 	int		pipefd[2];
 	int		save_in;
 	int		val_return;
-	int		*tab_child;
 	int		status;
 
-	tab_child = malloc(sizeof(int) * table.cmd_len);
+	//display_table(table);
+	status = 0;
 	i = 0;
 	pipefd[0] = table.cmds[0].in;
 	while (i < table.cmd_len)
@@ -88,12 +94,8 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
 		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env, shell);
-		tab_child[i] = val_return;
 		if (val_return == 1 || val_return == -1)
-		{
-			free(tab_child);
 			return (val_return);
-		}
 		i++;
 	}
 	while (wait(&status) > -1)
@@ -102,7 +104,6 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 		return WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		return 128 + WTERMSIG(status);
-	free(tab_child);
 	if(manage_ctrl_c_var(3) == 1)
 		printf("\n");
 	return (status);

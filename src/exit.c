@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/20 10:05:42 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 09:37:15 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,17 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell) // donner toutes la data a e
 	int	check;
 
 	check = 0;
+	ret = 0;
 	printf("exit\n");
 	if (cmd.args[1])
 		ret = ms_atoi(cmd.args[1], &check);
+	if (!ret)
+	{
+		free_lstr(env);
+		//free_table(table);
+		write(2, "Exit faild\n", 11);
+		exit(2);
+	}
 	if (check == -1 || (cmd.args[1] && check_args(cmd.args[1])))
 	{
 		write(2, "numeric argument required\n", ft_strlen("numeric argument required\n"));
@@ -83,7 +91,7 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell) // donner toutes la data a e
 		return ;
 	}
 	free_lstr(env);
-//	free_table(table);
+	//free_table(table);
 	if (!cmd.args[1])
 		exit(shell->error_code);
 	exit(ret);

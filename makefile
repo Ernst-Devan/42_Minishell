@@ -96,7 +96,7 @@ debuga:
 	fi
 	bash -c "echo -en '\033c\033[3J'"
 	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
-	bash -c "valgrind --leak-check=full --track-fds=yes --trace-children=yes ./minishell"
+	bash -c "valgrind --leak-check=full --track-fds=yes ./minishell"
 
 .PHONY: re
 re:	fclean all

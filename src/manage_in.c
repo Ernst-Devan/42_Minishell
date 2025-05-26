@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/23 15:16:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 14:39:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int	open_heredoc(char *str, char **eof, char **name)
 	else
 		free (*name);
 	nb = ft_itoa(i);
+	if (!nb)
+		return (-1);
 	*name = ft_strjoin(".EOF", nb);
+	free(nb);
 	if (!*name)
 		return (-1);
 	while (!access(*name, F_OK))
@@ -46,8 +49,12 @@ int	open_heredoc(char *str, char **eof, char **name)
 		free(*name);
 		i++;
 		nb = ft_itoa(i);
+		if (!nb)
+			return (-1);
 		*name = ft_strjoin(".EOF", nb);
 		free(nb);
+		if (!name)
+			return (-1);
 	}
 	i++;
 	while (str[n] && str[n] != SEPARATOR)
@@ -109,11 +116,18 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
 		{
+			if (fd)
+				close(fd);
 			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
+			if (fd == -1)
+			{
+				free(eof);
+				free(name);
+				return (1);
+			}
 			(*nb_files)++;
 			heredoc(fd, eof);
-			if (eof)
-				free (eof);
+			free (eof);
 			if (fd == -1)
 				return (1);
 			close(fd);
@@ -123,8 +137,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 		}
 		i++;
 	}
-	if (name)
-		free(name);
+	free(name);
 	cmd->in = fd;
 	return (fd);
 }

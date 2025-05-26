@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/16 13:00:27 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:05:01 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,33 @@ int	cd(t_cmd cmd, char ***env)
 		}
 	}
 	pwd2 = getcwd(NULL, 0);
+	if (!pwd2)
+	{
+		write(2, "fail on cd\n", 11);
+		return (1);
+	}
 	pwd = ft_strjoin("PWD=", pwd2);
+	if (!pwd)
+	{
+		free(pwd2);
+		write(2, "fail on cd\n", 11);
+		return (1);
+	}
 	free(pwd2);
 	old_pwd = ft_strjoin("OLD", pwd);
+	if (!old_pwd)
+	{
+		free(pwd);
+		write(2, "fail on cd\n", 11);
+		return (1);
+	}
 	if (set_pwd(old_pwd, env))
 		return (1);
 	if (cmd.args[1])
 	{
 		new_pwd = build_pwd(pwd, cmd.args[1]);
+		if (!new_pwd)
+			return (1);
 		if (!new_pwd[4])
 			return (0);
 		check = chdir(&new_pwd[4]);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/23 14:48:52 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 16:01:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	sig_hand(int sig)
 		rl_replace_line("", 0);
 		rl_done = 1;
 	}
-	// faire crtlc
 	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 13:55:04 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:22:57 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ int	del_env_var(char ***env, char *str, char **new_env)
 	env2 = *env;
 	while ((*env)[i])
 	{
-		if (ft_strncmp(str, (*env)[i], ft_strlen(str)) == 0)
+		if (ft_strncmp(str, (*env)[i], ft_strlen(str) - 1) == 0)
+		{
+			free ((*env)[i]);
 			i++;
+		}
 		new_env[j] = env2[i];
 		if ((*env)[i])
 		{
@@ -69,7 +72,10 @@ int	unset(t_cmd cmd, char ***env)
 		{
 			new_env = malloc(sizeof(char *) * (size_of_env(*env)));
 			if (!new_env)
+			{
+				free(str);
 				return (1);
+			}
 			del_env_var(env, str, new_env);
 		}
 		i++;

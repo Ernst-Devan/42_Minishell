@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/09 12:45:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:01:00 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*remove_consecutiv_slash(char *path)
 	i = 0;
 	j = 0;
 	len = 0;
+	if (!path)
+		return (NULL);
 	while (path[i])
 	{
 		while (path[i] == '/' && path[i + 1] == '/')
@@ -50,6 +52,7 @@ char	*remove_consecutiv_slash(char *path)
 		j++;
 	}
 	new_path[len] = '\0';
+	free(path);
 	return (new_path);
 }
 
@@ -63,26 +66,38 @@ char	*remove_dot_slash(char *path)
 	i = 0;
 	j = 0;
 	len = 0;
+
+	if (!path)
+		return (NULL);
 	while (path[i])
 	{
-		if (path[i] == '.' && path[i + 1] == '/')
-			i+=2;
-		i++;
-		len++;
+		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.' && path[i + 1] == '/')) 
+			|| (i == 0 && (path[i] == '.' && path[i + 1] == '/')))
+		{
+			while (path[i] == '.' && path[i + 1] == '/')
+				i+=2;
+		}
+		else
+		{
+			len++;
+			i++;
+		}
 	}
-	if (i != 0 && path[i - 1] == '.')
+	if ((i == 1 && path[i - 1] == '.') || (i > 1 && path[i - 2] == '/'))
 		len--;
 	i = 0;
 	new_path = malloc(sizeof(char) * (len + 1));
 	if (!new_path)
 	 	return (NULL);
+
 	while (path[i] && j < len)
 	{
-	 	if (path[i] == '.' && path[i + 1] == '/')
-	 	{
-	 		while (path[i] == '.' && path[i + 1] == '/')
-	 			i += 2;
-	 	}
+		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.' && path[i + 1] == '/')) 
+			|| (i == 0 && (path[i] == '.' && path[i + 1] == '/')))
+		{
+			while (path[i] == '.' && path[i + 1] == '/')
+				i+=2;
+		}
 		else
 		{
 			new_path[j] = path[i];
@@ -90,6 +105,7 @@ char	*remove_dot_slash(char *path)
 	 		j++;
 		}
 	}
+	free(path);
 	new_path[len] = '\0';
 	return (new_path);
 }
@@ -127,17 +143,28 @@ char	*remove_if_dotdot(char *path)
 
 	i = 0;
 	j = 0;
+	if (!path)
+		return (NULL);
 	while (path[i])
 	{
 		if (path[i] == '.' && path[i + 1] == '.')
 		{
 			j = i - 2;
-			while (j >= 3 && path[j] && path[j] != '/')
-				j--;
-			temp = path;
-			path = strljoin(path, &path[i + 2], j);
-			free (temp);
-			i = -1;
+			if (j >= 4)
+			{
+				while (j >= 4 && path[j] && path[j] != '/')
+					j--;
+				temp = path;
+				path = strljoin(path, &path[i + 2], j);
+				free (temp);
+				i = -1;
+			}
+			else
+			{
+				free(path);
+				path = ft_strjoin("PWD=/", "");
+				return (path);
+			}
 		}
 		i++;
 	}
