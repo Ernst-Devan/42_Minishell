@@ -26,8 +26,6 @@ size_t check_bultin(char *command)
 return(0);
 }
 
-
-#include <stdio.h>
 char  *check_command(char *path, char *command)
 {
 	char    **splited_path;
@@ -62,21 +60,24 @@ char  *check_command(char *path, char *command)
 
 char	*valid_command(char *path, char *command, size_t *type)
 {
-	char *temp;
+	char	*temp;
+	char	*cpy_command;
 
-	if (check_bultin(command))
+	cpy_command = ft_strdup(command);
+	if (check_bultin(cpy_command))
 	{
 		*type = 1;
-		return (command);
+		return (cpy_command);
 	}
-	temp = check_command(path, command);
+	temp = check_command(path, cpy_command);
 	if (temp)
 	{
 		*type = 0;
+		free(cpy_command);
 		return(temp);
 	}
 	*type = 3;
-	return (command);
+	return (cpy_command);
 }
 
 

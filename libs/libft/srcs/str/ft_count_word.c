@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 int	ft_count_word(char *line)
 {
 	int	i;
@@ -17,11 +18,13 @@ int	ft_count_word(char *line)
 
 	i = 0;
 	count = 0;
-	while (line[i] != '\0' || line[i] == '\n')
+	if (!line)
+		return (0);
+	while (line[i] && line[i] == '\n')
 	{
-		while (line[i] == ' ' && line[i] != '\0')
+		while (line[i] == ' ' && line[i])
 			i++;
-		while (line[i] > 32 && line[i] != '\0')
+		while (line[i] > 32 && line[i])
 			i++;
 		if (line[i - 1] > 32)
 			count++;

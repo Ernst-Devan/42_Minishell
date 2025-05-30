@@ -4,7 +4,8 @@
 #include "parsing.h"
 #include <stddef.h>
 
-void display_table(t_table table) {
+void display_table(t_table table) 
+{
 	size_t i;
 	size_t j;
 
@@ -12,9 +13,11 @@ void display_table(t_table table) {
 	j = 0;
 	while (i < table.cmd_len) 
 	{
-		ft_printf("type : %d\n", table.cmds[i].type);
+		ft_printf("\ntype : %d\n", table.cmds[i].type);
 		ft_printf("cmd  : %s\n", table.cmds[i].path);
 		ft_printf("args : ");
+		if (!table.cmds[i].args[0])
+			ft_printf("(null)");
 		while (table.cmds[i].args && table.cmds[i].args[j])
 		{
 			ft_printf("%s ", table.cmds[i].args[j]);
@@ -25,7 +28,6 @@ void display_table(t_table table) {
 		ft_printf("out : %d\n", table.cmds[i].out);
 		ft_printf("str_in : %s\n", table.cmds[i].str_in);
 		ft_printf("str_out : %s\n", table.cmds[i].str_out);
-		ft_printf("\n\n");
 		i++;
   }
   ft_printf("\n");
@@ -36,6 +38,8 @@ void display_lstr(char **lstr) {
 	size_t	i;
 
 	i = 0;
+	if (!lstr[i])
+		ft_printf(" (null)\n");
 	while (lstr[i]) 
 	{
 		ft_printf("%s\n",lstr[i]);

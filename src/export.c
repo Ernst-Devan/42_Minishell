@@ -66,7 +66,12 @@ int	add_variable_env(char ***env, char *data)
 		i++;
 	}
 	free_lstr(*env);
-	temp[i] = data;
+	temp[i] = ft_strdup(data);
+	if (!temp[i])
+	{
+		temp[i] = NULL;
+		return (1);
+	}
 	*env = temp;
 	return (0);
 }
@@ -77,7 +82,12 @@ int	edit_variable_env(char ***env, char *data)
 
 	i = find_env_variable(*env, data);
 	free((*env)[i]);
-	(*env)[i] = data;
+	(*env)[i] = ft_strdup(data);
+	if (!(*env)[i])
+	{
+		(*env)[i] = NULL;
+		return (1);
+	}
 	return (0);
 }
 

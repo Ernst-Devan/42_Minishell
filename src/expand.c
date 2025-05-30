@@ -1,5 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/28 10:13:06 by dernst            #+#    #+#             */
+/*   Updated: 2025/05/28 10:34:55 by dernst           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <complex.h>
 #include <libft.h>
 #include <parsing.h>
+#include <readline/readline.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -28,18 +42,89 @@
 // the first bytes must be not a digit
 // echo$PWD$PWD -> LEAKS !!!! 
 // Change the : by the new separator inside all the command (unwritable char)
+//
+//
+//
+//
+// MAKE THE MANAGEMENT OF ERROR RETURN
+
+char	*word_beetween_quote(char *variable)
+{
+	char	*buffer;
+	size_t	i;
+	size_t	j;
+
+	if (!variable)
+		return (NULL);
+	buffer = calloc(ft_strlen(variable) + 2, sizeof(char));
+	if (!buffer)
+		return (NULL);
+	i = 0;
+	j = 0;
+	buffer[i++] = '\x1E';
+	while(check_delimiter(variable[j], "<>|"))
+	{
+		buffer[i] = variable[j];
+		j++;
+		i++;
+	}
+	buffer[i++] = '\x1E';
+	buffer[i] = '\0';
+	return (buffer);
+}
+
+char	*adding_quotes_word(char *variable)
+{
+	char	*buffer;
+	char	*temp;
+	size_t	i;
+	size_t	j;
+
+	if (!variable)
+		return(NULL);
+	i = 0;
+	j = 0;
+	buffer = calloc(ft_strlen(variable) * 2, sizeof(char));
+	if (!buffer)
+		return (NULL);
+	while(variable[i] && ft_isspace(variable[i]))
+		buffer[j++] = variable[i++];
+	while(variable[i] && !ft_isspace(variable[i]))
+		buffer[j++] = variable[i++];
+	buffer[j++] = SEPARATOR;
+	i++;
+	while(ft_strlen(variable) >= i && variable[i])
+	{
+		if (check_delimiter(variable[i], "|<>-"))
+		{
+			temp = word_beetween_quote(&variable[i]);
+			if (!temp)
+				break;
+			ft_strlcat(buffer, temp, ft_strlen(variable) * 2);
+			i += ft_strlen(temp) - 2;
+			j += ft_strlen(temp);
+			free(temp);
+		}
+		else
+			buffer[j++] = variable[i++];
+	}
+	buffer[j] = '\0';
+	return (buffer);
+}
 
 char	*replace_var(char *str, char **env)
 {
 	char	*variable;
 	char	*buffer;
 
-	variable = find_env(str, env);
+	variable = find_env(str, env);	
+	variable = adding_quotes_word(variable);
 	if (!variable)
-		return ("\0");
+		return (NULL);
 	buffer = ft_strdup(variable);
 	if (!buffer)
-		return ("\0");
+		return (NULL);
+	free(variable);
 	return (buffer);
 }
 
@@ -76,15 +161,17 @@ char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 	
 	error = 0;
 	expanded = replace_var(variable, env);
-	if (quote == 0)
+	if (quote == 0 && expanded)
 		expanded = skip_space(expanded, &error);
 	expand->i += ft_strlen(variable);
+	if (!expanded)
+		return (expand->buffer);
 	ft_strlcat(expand->buffer, expanded, 500);
 	expand->j += ft_strlen(expanded);
 	if (expanded && ft_strlen(expanded) > 0)
 		free(expanded);
 	return (expand->buffer);
-}
+} 
 
 char	*special_expand(t_shell shell, t_expand *expand)
 {
@@ -111,7 +198,6 @@ char	*need_expand(char *input, t_expand *expand, t_shell shell, char quote)
 		expand->buffer = adding_expand(expand, variable, shell.env, quote);
 	free(variable);
 	return (expand->buffer);
-
 }
 
 char *manage_expand(char *input, t_shell shell)

@@ -20,17 +20,19 @@ size_t	count_split(char *input, char c)
 {
 	char	quotes;
 	size_t	count;
+	size_t	i;
 
 	count = 0;
 	quotes = 0;
-	while (*input)
+	i = 0;
+	while (input[i])
 	{
-		if (!inside_quote(*input, &quotes))
+		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != '\x1E')))
 		{
-			if (*input == c)
+			if (input[i] == c)
 				count++;
 		}
-		input++;
+		i++;
 	}
 	return (count);
 }
@@ -39,18 +41,21 @@ size_t	nb_letter(char *input, char c)
 {
 	char	quotes;
 	size_t	count;
+	size_t	i;
 	
 	count = 0;
 	quotes = 0;
-	while(*input)
+	i = 0;
+	while(input[i])
 	{
-		if (!inside_quote(*input, &quotes))
+		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != '\x1E')))
+
 		{
-			if (*input == c)
+			if (input[i] == c)
 				break;
 		} 
 		count++; 
-		input++;
+		i++;
 	}
 	return (count);
 }
@@ -60,20 +65,22 @@ size_t	nb_letter(char *input, char c)
 char	*split_insert(char *splited, char *input, char c)
 {
 	size_t	i;
+	size_t	j;
 	char	quotes;
 
 	i = 0;
+	j = 0;
 	quotes = 0;
-	while (*input)
+	while (input[j])
 	{
-		if (!inside_quote(*input, &quotes))
+		if ((!inside_quote(input[j], &quotes) && (input[j + 1] && input [j + 1] != '\x1E')))
 		{
-			if (*input == c)
+			if (input[j] == c)
 				break;
 		}
-		splited[i] = *input;
+		splited[i] = input[j];
 		i++;
-		input++;
+		j++;
 	}
 	splited[i] = '\0';
 	return (splited);

@@ -90,6 +90,11 @@ char *skip_space(char *input, int *error_code)
 	buffer = ft_calloc(ft_strlen(input) + 1, sizeof(char));
 	while(input[j])
 	{
+		if (j == 0)
+		{
+			while(ft_isspace(input[j]))
+				j++;
+		}
 		if (inside == 0)
 		{
 			if (input[j] == ' ')
