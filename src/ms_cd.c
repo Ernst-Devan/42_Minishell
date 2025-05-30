@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/26 11:05:01 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:55:00 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,46 +31,26 @@ char	*get_home(char **env)
 	return (NULL);
 }
 
-int	cd(t_cmd cmd, char ***env)
+int	manage_old_pwd(char *pwd, char ***env)
 {
-	int		check;
-	char	*pwd;
-	char	*pwd2;
-	char	*new_pwd;
 	char	*old_pwd;
-	char	*temp;
 
-	if (!cmd.args[1])
-	{
-		temp = get_home(*env);
-		if (!temp)
-		{
-			write(2, "HOME not set\n", ft_strlen("HOME not set \n"));
-			return (1);
-		}
-	}
-	pwd2 = getcwd(NULL, 0);
-	if (!pwd2)
-	{
-		write(2, "fail on cd\n", 11);
-		return (1);
-	}
-	pwd = ft_strjoin("PWD=", pwd2);
-	if (!pwd)
-	{
-		free(pwd2);
-		write(2, "fail on cd\n", 11);
-		return (1);
-	}
-	free(pwd2);
 	old_pwd = ft_strjoin("OLD", pwd);
 	if (!old_pwd)
 	{
 		free(pwd);
-		write(2, "fail on cd\n", 11);
-		return (1);
+		return (write(2, "fail on cd\n", 11), 1);
 	}
 	if (set_pwd(old_pwd, env))
+		return (1);
+	return (0);
+}
+
+int	set_cd(char ***env, char *pwd, t_cmd cmd, char *temp)
+{
+	char	*new_pwd;
+
+	if (manage_old_pwd(pwd, env))
 		return (1);
 	if (cmd.args[1])
 	{
@@ -79,18 +59,39 @@ int	cd(t_cmd cmd, char ***env)
 			return (1);
 		if (!new_pwd[4])
 			return (0);
-		check = chdir(&new_pwd[4]);
-		if (check != 0)
+		if (chdir(&new_pwd[4]) != 0)
 			return (perror("Error in chdir"), 1);
 	}
 	else
 	{
-		check = chdir(&temp[5]);
-		if (check != 0)
-			return (perror("Error in chdir2"), 1);
+		free(pwd);
 		new_pwd = ft_strjoin("PWD=", &temp[5]);
+		if (chdir(&temp[5]) != 0 || !new_pwd)
+			return (write(2, "fail on cd\n", 11), 1);
 	}
 	if (set_pwd(new_pwd, env))
 		return (1);
 	return (0);
+}
+
+int	cd(t_cmd cmd, char ***env)
+{
+	char	*pwd;
+	char	*new_pwd;
+	char	*temp;
+
+	if (!cmd.args[1])
+	{
+		temp = get_home(*env);
+		if (!temp)
+			return (write(2, "HOME not set\n", 13), 1);
+	}
+	new_pwd = getcwd(NULL, 0);
+	if (!new_pwd)
+		return (write(2, "fail on cd\n", 11), 1);
+	pwd = ft_strjoin("PWD=", new_pwd);
+	if (!pwd)
+		return (write(2, "fail on cd\n", 11), 1);
+	free(new_pwd);
+	return (set_cd(env, pwd, cmd, temp));
 }

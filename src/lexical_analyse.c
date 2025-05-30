@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/23 13:18:31 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:43:20 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,42 +28,42 @@ int	choose_define(char *input, int *i)
 	int	j;
 
 	j = 0;
-	if ((input[0] == '"' && input[1] == '"') || (input[0] == '\'' && input[1] == '\''))
-	{
-		(*i) += 2;
-		return (ERROR);
-	}
+	if ((input[0] == '"' && input[1] == '"')
+		|| (input[0] == '\'' && input[1] == '\''))
+		return ((*i) += 2, ERROR);
 	if (input[0] == '<' && input[1] == '<')
-	{
-		(*i) += 2;
-		return (LESSLESS);
-	}
+		return ((*i) += 2, LESSLESS);
 	if (input[0] == '>' && input[1] == '>')
-	{
-		(*i) += 2;
-		return (GREATGREAT);
-	}
+		return ((*i) += 2, GREATGREAT);
 	if (input[0] == '<')
-	{
-		(*i)++;
-		return (LESS);
-	}
+		return ((*i)++, LESS);
 	if (input[0] == '>')
-	{
-		(*i)++;
-		return (GREAT);
-	}
+		return ((*i)++, GREAT);
 	if (input[0] == '|')
-	{
+		return ((*i)++, PIPE);
+	while (input[j] && input[j] != '|' && input[j] != '<' && input[j++] != '>')
 		(*i)++;
-		return (PIPE);
-	}
-	while (input[j] && input[j] != '|' && input[j] != '<' && input[j] != '>')
-	{
-		j++;
-		(*i)++;
-	}
 	return (CMD);
+}
+
+int	*init_new_tab(int len, int define, int *tab)
+{
+	int	*new_tab;
+	int	j;
+
+	new_tab = malloc(sizeof(int) * (len + 1));
+	if (!new_tab)
+		return (NULL);
+	j = 0;
+	while (j < len)
+	{
+		new_tab[j] = tab[j];
+		j++;
+	}
+	new_tab[len] = define;
+	free(tab);
+	tab = new_tab;
+	return (tab);
 }
 
 int	*lexical_analyser_define(char *input, int *len)
@@ -71,11 +71,8 @@ int	*lexical_analyser_define(char *input, int *len)
 	int		i;
 	int		*tab;
 	int		define;
-	int		*new_tab;
-	int		j;
 
 	i = 0;
-	*len = 0;
 	tab = NULL;
 	while (input[i])
 	{
@@ -83,24 +80,14 @@ int	*lexical_analyser_define(char *input, int *len)
 			i++;
 		if (input[i])
 		{
-			if ((input[0] == '"' && input[1] == '"') || (input[0] == '\'' && input[1] == '\''))
+			if ((input[0] == '"' && input[1] == '"')
+				|| (input[0] == '\'' && input[1] == '\''))
 				i += 2;
 			define = choose_define(&input[i], &i);
-			new_tab = malloc(sizeof(int) * (*len + 1));
-			if (!new_tab)
+			tab = init_new_tab((*len)++, define, tab);
+			if (!tab)
 				return (NULL);
-			j = 0;
-			while (j < *len)
-			{
-				new_tab[j] = tab[j];
-				j++;
-			}
-			new_tab[*len] = define;
-			free(tab);
-			tab = new_tab;
-			(*len)++;
 		}
-		
 	}
 	return (tab);
 }
@@ -114,10 +101,12 @@ int	check_lexical(int *tab, int len)
 	{
 		if (tab[0] == PIPE)
 			return (1);
-		if ((tab[i] == GREAT || tab[i] == GREATGREAT || tab[i] == LESS || tab[i] == LESSLESS)
+		if ((tab[i] == GREAT || tab[i] == GREATGREAT
+				|| tab[i] == LESS || tab[i] == LESSLESS)
 			&& (i + 1 == len || tab[i + 1] != CMD))
 			return (1);
-		if (tab[i] == PIPE && ((i + 1 == len)|| ((i + 1 < len && tab[i + 1] == PIPE))))
+		if (tab[i] == PIPE && ((i + 1 == len)
+				|| ((i + 1 < len && tab[i + 1] == PIPE))))
 			return (1);
 		i++;
 	}
@@ -130,6 +119,7 @@ int	lexical_analyser(char *input)
 	int		len;
 	int		check;
 
+	len = 0;
 	tab = lexical_analyser_define(input, &len);
 	check = check_lexical(tab, len);
 	free(tab);

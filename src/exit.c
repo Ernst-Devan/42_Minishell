@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/26 09:37:15 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:36:58 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ int	check_args(char *str)
 	return (0);
 }
 
-void	ms_exit(t_cmd cmd, char **env, t_shell *shell) // donner toutes la data a exit pour tous free
+void	ms_exit(t_cmd cmd, char **env, t_shell *shell)// donner toutes la data a exit pour tous free
 {
 	unsigned char	ret;
-	int	check;
+	int				check;
 
 	check = 0;
 	ret = 0;

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/26 11:22:20 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:40:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,13 @@ int	add_variable_env(char ***env, char *data)
 	{
 		temp[i] = ft_strdup((*env)[i]);
 		if (!temp[i])
-		{
-			free_lstr(temp);
-			return (1);
-		}
+			return (free_lstr(temp), 1);
 		i++;
 	}
 	free_lstr(*env);
 	temp[i] = ft_strdup(data);
 	if (!temp[i])
-	{
-		temp[i] = NULL;
 		return (1);
-	}
 	*env = temp;
 	return (0);
 }
@@ -126,83 +120,77 @@ char	*find_n(char **env, int nb)
 	while (env[i])
 	{
 		if (count_bigger_than(env[i], env) == nb)
-			return env[i];
+			return (env[i]);
 		i++;
 	}
 	return (env[i]);
 }
 
-void	export_without_param(char **env)
+void	print_export_one_val(char *str)
 {
 	int	i;
-	int	j;
 	int	check;
+
+	check = 0;
+	i = 0;
+	while (str[i])
+	{
+		write(1, &str[i], 1);
+		if (str[i] == '=')
+		{
+			write(1, "\"", 1);
+			check = 1;
+		}
+		if (!str[i + 1] && check == 1)
+			write(1, "\"", 1);
+		i++;
+	}
+}
+
+void	export_without_param(char **env)
+{
+	int		i;
 	char	*str;
 
 	i = 0;
 	while (env[i])
 	{
-		check = 0;
-		j = 0;
 		if (ft_strncmp(find_n(env, i), "_=", 2) != 0)
 		{
 			str = find_n(env, i);
-	 		write(1, "declare -x ", ft_strlen("declare -x "));
-			while (str[j])
-			{
-				write(1, &str[j], 1);
-				if (str[j] == '=')
-				{
-					write(1, "\"", 1);
-					check = 1;
-				}
-				if (!str[j + 1] && check == 1)\
-				{
-					write(1, "\"", 1);
-				}
-				j++;
-			}
+			write(1, "declare -x ", ft_strlen("declare -x "));
+			print_export_one_val(str);
 			write(1, "\n", 1);
 		}
-	 	i++;
+		i++;
 	}
 }
 
 int	export(t_cmd cmd, char ***env)
 {
-	int	len;
 	int	i;
 	int	check;
 	int	check2;
 
 	check2 = 0;
 	if (!cmd.args[1])
-	{
-		export_without_param(*env);
-		return (0);
-	}
-	i = 1;
-	while (cmd.args[i])
+		return (export_without_param(*env), 0);
+	i = 0;
+	while (cmd.args[++i])
 	{
 		if (cmd.args[i] && !ft_isalpha(cmd.args[i][0]))
 		{
-			check2++;
-			if (check2 == 1)
+			if (check2++ == 1)
 				printf("Bad param(s)\n");
 		}
 		else
 		{
-			len = var_env_len(cmd.args[i]);
 			check = find_env_variable(*env, cmd.args[i]);
-			if (check == -1)
-			{
-				if (add_variable_env(env, cmd.args[i]))
-					return (1);
-			}
-			else if (cmd.args[i][len] == '=')
+			if (check == -1 && add_variable_env(env, cmd.args[i]))
+				return (1);
+			else if (cmd.args[i][var_env_len(cmd.args[i])] == '=')
 				edit_variable_env(env, cmd.args[i]);
 		}
-		i++;
 	}
 	return (0);
 }

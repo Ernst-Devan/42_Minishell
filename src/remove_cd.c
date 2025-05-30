@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/26 11:01:00 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/29 19:03:48 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,13 @@
 #include "exec.h"
 #include "libft.h"
 
-char	*remove_consecutiv_slash(char *path)
+int	len_without_slashslash(char *path)
 {
-	int	i;
-	int	j;
 	int	len;
-	char	*new_path;
+	int	i;
 
 	i = 0;
-	j = 0;
 	len = 0;
-	if (!path)
-		return (NULL);
 	while (path[i])
 	{
 		while (path[i] == '/' && path[i + 1] == '/')
@@ -36,10 +31,22 @@ char	*remove_consecutiv_slash(char *path)
 		i++;
 		len++;
 	}
+	return (len);
+}
+
+char	*remove_consecutiv_slash(char *path)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*new_path;
+
+	j = 0;
+	len = len_without_slashslash(path);
 	i = 0;
 	new_path = malloc(sizeof(char) * (len + 1));
 	if (!new_path)
-		return (NULL);
+		return (free(path), NULL);
 	while (path[i] && j < len)
 	{
 		new_path[j] = path[i];
@@ -56,26 +63,21 @@ char	*remove_consecutiv_slash(char *path)
 	return (new_path);
 }
 
-char	*remove_dot_slash(char *path)
+int	len_without_dotslash(char *path)
 {
-	int	i;
-	int	j;
 	int	len;
-	char	*new_path;
+	int	i;
 
 	i = 0;
-	j = 0;
 	len = 0;
-
-	if (!path)
-		return (NULL);
 	while (path[i])
 	{
-		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.' && path[i + 1] == '/')) 
-			|| (i == 0 && (path[i] == '.' && path[i + 1] == '/')))
+		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.'
+					&& path[i + 1] == '/')) || (i == 0 && (path[i] == '.'
+					&& path[i + 1] == '/')))
 		{
 			while (path[i] == '.' && path[i + 1] == '/')
-				i+=2;
+				i += 2;
 		}
 		else
 		{
@@ -85,27 +87,47 @@ char	*remove_dot_slash(char *path)
 	}
 	if ((i == 1 && path[i - 1] == '.') || (i > 1 && path[i - 2] == '/'))
 		len--;
-	i = 0;
-	new_path = malloc(sizeof(char) * (len + 1));
-	if (!new_path)
-	 	return (NULL);
+	return (len);
+}
 
+void	make_newpath_without_dotslash(int len, char *path, char *new_path)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	i = 0;
 	while (path[i] && j < len)
 	{
-		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.' && path[i + 1] == '/')) 
+		if ((i > 0 && (path[i - 1] != '.' && path[i] == '.'
+					&& path[i + 1] == '/'))
 			|| (i == 0 && (path[i] == '.' && path[i + 1] == '/')))
 		{
 			while (path[i] == '.' && path[i + 1] == '/')
-				i+=2;
+				i += 2;
 		}
 		else
 		{
 			new_path[j] = path[i];
 			i++;
-	 		j++;
+			j++;
 		}
 	}
 	free(path);
+}
+
+char	*remove_dot_slash(char *path)
+{
+	int		len;
+	char	*new_path;
+
+	if (!path)
+		return (NULL);
+	len = len_without_dotslash(path);
+	new_path = malloc(sizeof(char) * (len + 1));
+	if (!new_path)
+		return (NULL);
+	make_newpath_without_dotslash(len, path, new_path);
 	new_path[len] = '\0';
 	return (new_path);
 }
@@ -135,11 +157,29 @@ char	*strljoin(char const *s1, char const *s2, size_t len)
 	return (str);
 }
 
+char	*ignore_slashslash(char *path, int j, int i)
+{
+	char	*temp;
+
+	while (j >= 4 && path[j] && path[j] != '/')
+		j--;
+	temp = path;
+	path = strljoin(path, &path[i + 2], j);
+	free (temp);
+	return (path);
+}
+
+char	*free_and_dup(char *path)
+{
+	free(path);
+	path = ft_strdup("PWD=/");
+	return (path);
+}
+
 char	*remove_if_dotdot(char *path)
 {
 	int	i;
 	int	j;
-	char	*temp;
 
 	i = 0;
 	j = 0;
@@ -152,19 +192,13 @@ char	*remove_if_dotdot(char *path)
 			j = i - 2;
 			if (j >= 4)
 			{
-				while (j >= 4 && path[j] && path[j] != '/')
-					j--;
-				temp = path;
-				path = strljoin(path, &path[i + 2], j);
-				free (temp);
+				path = ignore_slashslash(path, j, i);
+				if (!path)
+					return (NULL);
 				i = -1;
 			}
 			else
-			{
-				free(path);
-				path = ft_strjoin("PWD=/", "");
-				return (path);
-			}
+				return (free_and_dup(path));
 		}
 		i++;
 	}
