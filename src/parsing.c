@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/22 15:37:54 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 14:17:09 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,24 @@
 // NOT JUST SPACE BE CAREFUL TO ALL delimiter
 // SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
 
+int	count_nb_cmd(char *input)
+{
+	int	i;
+	int	nb_cmd;
+
+	nb_cmd = 0;
+	i = 0;
+	if (input[i] && input[i] != '|')
+		nb_cmd++;
+	while (input[i])
+	{
+		if (input[i + 1] && input[i] == '|')
+			nb_cmd++;
+		i++;
+	}
+	return (nb_cmd);
+}
+
 t_table parsing(t_shell *shell) 
 {
 	t_table table;
@@ -48,6 +66,7 @@ t_table parsing(t_shell *shell)
 		return (table);
 	}
 	input = manage_expand(input, *shell);
+	printf("input : %s\n", input);
 	if (init_table(&table, count_split(input, '|')))
 		free_table(table);
 	if (parser(&table, shell->env,input))
