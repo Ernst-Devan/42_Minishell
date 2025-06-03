@@ -40,7 +40,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		i++;
 		count++;
 	}
-	ft_printf("ALLOC:%d\n", count);
 	return (count + 1);
 }
 
