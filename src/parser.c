@@ -47,11 +47,9 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 		else 
 		{
 			cmd[i].type = 2;
-			free_lstr(args);
 			i++;
 		}
 		list_cmds++;
-		
 	}
   	return (0);
 }

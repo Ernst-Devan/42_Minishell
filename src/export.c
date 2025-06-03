@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:40:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:00:36 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,12 @@ int	edit_variable_env(char ***env, char *data)
 
 	i = find_env_variable(*env, data);
 	free((*env)[i]);
-	(*env)[i] = data;
+	(*env)[i] = ft_strdup(data);
+	if (!(*env)[i])
+	{
+		(*env)[i] = NULL;
+		return (1);
+	}
 	return (0);
 }
 

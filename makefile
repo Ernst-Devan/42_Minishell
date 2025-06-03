@@ -82,9 +82,9 @@ fclean: clean
 debug:
 	@if ! readelf --debug-dump=info obj/init.o | grep -q "Version"; then \
 		$(MAKE) fclean; \
-		$(MAKE) debug -C libs/libft; \
 	fi
 	bash -c "echo -en '\033c\033[3J'"
+	$(MAKE) debug -C libs/libft;
 	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
 	bash -c "valgrind --leak-check=full --suppressions=valgrind_readline.supp ./minishell"
 	

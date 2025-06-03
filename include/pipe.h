@@ -12,7 +12,7 @@
  * @param pipefd The read and write file descriptors of the current pipe.
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
-int	use_pipe(t_cmd command, int in, int pipefd[2], char ***pipe, t_shell *shell, t_table table);
+int	use_pipe(t_cmd command, int in, int pipefd[2], char ***pipe, t_shell *shell);
 
 /** 
  * The main function for handling pipes.  

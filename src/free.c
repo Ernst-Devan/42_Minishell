@@ -50,10 +50,10 @@ void	free_cmds(t_table table)
 
 void	free_table(t_table table)
 {
-	display_table(table);
 	if (table.cmds)
 	{
 		free_cmds(table);
 		table.cmds = NULL;
 	}
+	free(table.cmds);
 }

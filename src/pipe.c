@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 14:37:06 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:01:14 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	manage_dup_pipe(t_cmd command, int pipefd[2], int in)
 		close(pipefd[1]);
 }
 
-int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2 /
+int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2
 {// FAIRE LES FREE ALL DANS LES FORKS
 	pid_t	pid;
 
