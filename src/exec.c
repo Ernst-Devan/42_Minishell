@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:34:15 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 13:35:21 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	exec_bin(t_table table, char **env)
 	return (status);
 }
 
-int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
 {
 	int	len;
 
@@ -81,7 +81,7 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell)
 	else if (!ft_strncmp("unset", cmd.args[0], len + 1))
 		return (unset(cmd, env));
 	else if (!ft_strncmp("exit", cmd.args[0], len + 1))
-		ms_exit(cmd, *env, shell);
+		ms_exit(cmd, *env, shell, table);
 	return (0);
 }
 
@@ -96,13 +96,29 @@ int	manage_builtins(t_table table, char ***env, t_shell *shell)
 	if (dup2(table.cmds->in, STDIN_FILENO) == -1
 		|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 		return (perror("pid faild on exec_src_bin"), 1);
-	ret = exec_builtins(table.cmds[0], env, shell);
+	ret = exec_builtins(table.cmds[0], env, shell, table);
 	dup2(save_stdin, STDIN_FILENO);
 	dup2(save_stdout, STDOUT_FILENO);
 	close(save_stdin);
 	close(save_stdout);
 	return (ret);
 }
+
+void	close_fd(t_table table)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < table.cmd_len)
+	{
+		if (table.cmds[i].in != 0)
+			close(table.cmds[i].in);
+		if (table.cmds[i].out != 1)
+			close(table.cmds[i].out);
+		i++;
+	}
+}
+
 
 t_shell	exec(t_table table, char ***env, t_shell shell)
 {
@@ -126,5 +142,6 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
 		shell.error_code = manage_builtins(table, env, &shell);
+	close_fd(table);
 	return (shell);
 }

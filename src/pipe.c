@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 15:01:14 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 13:41:40 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	manage_dup_pipe(t_cmd command, int pipefd[2], int in)
 		close(pipefd[1]);
 }
 
-int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2
+int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell, t_table table) // faire la gestion d'erreur des dup2
 {// FAIRE LES FREE ALL DANS LES FORKS
 	pid_t	pid;
 
@@ -64,8 +64,10 @@ int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) 
 			perror("Commande not found");
 			exit(1);
 		}
-		exec_builtins(command, env, shell);
-		// free all
+		exec_builtins(command, env, shell, table);
+		free_table(table);
+		free_lstr(*env);
+		close_fd(table);
 		exit(1);
 	}
 	if (command.out != 1)
@@ -118,7 +120,7 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 			return (perror("pipe error"), 1);
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
-		val_return = use_pipe(table.cmds[i], save_in, pipefd, env, shell);
+		val_return = use_pipe(table.cmds[i], save_in, pipefd, env, shell, table);
 		if (val_return == 1 || val_return == -1)
 			return (val_return);
 		i++;

@@ -30,10 +30,10 @@ int		cd(t_cmd cmd, char ***env);
 int		echo(t_cmd command);
 int		pwd(t_cmd cmd);
 int		unset(t_cmd cmd, char ***env);
-void	ms_exit(t_cmd cmd, char **env, t_shell *shell);
+void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table);
 int		env_builtin(char **env, t_cmd cmd);
 
-int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell);
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table);
 
 char	*remove_consecutiv_slash(char *path);
 char	*remove_dot_slash(char *path);
@@ -59,6 +59,7 @@ int	manage_out(t_cmd *cmds, t_table table);
 int	open_out_cmd(t_cmd *cmd);
 int	open_out_file(char *str);
 int	open_append(char *str);
+void	close_fd(t_table table);
 
 int	lexical_analyser(char *input);
 

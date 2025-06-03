@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:50:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:47:58 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ void	heredoc(int fd, char *eof)
 	while (ft_strncmp(eof, input, ft_strlen(eof))
 		&& input && manage_ctrl_c_var(3) != 1)
 	{
-		printf("test\n");
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		free (input);
