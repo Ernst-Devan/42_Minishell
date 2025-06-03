@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/03 13:35:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 14:46:22 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	close_fd(t_table table)
 	size_t	i;
 
 	i = 0;
+	printf("len : %zu\n", table.cmd_len);
 	while (i < table.cmd_len)
 	{
 		if (table.cmds[i].in != 0)

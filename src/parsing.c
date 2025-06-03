@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/03 14:17:09 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 14:29:11 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ t_table parsing(t_shell *shell)
 		return (table);
 	}
 	input = manage_expand(input, *shell);
-	printf("input : %s\n", input);
-	if (init_table(&table, count_split(input, '|')))
+	if (init_table(&table, count_nb_cmd(input)))
 		free_table(table);
 	if (parser(&table, shell->env,input))
 		free_table(table);

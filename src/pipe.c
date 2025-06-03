@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/03 13:41:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 14:47:24 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int	use_pipe(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell, 
 			exit(1);
 		}
 		exec_builtins(command, env, shell, table);
+		close_fd(table);
 		free_table(table);
 		free_lstr(*env);
-		close_fd(table);
 		exit(1);
 	}
 	if (command.out != 1)

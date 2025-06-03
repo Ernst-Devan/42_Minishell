@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/03 11:03:06 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 15:18:16 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 	if (!ret && cmd.args[1])
 	{
 		free_lstr(env);
+		close_fd(table);
 		free_table(table);
 		write(2, "Exit faild\n", 11);
 		exit(2);
@@ -80,6 +81,7 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 	if (check == -1 || (cmd.args[1] && check_args(cmd.args[1])))
 	{
 		write(2, "numeric argument required\n", ft_strlen("numeric argument required\n"));
+		close_fd(table);
 		free_table(table);
 		free_lstr(env);
 		exit (2);
@@ -92,10 +94,12 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 	}
 	if (!cmd.args[1])
 	{
+		close_fd(table);
 		free_lstr(env);
 		free_table(table);
 		exit(shell->error_code);
 	}
+	close_fd(table);
 	free_lstr(env);
 	free_table(table);
 	exit(ret);

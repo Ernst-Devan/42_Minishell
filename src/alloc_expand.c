@@ -40,6 +40,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		i++;
 		count++;
 	}
-	return (count * 2);
+	return (count + 1);
 }
 
