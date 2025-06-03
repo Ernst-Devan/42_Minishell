@@ -41,6 +41,7 @@ SRCS		=	minishell.c 	\
 				manage_in.c 	\
 				manage_out.c 	\
 				lexical_analyse.c \
+				alloc_expand.c	\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)

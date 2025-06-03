@@ -41,6 +41,7 @@ typedef struct s_table {
 typedef struct s_expand{
 	size_t	i;
 	size_t	j;
+	size_t	alloc;
 	char	*buffer;
 }	t_expand;
 
@@ -87,7 +88,9 @@ size_t	ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
 char	*manage_expand(char *input, t_shell shell);
-int	init_expand(t_expand *expand);
+size_t	init_expand(t_expand *expand, char *input, t_shell shell);
+size_t	size_allocation_expand(char *input, t_shell shell);
+char	*detect_full_variable(char *input);
 
 // Check.c
 char	*valid_command(char *path, char *command, size_t *type);

@@ -47,7 +47,7 @@ int	minishell(char **env)
 		table = parsing(&shell);
 		if ((manage_ctrl_c_var(3) != 1 && table.cmd_len > 0) || table.cmds)
 		  	shell = exec(table, &ms_env, shell);
-	//	free_table(table);
+		free_table(table);
     }
 	return (0);
 }

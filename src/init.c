@@ -2,6 +2,7 @@
 
 #include "libft.h"
 #include "parsing.h"
+#include <stddef.h>
 
 void	init_cmd(t_cmd *cmd, int nb_cmd)
 {
@@ -32,11 +33,15 @@ int	init_table(t_table *table, int nb_cmd)
 }
 
 
-int	init_expand(t_expand *expand)
+size_t	init_expand(t_expand *expand, char *input, t_shell shell)
 {
+	size_t	alloc;
+
+	alloc = size_allocation_expand(input, shell);
 	expand->i = 0;
 	expand->j = 0;
-	expand->buffer = ft_calloc(500, sizeof(char));
+	expand->alloc = alloc;
+	expand->buffer = ft_calloc(alloc, sizeof(char));
 	if (!expand->buffer)
 		return (1);
 	return (0);
