@@ -83,7 +83,7 @@ int	*lexical_analyser_define(char *input, int *len)
 			i++;
 		if (input[i])
 		{
-			if ((input[0] == '"' && input[1] == '"') || (input[0] == '\'' && input[1] == '\''))
+			if ((input[i] == '"' && input[i + 1] == '"') || (input[i] == '\'' && input[i + 1] == '\''))
 				i += 2;
 			define = choose_define(&input[i], &i);
 			new_tab = malloc(sizeof(int) * (*len + 1));

@@ -56,6 +56,8 @@ size_t count_characters(char *s, char *cs) {
 	count = 0;
 	i = 0;
 	j = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 	{
 		while (cs[j])

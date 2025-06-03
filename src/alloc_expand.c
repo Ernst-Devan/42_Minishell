@@ -35,12 +35,12 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 				count += alloc_error_code(shell, &i);
 			i += ft_strlen(full) - 1;
 			free(full);
-			count += ft_strlen(variable);
+			count += ft_strlen(variable) + (count_characters(variable, DELIMITER) * 2);
 		}
 		i++;
 		count++;
 	}
 	ft_printf("ALLOC:%d\n", count);
-	return (count * 2);
+	return (count + 1);
 }
 
