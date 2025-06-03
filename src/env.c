@@ -26,7 +26,9 @@ char	*find_env(char *str, char **env)
 	while (env[i])
 	{
 		if (ft_strncmp(str, env[i], count) == 0)
+		{
 			return (env[i] + count);
+		}
 		i++;
 	}
 	return (NULL);

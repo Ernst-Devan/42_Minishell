@@ -42,10 +42,15 @@
 // the first bytes must be not a digit
 // echo$PWD$PWD -> LEAKS !!!! 
 // Change the : by the new separator inside all the command (unwritable char)
-//
-//
-//
-//
+// export toto="echo coucou | sleep 3"
+// export toto="\0 je fais des test"
+// export toto=""
+// export toto="$USER va crash"
+// export toto="d"
+// export toto-" echo coucou \ sleep 3" -> echo $toto$toto$toto keep one space to delimite each variable
+// echo $????
+// echo $_?? -> echo the env and the ? dont expand it 
+// 
 // MAKE THE MANAGEMENT OF ERROR RETURN
 
 char	*word_beetween_quote(char *variable)
@@ -62,7 +67,7 @@ char	*word_beetween_quote(char *variable)
 	i = 0;
 	j = 0;
 	buffer[i++] = '\x1E';
-	while(check_delimiter(variable[j], "<>|"))
+	while(check_delimiter(variable[j], "<>|"))  
 	{
 		buffer[i] = variable[j];
 		j++;
@@ -84,15 +89,18 @@ char	*adding_quotes_word(char *variable)
 		return(NULL);
 	i = 0;
 	j = 0;
-	buffer = calloc(ft_strlen(variable) * 2, sizeof(char));
+	buffer = calloc((ft_strlen(variable) * 2) + 1, sizeof(char));
 	if (!buffer)
 		return (NULL);
 	while(variable[i] && ft_isspace(variable[i]))
 		buffer[j++] = variable[i++];
 	while(variable[i] && !ft_isspace(variable[i]))
 		buffer[j++] = variable[i++];
-	buffer[j++] = SEPARATOR;
-	i++;
+	if (ft_strlen(variable) >= i && variable[i])
+	{
+		buffer[j++] = SEPARATOR;
+		i++;
+	}
 	while(ft_strlen(variable) >= i && variable[i])
 	{
 		if (check_delimiter(variable[i], "|<>-"))
@@ -117,7 +125,9 @@ char	*replace_var(char *str, char **env)
 	char	*variable;
 	char	*buffer;
 
-	variable = find_env(str, env);	
+	variable = find_env(str, env);
+	if (ft_strlen(variable) == 0)
+		return (NULL);
 	variable = adding_quotes_word(variable);
 	if (!variable)
 		return (NULL);
@@ -134,15 +144,22 @@ char	*detect_full_variable(char *input)
 	size_t	i;
 
 	i = 0;
-	buffer = malloc(ft_strlen(input) + 2);
+	buffer = calloc(ft_strlen(input) + 2, sizeof(char));
 	if (!buffer)
 		return (NULL);
+	input++;
+	if (*input == '?')
+	{
+		buffer[i++] = *input;
+		buffer[i] = '\0';
+		return(buffer);
+	}
 	while (*input)
 	{
-		input++;
-		if (!ft_isalnum(*input) && *input != '?' && *input != '_')
+		if (!ft_isalnum(*input) && *input != '_')
 			break ;
 		buffer[i++] = *input;
+		input++;
 	}
 	buffer[i] = '=';
 	buffer[i + 1] = '\0';
@@ -166,7 +183,7 @@ char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 	expand->i += ft_strlen(variable);
 	if (!expanded)
 		return (expand->buffer);
-	ft_strlcat(expand->buffer, expanded, 500);
+	ft_strlcat(expand->buffer, expanded, expand->alloc);
 	expand->j += ft_strlen(expanded);
 	if (expanded && ft_strlen(expanded) > 0)
 		free(expanded);
@@ -178,46 +195,44 @@ char	*special_expand(t_shell shell, t_expand *expand)
 	char	*error;
 
 	error = ft_itoa(shell.error_code);
-	ft_strlcat(expand->buffer, error, 500);
+	ft_strlcat(expand->buffer, error, expand->alloc);
 	expand->j += ft_strlen(error);
 	expand->i += 2;
 	free(error);
 	return (expand->buffer);
 }
 
-char	*need_expand(char *input, t_expand *expand, t_shell shell, char quote)
+size_t	need_expand(char *input, t_expand *expand, t_shell shell, char quote)
 {
 	char *variable;
 
 	variable = detect_full_variable(&input[expand->i]);
 	if (!variable)
-		return (NULL);	
+		return (1);	
 	else if (variable[0] == '?')
 		expand->buffer = special_expand(shell, expand);
 	else
 		expand->buffer = adding_expand(expand, variable, shell.env, quote);
 	free(variable);
-	return (expand->buffer);
+	return (0);
 }
 
 char *manage_expand(char *input, t_shell shell)
 {
 	t_expand	expand;
-	char		*test;
 	char		quote;
-
-	if (init_expand(&expand))
+	
+	if(init_expand(&expand, input, shell))
 		return(NULL);
 	quote = 0;
 	while (input[expand.i])
-	{	
+	{
 		inside_quote(input[expand.i], &quote);
 		if (quote != '\'')
 		{
 			while (input[expand.i] == '$')
 			{
-				test = need_expand(input, &expand, shell, quote);
-				if (!test)
+				if(need_expand(input, &expand, shell, quote))
 					break;
 			}
 		}
