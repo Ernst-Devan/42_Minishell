@@ -32,14 +32,18 @@ int	count_nb_cmd(char *input)
 {
 	int	i;
 	int	nb_cmd;
+	char quote;
 
 	nb_cmd = 0;
 	i = 0;
-	if (input[i] && input[i] != '|')
+	quote = 0;
+	inside_quote(input[i], &quote);
+	if (input[i] && input[i] != '|' && quote == 0 )
 		nb_cmd++;
 	while (input[i])
 	{
-		if (input[i + 1] && input[i] == '|')
+		inside_quote(input[i], &quote);
+		if (input[i + 1] && input[i] == '|' && quote == 0)
 			nb_cmd++;
 		i++;
 	}
@@ -53,7 +57,7 @@ t_table parsing(t_shell *shell)
 
 	input = NULL;
 	input = get_command(input, shell);
-	input = skip_space(input, &shell->error_code);
+	input = skip_space(input);
 //	if (shell->error_code)
 	//	return (table);
 	input = lexer(input);
