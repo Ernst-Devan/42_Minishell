@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:12:48 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/07 14:01:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/05/27 12:22:32 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,53 @@ char	*get_pwd(char **env)
 	return (env[i]);
 }
 
-char	*build_pwd(char *pwd, char *path)
+char	*pwd_manage(char *pwd)
 {
-	
-	if (path[0] == '/')
-		pwd = ft_strjoin("PWD=", path);
-	else
-	{
-		if (pwd[ft_strlen(pwd) - 1] != '/' && path[0] != '/')
-			pwd = ft_strjoin(pwd, "/");
-		pwd = ft_strjoin(pwd, path);
-	}
 	pwd = remove_consecutiv_slash(pwd);
-	pwd = remove_if_dotdot(pwd);
+	if (!pwd)
+		return (NULL);
 	pwd = remove_dot_slash(pwd);
-	if(ft_strlen(pwd) == 4)
+	if (!pwd)
+		return (NULL);
+	pwd = remove_if_dotdot(pwd);
+	if (!pwd)
+		return (NULL);
+	if (ft_strlen(pwd) > 0 && pwd[ft_strlen(pwd) - 1] == '/')
+		pwd[ft_strlen(pwd) - 1] = '\0';
+	if (ft_strlen(pwd) == 4)
 	{
 		free(pwd);
 		pwd = ft_strjoin("PWD=", "/");
+		if (!pwd)
+			return (NULL);
+	}
+	return (pwd);
+}
+
+char	*build_pwd(char *pwd, char *path)
+{
+	char	*temp;
+
+	if (path[0] == '/')
+	{
+		free(pwd);
+		pwd = ft_strjoin("PWD=", path);
+	}
+	else
+	{
+		if (pwd[ft_strlen(pwd) - 1] != '/' && path[0] != '/')
+		{
+			temp = pwd;
+			pwd = ft_strjoin(pwd, "/");
+			free(temp);
+		}
+		temp = pwd;
+		pwd = ft_strjoin(pwd, path);
+		free(temp);
 	}
 	if (!pwd)
 		return (NULL);
-	// proteger tous les malloc
+	pwd = pwd_manage(pwd);
 	return (pwd);
 }
 

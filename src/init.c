@@ -27,7 +27,7 @@ int	init_table(t_table *table, int nb_cmd)
 	table->cmds = malloc((nb_cmd + 1) * sizeof(t_cmd));
 	if (!table->cmds)
 		return (1);
-	table->cmd_len = nb_cmd + 1;
+	table->cmd_len = nb_cmd;
 	init_cmd(table->cmds, nb_cmd + 1);
 	return (0);
 }

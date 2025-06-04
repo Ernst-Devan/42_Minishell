@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/23 15:16:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:47:58 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,40 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
+int	make_file_heredoc(char **eof, char **name, char *str, int n)
+{
+	*eof = malloc(sizeof(char) * (n + 1));
+	if (!*eof)
+		return (-1);
+	ft_strlcpy(*eof, str, n + 1);
+	n = open(*name, O_CREAT | O_RDWR, 0600);
+	return (n);
+}
+
+char	**try_access(char **name, int i)
+{
+	char	*nb;
+
+	while (!access(*name, F_OK))
+	{
+		free(*name);
+		i++;
+		nb = ft_itoa(i);
+		if (!nb)
+			return (NULL);
+		*name = ft_strjoin(".EOF", nb);
+		free(nb);
+		if (!name)
+			return (NULL);
+	}
+	return (name);
+}
+
 int	open_heredoc(char *str, char **eof, char **name)
 {
-	int		n;
-	char	*nb;
-	static int i;
+	int			n;
+	char		*nb;
+	static int	i;
 
 	n = 0;
 	if (*name == NULL)
@@ -38,25 +67,17 @@ int	open_heredoc(char *str, char **eof, char **name)
 	else
 		free (*name);
 	nb = ft_itoa(i);
+	if (!nb)
+		return (-1);
 	*name = ft_strjoin(".EOF", nb);
+	free(nb);
 	if (!*name)
 		return (-1);
-	while (!access(*name, F_OK))
-	{
-		free(*name);
-		i++;
-		nb = ft_itoa(i);
-		*name = ft_strjoin(".EOF", nb);
-		free(nb);
-	}
+	name = try_access(name, i);
 	i++;
 	while (str[n] && str[n] != SEPARATOR)
 		n++;
-	*eof = malloc(sizeof(char) * (n + 1));
-	if (!*eof)
-		return (-1);
-	ft_strlcpy(*eof, str, n + 1);
-	n = open(*name, O_CREAT | O_RDWR, 0600);
+	n = make_file_heredoc(eof, name, str, n);
 	return (n);
 }
 
@@ -77,14 +98,15 @@ int	open_in_file(char *str)
 	return (n);
 }
 
-void	heredoc(int	fd, char *eof)
+void	heredoc(int fd, char *eof)
 {
 	char	*input;
 
 	if (manage_ctrl_c_var(3) == 1)
 		return ;
 	input = readline("heredoc>");
-	while (ft_strncmp(eof, input, ft_strlen(eof) && input && manage_ctrl_c_var(3) != 1))
+	while (ft_strncmp(eof, input, ft_strlen(eof))
+		&& input && manage_ctrl_c_var(3) != 1)
 	{
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
@@ -94,37 +116,54 @@ void	heredoc(int	fd, char *eof)
 	free (input);
 }
 
-int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
+int	manage_heredoc(int fd, char *str_in)
 {
-	int	i;
-	int	fd;
 	char	*eof;
 	char	*name;
 
 	eof = NULL;
+	name = NULL;
+	if (fd)
+		close(fd);
+	fd = open_heredoc(str_in, &eof, &name);
+	if (fd == -1)
+	{
+		free(eof);
+		free(name);
+		return (-1);
+	}
+	heredoc(fd, eof);
+	free (eof);
+	if (fd == -1)
+		return (-1);
+	close(fd);
+	fd = open_in_file(name);
+	if (fd != -1)
+		unlink(name);
+	free(name);
+	return (fd);
+}
+
+int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
+{
+	int	i;
+	int	fd;
+
 	i = 0;
 	fd = 0;
-	name = NULL;
 	while (cmd->str_in[i])
 	{
-		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
+		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2]
+			&& cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<'
+			&& cmd->str_in[i + 2] == SEPARATOR)
 		{
-			fd = open_heredoc(&cmd->str_in[i + 3], &eof, &name);
-			(*nb_files)++;
-			heredoc(fd, eof);
-			if (eof)
-				free (eof);
+			fd = manage_heredoc(fd, &cmd->str_in[i + 3]);
 			if (fd == -1)
-				return (1);
-			close(fd);
-			fd = open_in_file(name);
-			if (fd != -1)
-				unlink(name);
+				return (-1);
+			(*nb_files)++;
 		}
 		i++;
 	}
-	if (name)
-		free(name);
 	cmd->in = fd;
 	return (fd);
 }
@@ -134,15 +173,16 @@ int	open_in_cmd(t_cmd *cmd)
 	int	i;
 	int	fd;
 
-	i = 0;
+	i = -1;
 	fd = 0;
-	while (cmd->str_in[i])
+	while (cmd->str_in[++i])
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '<')
 		{
-			if (cmd->str_in[i + 1] && cmd->str_in[i + 2] && cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
+			if (cmd->str_in[i + 1] && cmd->str_in[i + 2]
+				&& cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
 			{
-				i+=2;
+				i += 2;
 				fd = cmd->in;
 			}
 			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == SEPARATOR)
@@ -152,7 +192,6 @@ int	open_in_cmd(t_cmd *cmd)
 					return (-1);
 			}
 		}
-		i++;
 	}
 	cmd->in = fd;
 	return (fd);
@@ -161,7 +200,7 @@ int	open_in_cmd(t_cmd *cmd)
 int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 {
 	size_t		i;
-	int		check;
+	int			check;
 
 	check = 0;
 	i = 0;

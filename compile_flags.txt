@@ -1,4 +1,0 @@
--Iinclude/
--Ilibs/libft/includes/
--Wextra
--Wall

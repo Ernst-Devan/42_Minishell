@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/22 12:45:11 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/04 13:17:18 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,63 +21,103 @@
 #include "exec.h"
 #include "libft.h"
 
-int	use_pipe_builtins(t_cmd command, int in, int pipefd[2], char ***env, t_shell *shell) // faire la gestion d'erreur des dup2
+void	manage_dup_pipe(t_cmd command, int pipefd[2], int in)
+{
+	if (!command.path)
+		exit(0);
+	if (pipefd[0] != STDIN_FILENO && pipefd[0] != in)
+		close(pipefd[0]);
+	if (command.in != STDIN_FILENO && in != command.in)
+	{
+		close(in);
+		in = command.in;
+	}
+	if (command.out != STDOUT_FILENO && pipefd[1] != command.out)
+	{
+		close(pipefd[1]);
+		pipefd[1] = command.out;
+	}
+	if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
+	{
+		perror("dup2 faild in usepipe");
+		exit(1);
+	}
+	if (in != STDIN_FILENO)
+		close(in);
+	if (pipefd[1] != STDOUT_FILENO)
+		close(pipefd[1]);
+}
+
+void	manage_close_in_pipe(t_cmd command, int in, int pipefd[2])
+{
+	if (command.out != 1)
+		close(command.out);
+	if (command.in != 0)
+		close(command.in);
+	if (in != STDIN_FILENO && in != command.in)
+		close(in);
+	if (pipefd[1] != STDOUT_FILENO)
+		close(pipefd[1]);
+}
+
+int	use_pipe(t_cmd command, int in, int pipefd[2], t_shell *shell, t_table table)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork error in use pipe"), 1);
-	if (pid == 0 && command.path)
+	if (pid == 0)
 	{
-		if (pipefd[0] != STDIN_FILENO && pipefd[0] != in)
-			close(pipefd[0]);
-		if (command.in != STDIN_FILENO && in != command.in)
-		{
-			close(in);
-			in = command.in;
-		}
-		if (command.out != STDOUT_FILENO && pipefd[1] != command.out)
-		{
-			close(pipefd[1]);
-			pipefd[1] = command.out;
-		}
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
-		{
-			perror("dup2 faild in usepipe");
-			exit(1);
-		}
-		if (in != STDIN_FILENO)
-			close(in);
-		if (pipefd[1] != STDOUT_FILENO)
-			close(pipefd[1]);
+		manage_dup_pipe(command, pipefd, in);
 		if (command.type == 0)
 		{ 
-			execve(command.path, command.args,*env);
+			signal(SIGQUIT, SIG_DFL);
+			signal(SIGPIPE, SIG_DFL);
+			execve(command.path, command.args,shell->env);
 			perror("Commande not found");
 			exit(1);
 		}
-		exec_builtins(command, env, shell);
-		// free all
+		exec_builtins(command, &shell->env, shell, table);
+		close_fd(table);
+		free_table(table);
+		free_lstr(shell->env);
 		exit(1);
 	}
-	if (in != STDIN_FILENO && in != command.in)
-		close(in);
-	if (pipefd[1] != STDOUT_FILENO)
-		close(pipefd[1]);
+	manage_close_in_pipe(command, in, pipefd);
 	return (pid);
 }
 
-int	ms_pipe(t_table table, char ***env, t_shell *shell)
+int	waiter(pid_t last_pid)
+{
+	int		status;
+	pid_t	pid;
+	int		last_status;
+
+	status = 0;
+	pid = 0;
+	while (pid > -1)
+	{
+		pid = wait(&status);
+		if (pid == last_pid)
+			last_status = status;
+	}
+	if (WIFEXITED(last_status))
+		return (WEXITSTATUS(last_status));
+	else if (WIFSIGNALED(last_status))
+		return (128 + WTERMSIG(last_status));
+	if (manage_ctrl_c_var(3) == 1)
+		printf("\n");
+	return (last_status);
+}
+
+int	ms_pipe(t_table table, t_shell *shell)
 {
 	size_t		i;
-	int		pipefd[2];
-	int		save_in;
-	int		val_return;
-	int		*tab_child;
-	int		status;
+	int			pipefd[2];
+	int			save_in;
+	int			val_return;
 
-	tab_child = malloc(sizeof(int) * table.cmd_len);
 	i = 0;
 	pipefd[0] = table.cmds[0].in;
 	while (i < table.cmd_len)
@@ -87,23 +127,10 @@ int	ms_pipe(t_table table, char ***env, t_shell *shell)
 			return (perror("pipe error"), 1);
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
-		val_return = use_pipe_builtins(table.cmds[i], save_in, pipefd, env, shell);
-		tab_child[i] = val_return;
+		val_return = use_pipe(table.cmds[i], save_in, pipefd, shell, table);
 		if (val_return == 1 || val_return == -1)
-		{
-			free(tab_child);
 			return (val_return);
-		}
 		i++;
 	}
-	while (wait(&status) > -1)
-	{}
-	if (WIFEXITED(status))
-		return WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		return 128 + WTERMSIG(status);
-	free(tab_child);
-	if(manage_ctrl_c_var(3) == 1)
-		printf("\n");
-	return (status);
+	return (waiter(val_return));
 }

@@ -35,7 +35,7 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 				count += alloc_error_code(shell, &i);
 			i += ft_strlen(full) - 1;
 			free(full);
-			count += ft_strlen(variable) + (count_characters(variable, DELIMITER) * 2);
+			count += ft_strlen(variable);
 		}
 		i++;
 		count++;

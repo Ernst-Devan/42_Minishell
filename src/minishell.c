@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/23 13:06:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/04 13:11:21 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,13 @@ int	minishell(char **env)
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 	ms_env = new_env(env);
 	if (!ms_env)
+	{
+		write (2, "ENV fail\n", 9);
 		return(1);
+	}
 	shell.error_code = 0;
 	while (1)
 	{
