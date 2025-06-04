@@ -12,7 +12,7 @@
  * @param pipefd The read and write file descriptors of the current pipe.
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
-int	use_pipe(t_cmd command, int in, int pipefd[2], char ***pipe, t_shell *shell, t_table table);
+int	use_pipe(t_cmd command, int in, int pipefd[2], t_shell *shell, t_table table);
 
 /** 
  * The main function for handling pipes.  
@@ -21,6 +21,6 @@ int	use_pipe(t_cmd command, int in, int pipefd[2], char ***pipe, t_shell *shell,
  * @param table A table struct containing the path and the command/binary used for execution. It executes only one binary or command.
  * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
  */
-int	ms_pipe(t_table table, char ***pipe, t_shell *shell);
+int	ms_pipe(t_table table, t_shell *shell);
 
 #endif

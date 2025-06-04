@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:43:20 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/04 11:36:16 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@
 #define LESS 4
 #define GREATGREAT 5
 #define ERROR 6
+
+size_t	quote_check(char *input)
+{
+	char	quote;
+	size_t	j;
+
+	j = 0;
+	quote = 0;
+	while(input[j])
+	{
+		inside_quote(input[j], &quote);
+		j++;
+	}
+	if (quote)
+		return (2);	
+	free(input);
+	return (0);
+}
 
 int	choose_define(char *input, int *i)
 {
@@ -123,7 +141,7 @@ int	lexical_analyser(char *input)
 	tab = lexical_analyser_define(input, &len);
 	check = check_lexical(tab, len);
 	free(tab);
-	if (check == 1)
+	if (check == 1 || quote_check(input))
 		write(2, "Syntax error\n", ft_strlen("Syntax error\n"));
 	return (check);
 }
