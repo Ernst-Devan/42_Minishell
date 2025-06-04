@@ -27,6 +27,10 @@ char	*find_env(char *str, char **env)
 	{
 		if (ft_strncmp(str, env[i], count) == 0)
 		{
+			if (ft_strlen(env[i]) == 0)
+			{
+				return(NULL);
+			}
 			return (env[i] + count);
 		}
 		i++;

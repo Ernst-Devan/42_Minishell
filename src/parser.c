@@ -26,21 +26,19 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 	i = 0;
 	type = 0;
 	args = NULL;
-	while (*list_cmds != NULL) 
+	while (list_cmds && *list_cmds != NULL) 
 	{
 		if (**list_cmds)
 		{
 			args = ft_split(*list_cmds, SEPARATOR);
 			if (!args)
 				return (1);
-			cmd[i].args = args;
 		}
 		if (args && args[0])
 		{
 			path_command = valid_command(path, args[0], &type);
 			cmd[i].path = path_command;
-			if (!path_command)
-				ft_printf("\n%s: command not found\n", args[0]);
+			cmd[i].args = args;
 			cmd[i].type = type;
 			i++;
 		}

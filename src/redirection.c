@@ -5,10 +5,6 @@
 #include <fcntl.h>
 #include <stddef.h>
 
-
-// We can too send the command if there are not valid
-// and same if just have not command
-
 char	*ft_ignore_str(char *str, char *ignore)
 {
 	char	*cpy_str;
@@ -66,6 +62,28 @@ char	*remove_quote(char *str)
 	return (temp);
 }
 
+
+size_t	check_empty(char **lstr)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (lstr[i])
+	{
+		while(lstr[i][j])
+		{
+			if (ft_isascii(lstr[i][j]) && lstr[i][j] != SEPARATOR)
+				return (1);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (0);
+}
+
 char **skip_redirection(char **split_cmd)
 {
 	size_t	i;
@@ -105,13 +123,15 @@ char **skip_redirection(char **split_cmd)
 		split_cmd[i] = temp;
 		i++;
 	}
+	if (check_empty(split_cmd) == 0)
+	{
+		free_lstr(split_cmd);
+		return (NULL);
+	}
 	return (split_cmd);
 }
 
-//!!! BUGS WHEM THE REDIRECTION ARE TOO LONG 
-// Patch the bug with adding the name max of a redirection
 // ADDING max for all other category like Path_max Name_max Command_max etc..
-
 
 char	*redirection_in(char *in, char **split_cmd, size_t *i, size_t *j, char *quote)
 {
@@ -144,8 +164,6 @@ char	*redirection_out(char *out, char **split_cmd, size_t *i, size_t *j, char *q
 	}
 	return (out);
 }
-
-#include "stdio.h"
 
 void manage_redirection(t_cmd **cmds, char **split_cmd)
 {

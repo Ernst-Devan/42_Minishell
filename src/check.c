@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include "libft.h"
 #include <threads.h>
+#include <time.h>
 #include <unistd.h>
 
 size_t check_bultin(char *command)
@@ -36,6 +37,8 @@ char  *check_command(char *path, char *command)
 	i = 0;
 	if (command == NULL)
 		return(NULL);
+	if (!path)
+		return(NULL);
 	splited_path = ft_split(path, ':');
 	if (!splited_path)
 		return(NULL);
@@ -49,12 +52,28 @@ char  *check_command(char *path, char *command)
 			final_path = ft_strdup(temp_path);
 			free_lstr(splited_path);
 			if (!final_path)
-				return (NULL);
+				return (NULL); 
 			return (final_path);
 		}
 		i++;
 	}
 	free_lstr(splited_path);
+	return (NULL);
+}
+
+char	*check_relative_path(char *command)
+{
+	// check ./ or path
+	if (count_characters(command, "/") >= 1)
+	{
+		if (command[0] == '.' && command[1] == '/')
+		{
+			if (!access(command, X_OK | F_OK))
+				return (command);
+		}
+		if (!access(command, X_OK | F_OK))
+			return (command);
+	}
 	return (NULL);
 }
 
@@ -64,6 +83,13 @@ char	*valid_command(char *path, char *command, size_t *type)
 	char	*cpy_command;
 
 	cpy_command = ft_strdup(command);
+	if (!cpy_command)
+		return (NULL);
+	if (count_characters(cpy_command, "/") >= 1)
+	{
+		*type = 0;
+		return(cpy_command);
+	}
 	if (check_bultin(cpy_command))
 	{
 		*type = 1;

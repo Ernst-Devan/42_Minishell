@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "parsing.h"
 #include <stddef.h>
+#include "stdio.h"
 
 void display_table(t_table table) 
 {
@@ -13,24 +14,24 @@ void display_table(t_table table)
 	j = 0;
 	while (i < table.cmd_len) 
 	{
-		ft_printf("\ntype : %d\n", table.cmds[i].type);
-		ft_printf("cmd  : %s\n", table.cmds[i].path);
-		ft_printf("args : ");
+		printf("\ntype : %zu\n", table.cmds[i].type);
+		printf("cmd  : %s\n", table.cmds[i].path);
+		printf("args : ");
 		if (!table.cmds[i].args[0])
-			ft_printf("(null)");
+			printf("(null)");
 		while (table.cmds[i].args && table.cmds[i].args[j])
 		{
-			ft_printf("%s ", table.cmds[i].args[j]);
+			printf("%s ", table.cmds[i].args[j]);
 			j++;	
 		}
 		j = 0;
-		ft_printf("\nin : %d\n", table.cmds[i].in);
-		ft_printf("out : %d\n", table.cmds[i].out);
-		ft_printf("str_in : %s\n", table.cmds[i].str_in);
-		ft_printf("str_out : %s\n", table.cmds[i].str_out);
+		printf("\nin : %d\n", table.cmds[i].in);
+		printf("out : %d\n", table.cmds[i].out);
+		printf("str_in : %s\n", table.cmds[i].str_in);
+		printf("str_out : %s\n", table.cmds[i].str_out);
 		i++;
   }
-  ft_printf("\n");
+  printf("\n");
 }
 
 void display_lstr(char **lstr) {
@@ -39,13 +40,13 @@ void display_lstr(char **lstr) {
 
 	i = 0;
 	if (!lstr[i])
-		ft_printf(" (null)\n");
+		printf(" (null)\n");
 	while (lstr[i]) 
 	{
-		ft_printf("%s\n",lstr[i]);
+		printf("%s\n",lstr[i]);
 		i++;
 	}
-	ft_printf("\n");
+	printf("\n");
 }
 
 size_t count_characters(char *s, char *cs) {

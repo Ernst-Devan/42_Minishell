@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 11:36:16 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/04 13:26:52 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ size_t	quote_check(char *input)
 	}
 	if (quote)
 		return (2);	
-	free(input);
 	return (0);
 }
 
