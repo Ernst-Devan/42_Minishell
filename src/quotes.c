@@ -49,6 +49,8 @@ char	**remove_quotes(char **splited_cmds)
 	j = 0;
 	k = 0;
 	quote = 0;
+	if (!splited_cmds)
+		return(NULL);
 	while(splited_cmds[i])
 	{
 		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
@@ -113,7 +115,7 @@ char *skip_space(char *input, int *error_code)
 	buffer[i] = '\0';
 	if (quote != 0)
 	{
-		ft_printf("Unclosed quotes : %s\n", buffer);
+		printf("Unclosed quotes : %s\n", buffer);
 		*error_code = 2;	
 	}
 	free(input);
