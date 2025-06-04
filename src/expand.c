@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 10:13:06 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/28 10:34:55 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:54:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,12 +174,10 @@ char	*detect_full_variable(char *input)
 char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 {
 	char	*expanded;
-	int		error;
 	
-	error = 0;
 	expanded = replace_var(variable, env);
 	if (quote == 0 && expanded)
-		expanded = skip_space(expanded, &error);
+		expanded = skip_space(expanded);
 	expand->i += ft_strlen(variable);
 	if (!expanded)
 		return (expand->buffer);

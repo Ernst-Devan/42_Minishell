@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:20:19 by dernst            #+#    #+#             */
-/*   Updated: 2025/04/28 17:16:04 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:53:39 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	**remove_quotes(char **splited_cmds)
 	return (splited_cmds);
 }
 
-char *skip_space(char *input, int *error_code)
+char *skip_space(char *input)
 {
 	char	*buffer;
 	char	quote;
@@ -114,10 +114,7 @@ char *skip_space(char *input, int *error_code)
 	}
 	buffer[i] = '\0';
 	if (quote != 0)
-	{
 		printf("Unclosed quotes : %s\n", buffer);
-		*error_code = 2;	
-	}
 	free(input);
 	return (buffer);
 }

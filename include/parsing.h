@@ -101,7 +101,7 @@ char	*get_command(char *input, t_shell *shell);
 
 //Quotes.c
 size_t	inside_quote(char c, char *quote);
-char	*skip_space(char *input, int *error_code);
+char	*skip_space(char *input);
 
 // Lexer.c
 char	*lexer(char *input);
