@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 13:11:21 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:36:31 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	minishell(char **env)
 		shell.env = ms_env;
 		table = parsing(&shell);
 		if ((manage_ctrl_c_var(3) != 1 && table.cmd_len > 0) || table.cmds)
-		  	shell = exec(table, &ms_env, shell);
+		 	shell = exec(table, &ms_env, shell);
 		free_table(table);
     }
 	return (0);
