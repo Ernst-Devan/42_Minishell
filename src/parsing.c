@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 11:30:09 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/06/17 12:26:17 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
   
 // NOT JUST SPACE BE CAREFUL TO ALL delimiter
 // SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
+//
+
+size_t	count_nb_pipe(char *input)
 //
 
 size_t	count_nb_pipe(char *input)
@@ -65,6 +68,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	input = get_command(shell);
 	input = manage_space(input);
 	input = lexer(input);
+	printf("after:%s\n", input);
 	if (lexical_analyser(input) == 1)
 	{
 		free(input);

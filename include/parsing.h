@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/13 08:35:43 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/17 12:24:18 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # define DELIMITER " -<>|"
 # define SEPARATOR ':'
 # define SEPARATOR2 ":"
+# define RED "\001\e[0;36m\002"
+# define BLUE "\001\e[0;91m\002"
+# define WHITE "\001\e[0;37m\002"
+# define END_COLOR ""
 
 typedef struct s_shell
 {
@@ -91,16 +95,16 @@ size_t	nb_letter(char *input, char c);
 char	**split_cmd(char *input, char c);
 
 // Utils.c
+char	*skip_characters(char *input, char c);
+int		count_lstr(char **list_str);
 int		ft_strlen_c(char *str, char delimiter);
 size_t	check_delimiter(char c, char *delimiter);
-void	display_lstr(char **lstr);
-void	display_table(t_table table);
 size_t	count_characters(char *s, char *cs);
-int		count_lstr(char **list_str);
+size_t	ft_strccat(char *dest, char *src, char c);
 size_t	ft_strccpy(char *dest, const char *src, char c);
 size_t	lstrlen(char **lstr);
-char	*skip_characters(char *input, char c);
-size_t	ft_strccat(char *dest, char *src, char c);
+void	display_lstr(char **lstr);
+void	display_table(t_table table);
 
 // Expand.c
 char	*manage_expand(char *input, t_shell shell);
