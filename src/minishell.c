@@ -45,7 +45,7 @@ int	minishell(char **env)
 	{
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
-		table = parsing(&shell);
+		parsing(&shell, &table);
 		display_table(table);
 		if ((manage_ctrl_c_var(3) != 1 && table.cmd_len > 0) || table.cmds)
 		  	shell = exec(table, &ms_env, shell);

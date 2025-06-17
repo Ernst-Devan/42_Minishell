@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/13 08:36:38 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/17 11:30:09 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,28 +58,25 @@ size_t	count_nb_cmd(char *input)
 	return (nb_cmd);
 }
 
-t_table parsing(t_shell *shell) 
+size_t	parsing(t_shell *shell, t_table *table) 
 {
-	t_table	table;
 	char	*input;
 
 	input = get_command(shell);
 	input = manage_space(input);
-	printf("before:%s\n", input);
 	input = lexer(input);
-	printf("after:%s\n", input);
 	if (lexical_analyser(input) == 1)
 	{
 		free(input);
-		table.cmd_len = 0;
-		table.cmds = NULL;
+		(*table).cmd_len = 0;
+		(*table).cmds = NULL;
 		shell->error_code = 2;
-		return (table);
+		return (1);
 	}
 	input = manage_expand(input, *shell);
-	if (init_table(&table, count_nb_cmd(input)))
-		free_table(table);
-	if (parser(&table, shell->env,input))
-		free_table(table);
-	return (table);
+	if (init_table(table, count_nb_cmd(input)))
+		free_table(*table);
+	if (parser(table, shell->env,input))
+		free_table(*table);
+	return (1);
 }

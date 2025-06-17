@@ -68,7 +68,7 @@ char	**skip_redirection(char **split_cmd);
 char	*remove_quote(char *str);
 
 // Parsing.c
-t_table	parsing(t_shell *shell);
+size_t	parsing(t_shell *shell, t_table *table);
 
 // Init.c
 void	init_cmd(t_cmd *cmd, int nb_cmd);
