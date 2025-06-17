@@ -6,14 +6,13 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:20:19 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/04 15:53:39 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 10:26:36 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
+#include "parsing.h"
 
 size_t	inside_quote(char c, char *quote)
 {
@@ -22,19 +21,19 @@ size_t	inside_quote(char c, char *quote)
 		if (c == '\"' || c == '\'')
 		{
 			*quote = c;
-			return(2);
+			return (2);
 		}
 		return (0);
 	}
-	else 
+	else
 	{
 		if (c == *quote)
 		{
 			*quote = 0;
-			return(3);
+			return (3);
 		}
 		return (1);
-	}	
+	}
 }
 
 char	**remove_quotes(char **splited_cmds)
@@ -50,8 +49,8 @@ char	**remove_quotes(char **splited_cmds)
 	k = 0;
 	quote = 0;
 	if (!splited_cmds)
-		return(NULL);
-	while(splited_cmds[i])
+		return (NULL);
+	while (splited_cmds[i])
 	{
 		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
 		while (splited_cmds[i][j])
@@ -75,46 +74,4 @@ char	**remove_quotes(char **splited_cmds)
 		splited_cmds[i++] = temp;
 	}
 	return (splited_cmds);
-}
-
-char *skip_space(char *input)
-{
-	char	*buffer;
-	char	quote;
-	size_t	i;
-	size_t	j;
-	size_t	inside;
-
-	inside = 0;
-	i = 0;
-	j = 0;
-	quote = 0;
-	buffer = ft_calloc(ft_strlen(input) + 1, sizeof(char));
-	while(input[j])
-	{
-		if (j == 0)
-		{
-			while(ft_isspace(input[j]))
-				j++;
-		}
-		if (inside == 0)
-		{
-			if (input[j] == ' ')
-			{
-				buffer[i++] = input[j];
-				while(input[j] && input[j] == ' ')
-					j++;
-				if (!input[j])
-					break;
-			}
-		}
-		inside = inside_quote(input[j], &quote);
-		buffer[i++] = input[j];
-		j++;
-	}
-	buffer[i] = '\0';
-	if (quote != 0)
-		printf("Unclosed quotes : %s\n", buffer);
-	free(input);
-	return (buffer);
 }

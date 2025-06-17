@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 
+#include "libft.h"
 int	ft_count_word(char *line)
 {
 	int	i;
@@ -22,7 +23,7 @@ int	ft_count_word(char *line)
 		return (0);
 	while (line[i] && line[i] == '\n')
 	{
-		while (line[i] == ' ' && line[i])
+		while (ft_isspace(line[i]) && line[i])
 			i++;
 		while (line[i] > 32 && line[i])
 			i++;

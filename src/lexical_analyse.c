@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "parsing.h"
@@ -140,12 +141,17 @@ int	lexical_analyser(char *input)
 	int		*tab;
 	int		len;
 	int		check;
+	int		check_quote;
 
 	len = 0;
 	tab = lexical_analyser_define(input, &len);
 	check = check_lexical(tab, len);
+	check_quote = quote_check(input);
 	free(tab);
-	if (check == 1 || quote_check(input))
+	if (check == 1 || check_quote)
+	{
 		write(2, "Syntax error\n", ft_strlen("Syntax error\n"));
-	return (check);
+		return (1);
+	}
+	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   alloc_expand.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/17 11:27:27 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/17 11:27:32 by njooris          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "parsing.h"
 #include <stddef.h>
@@ -23,6 +35,7 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 
 	i = 0;
 	count = 0;
+	variable = NULL;
 	while (input[i])
 	{
 		while (input[i] == '$')
@@ -40,6 +53,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		i++;
 		count++;
 	}
-	return (count + 1);
+	return (count + count_characters(variable, "|<>") * 2);
 }
 

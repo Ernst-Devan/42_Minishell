@@ -42,6 +42,7 @@ SRCS		=	minishell.c 	\
 				manage_out.c 	\
 				lexical_analyse.c \
 				alloc_expand.c	\
+				space.c			\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
@@ -87,7 +88,7 @@ debug:
 	echo -en '\033c\033[3J'
 	$(MAKE) debug -C libs/libft;
 	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
-	valgrind --leak-check=full --suppressions=valgrind_readline.supp ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=valgrind_readline.supp ./minishell
 	
 .PHONY: debuga 
 debuga:

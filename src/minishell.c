@@ -18,6 +18,7 @@
 #include <signal.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -28,8 +29,7 @@ int	minishell(char **env)
 	char	**ms_env;
 	t_cmd	cmd;
 
-	table.cmds = &cmd;
-	rl_catch_signals = 0;
+	table.cmds = &cmd; rl_catch_signals = 0;
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
 	signal(SIGQUIT, SIG_IGN);
@@ -46,6 +46,7 @@ int	minishell(char **env)
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		table = parsing(&shell);
+		display_table(table);
 		if ((manage_ctrl_c_var(3) != 1 && table.cmd_len > 0) || table.cmds)
 		 	shell = exec(table, &ms_env, shell);
 		free_table(table);

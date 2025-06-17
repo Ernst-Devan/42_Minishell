@@ -1,4 +1,14 @@
-// DONT FORGET TO ADD THE HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/17 11:27:53 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/17 11:27:56 by njooris          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "parsing.h"
 #include <stdio.h>
@@ -15,11 +25,9 @@ void free_lstr(char **lstr)
 		{
 			temp = lstr[i];
 			free(temp);
-			temp = NULL;
 			i++;
 		}
 		free(lstr);
-		lstr = NULL;
 	}
 }
  

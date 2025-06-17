@@ -75,7 +75,7 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 		free_lstr(env);
 		close_fd(table);
 		free_table(table);
-		write(2, "Exit faild\n", 11);
+		write(2, "Exit failed\n", 11);
 		exit(2);
 	}
 	if (check == -1 || (cmd.args[1] && check_args(cmd.args[1])))

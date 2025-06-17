@@ -39,6 +39,8 @@ static void	exec_child_process(t_table table, char **env)
 	if (execve(table.cmds->path, table.cmds->args, env) == -1)
 	{
 		perror("Command not found");
+		free_table(table);
+		free_lstr(env);
 		exit(1);
 	}
 }
