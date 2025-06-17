@@ -15,11 +15,9 @@ void free_lstr(char **lstr)
 		{
 			temp = lstr[i];
 			free(temp);
-			temp = NULL;
 			i++;
 		}
 		free(lstr);
-		lstr = NULL;
 	}
 }
  

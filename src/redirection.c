@@ -32,6 +32,8 @@ char	*ft_ignore_str(char *str, char *ignore)
 	return (temp);
 }
 
+
+
 char	*remove_quote(char *str)
 {
 	size_t	i;
@@ -39,6 +41,8 @@ char	*remove_quote(char *str)
 	char	*temp;
 	char	quote;
 
+	if (!count_characters(str, "\"\'"))
+		return(str);
 	i = 0;
 	j = 0;
 	quote = 0;
@@ -61,7 +65,6 @@ char	*remove_quote(char *str)
 	free(str);
 	return (temp);
 }
-
 
 size_t	check_empty(char **lstr)
 {
@@ -95,6 +98,11 @@ char **skip_redirection(char **split_cmd)
 	i = 0;
 	j = 0;
 	quote = 0;
+	if (check_empty(split_cmd) == 0)
+	{
+		free_lstr(split_cmd);
+		return (NULL);
+	}
 	while (split_cmd[i])
 	{
 		k = 0;
@@ -107,7 +115,8 @@ char **skip_redirection(char **split_cmd)
 				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
 				{
 					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
-					j++;
+					if (split_cmd[i][j])
+						j++;
 					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
 				}
 			}
@@ -123,49 +132,86 @@ char **skip_redirection(char **split_cmd)
 		split_cmd[i] = temp;
 		i++;
 	}
-	if (check_empty(split_cmd) == 0)
-	{
-		free_lstr(split_cmd);
-		return (NULL);
-	}
 	return (split_cmd);
 }
 
 // ADDING max for all other category like Path_max Name_max Command_max etc..
 
-char	*redirection_in(char *in, char **split_cmd, size_t *i, size_t *j, char *quote)
+char	*redirection_in(char *in, char *split_cmd, size_t *j, char *quote)
 {
-		if (split_cmd[*i][*j] == '<')
+	size_t	len;
+
+	len = ft_strlen(split_cmd);
+		if (split_cmd[*j] == '<')
 		{
-			(*j) += ft_strccat(in, &split_cmd[*i][*j], SEPARATOR);
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
-			inside_quote(split_cmd[*i][*j], quote);
+			(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
+			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
+			inside_quote(split_cmd[*j], quote);
 			if (*quote != 0)
-				ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
-			(*j)++;
-			(*j) += ft_strccat(in, &split_cmd[*i][*j], SEPARATOR);
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd[*i] + 1));
+				ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
+			if (*j < len)
+			{
+				(*j)++;
+				(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
+			}
+			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd + 1));
 	}
 	return (in);
 }
 
-char	*redirection_out(char *out, char **split_cmd, size_t *i, size_t *j, char *quote)
+char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote)
 {
-	if (split_cmd[*i][*j] == '>')
-	{
-			(*j) += ft_strccat(out, &split_cmd[*i][*j], SEPARATOR);
-			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
-			inside_quote(split_cmd[*i][*j], quote);
-			if (*quote != 0)
-				ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i]) + 1);
+	size_t	len;
+
+	len = ft_strlen(split_cmd);
+	if (split_cmd[*j] == '>')
+	{	
+		(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
+		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
+		inside_quote(split_cmd[*j], quote);
+		if (*quote != 0)
+			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
+		if (*j < len)
+		{
 			(*j)++;
-			(*j) += ft_strccat(out, &split_cmd[*i][*j], SEPARATOR);
-			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd[*i] + 1));
+			(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
+		}
+		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd + 1));
 	}
 	return (out);
 }
 
-void manage_redirection(t_cmd **cmds, char **split_cmd)
+
+size_t	check_redirection(char **split_cmd)
+{
+	size_t	i;
+
+	i = 0;
+	while (split_cmd[i])
+	{
+		if (count_characters(split_cmd[i], "><") > 0)
+			return(1);
+		i++;
+	}
+	return (0);
+}
+
+
+
+size_t	init_redirection(char **in, char **out, char *cmd)
+{
+	*in = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
+	if (!*in)
+		return (1);
+	(*in)[0] = '\0';
+	*out = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
+	if (!*out)
+		return (1);
+	(*out)[0] = '\0';
+	return (0);
+}
+
+char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 {
 	size_t	i;
 	size_t	j;
@@ -175,20 +221,19 @@ void manage_redirection(t_cmd **cmds, char **split_cmd)
 
 	i = 0;	
 	quote = 0;
-	while (split_cmd[i])
+	if (!check_redirection(split_cmd))
+		return(split_cmd);
+	while (check_empty(split_cmd) == 1 && split_cmd[i])
 	{
-		in = malloc(ft_strlen(split_cmd[i]) + 1);
-		out = malloc(ft_strlen(split_cmd[i]) + 1);
-		in[0] = '\0';
-		out[0] = '\0';
+		init_redirection(&in, &out, split_cmd[i]);
 		j = 0;
 		while (split_cmd[i][j])
 		{
 			inside_quote(split_cmd[i][j], &quote);
 			if (quote == 0)
 			{
-				in = redirection_in(in, split_cmd, &i, &j, &quote);
-				out = redirection_out(out, split_cmd, &i, &j, &quote);
+				in = redirection_in(in, split_cmd[i], &j, &quote);
+				out = redirection_out(out, split_cmd[i], &j, &quote);
 			}
 			if (!split_cmd[i][j])
 				break;
@@ -197,4 +242,5 @@ void manage_redirection(t_cmd **cmds, char **split_cmd)
 		(*cmds)[i].str_in = remove_quote(in);
 		(*cmds)[i++].str_out = remove_quote(out);
 	}
+	return (skip_redirection(split_cmd));
 }

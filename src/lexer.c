@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:13:07 by dernst            #+#    #+#             */
-/*   Updated: 2025/04/22 11:13:55 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/13 08:53:22 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,36 @@
 #include "parsing.h"
 #include <readline/readline.h>
 #include <stddef.h>
+#include <stdio.h>
 
-char *lexer(char *input) 
+char	*lexer(char *input)
 {
 	char	*buffer;
-	char	*input_adress;
-	size_t	i;
-	size_t	buffer_size;
 	char	quote;
+	size_t	i;
+	size_t	j;
 
-	quote = 0;
-	// Find a better allocation size
-	buffer_size = ft_strlen(input) + count_characters(input, DELIMITER) * 10 + 1;
 	i = 0;
-	buffer = ft_calloc(buffer_size, sizeof(char));
-	if (!buffer)
-		return (NULL);
-	input_adress = input;
-	while (*input)
+	j = 0;
+	quote = 0;
+	buffer = ft_calloc(ft_strlen(input) + count_characters(input, DELIMITER) + 1, 1);
+	while (input[i])
 	{
-		if (inside_quote(*input, &quote))
-			buffer[i++] = *input++;
-		else
+		if (input[i] && !inside_quote(input[i], &quote) && check_delimiter(input[i], "<>|\x1E"))
 		{
-			if (check_delimiter(*input, "<>| ") == 1)
-			{
-				if (*input == ' ')
-					input++;
-				buffer[i++] = SEPARATOR;
-				while(check_delimiter(*input, "<>|") == 1)
-					buffer[i++] = *input++;
-				if (buffer[i - 1] != SEPARATOR)
-					buffer[i++] = SEPARATOR;
-				if (*input == ' ')
-					input++;
-			}
-			else if (*input && *input != '\'' && *input != '\"')
-				buffer[i++] = *input++;
+			if (ft_isspace(input[i]))
+				i++;
+			while (check_delimiter(input[i], "<>|"))
+				buffer[j++] = input[i++];
+			if (buffer[j - 1] != SEPARATOR)
+				buffer[j++] = SEPARATOR;
 		}
+		else if (j >= 1 && buffer[j - 1] == SEPARATOR && input[i] == SEPARATOR)
+			i++;
+		else if (input[i])
+			buffer[j++] = input[i++];
 	}
-	buffer[i] = '\0';
-	free(input_adress);
+	buffer[j] = '\0';
+	free(input);
 	return (buffer);
 }

@@ -32,7 +32,6 @@ int	init_table(t_table *table, int nb_cmd)
 	return (0);
 }
 
-
 size_t	init_expand(t_expand *expand, char *input, t_shell shell)
 {
 	size_t	alloc;
@@ -41,7 +40,7 @@ size_t	init_expand(t_expand *expand, char *input, t_shell shell)
 	expand->i = 0;
 	expand->j = 0;
 	expand->alloc = alloc;
-	expand->buffer = ft_calloc(alloc, sizeof(char));
+	expand->buffer = ft_calloc(alloc + 1, sizeof(char));
 	if (!expand->buffer)
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/04 13:26:31 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/13 08:36:38 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,40 +27,47 @@
   
 // NOT JUST SPACE BE CAREFUL TO ALL delimiter
 // SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
+//
 
-int	count_nb_cmd(char *input)
+size_t	count_nb_pipe(char *input)
 {
-	int	i;
-	int	nb_cmd;
-	char quote;
+	size_t	i;
+	size_t	count;
+	char	quote;
 
-	nb_cmd = 0;
 	i = 0;
+	count = 0;
 	quote = 0;
-	inside_quote(input[i], &quote);
-	if (input[i] && input[i] != '|' && quote == 0 )
-		nb_cmd++;
 	while (input[i])
 	{
 		inside_quote(input[i], &quote);
-		if (input[i + 1] && input[i] == '|' && quote == 0)
-			nb_cmd++;
+		if (quote == 0 && (i > 1 && input[i - 1] != '\x1E') && input[i] == '|')
+			count++;	
 		i++;
 	}
+	return (count);
+}
+
+size_t	count_nb_cmd(char *input)
+{
+	size_t	nb_cmd;
+
+	nb_cmd = count_nb_pipe(input);
+	if (ft_strlen(input))
+		nb_cmd++;
 	return (nb_cmd);
 }
 
 t_table parsing(t_shell *shell) 
 {
-	t_table table;
+	t_table	table;
 	char	*input;
 
-	input = NULL;
-	input = get_command(input, shell);
-	input = skip_space(input);
-//	if (shell->error_code)
-	//	return (table);
+	input = get_command(shell);
+	input = manage_space(input);
+	printf("before:%s\n", input);
 	input = lexer(input);
+	printf("after:%s\n", input);
 	if (lexical_analyser(input) == 1)
 	{
 		free(input);

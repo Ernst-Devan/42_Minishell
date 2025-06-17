@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 10:13:06 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/28 10:34:55 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/13 08:36:25 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*word_beetween_quote(char *variable)
 
 	if (!variable)
 		return (NULL);
-	buffer = calloc(ft_strlen(variable) + 2, sizeof(char));
+	buffer = calloc(ft_strlen(variable) + 3, sizeof(char));
 	if (!buffer)
 		return (NULL);
 	i = 0;
@@ -95,7 +95,20 @@ char	*adding_quotes_word(char *variable)
 	while(variable[i] && ft_isspace(variable[i]))
 		buffer[j++] = variable[i++];
 	while(variable[i] && !ft_isspace(variable[i]))
-		buffer[j++] = variable[i++];
+	{
+		if (check_delimiter(variable[i], "|<>"))
+		{
+			temp = word_beetween_quote(&variable[i]);
+			if (!temp)
+				break;
+			ft_strlcat(buffer, temp, ft_strlen(variable) * 2 + 1);
+			i += ft_strlen(temp) - 2;
+			j += ft_strlen(temp);
+			free(temp);
+		}
+		else
+			buffer[j++] = variable[i++];
+	}
 	if (ft_strlen(variable) >= i && variable[i])
 	{
 		buffer[j++] = SEPARATOR;
@@ -103,7 +116,7 @@ char	*adding_quotes_word(char *variable)
 	}
 	while(ft_strlen(variable) >= i && variable[i])
 	{
-		if (check_delimiter(variable[i], "|<>-"))
+		if (check_delimiter(variable[i], "|<>"))
 		{
 			temp = word_beetween_quote(&variable[i]);
 			if (!temp)
@@ -119,6 +132,8 @@ char	*adding_quotes_word(char *variable)
 	buffer[j] = '\0';
 	return (buffer);
 }
+
+
 
 char	*replace_var(char *str, char **env)
 {
@@ -174,12 +189,10 @@ char	*detect_full_variable(char *input)
 char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 {
 	char	*expanded;
-	int		error;
 	
-	error = 0;
 	expanded = replace_var(variable, env);
 	if (quote == 0 && expanded)
-		expanded = skip_space(expanded, &error);
+		expanded = manage_space(expanded);
 	expand->i += ft_strlen(variable);
 	if (!expanded)
 		return (expand->buffer);
@@ -199,7 +212,7 @@ char	*special_expand(t_shell shell, t_expand *expand)
 	expand->j += ft_strlen(error);
 	expand->i += 2;
 	free(error);
-	return (expand->buffer);
+	return (expand->buffer); 
 }
 
 size_t	need_expand(char *input, t_expand *expand, t_shell shell, char quote)
@@ -222,6 +235,8 @@ char *manage_expand(char *input, t_shell shell)
 	t_expand	expand;
 	char		quote;
 	
+	if (!count_characters(input, "$"))
+		return(input);
 	if(init_expand(&expand, input, shell))
 		return(NULL);
 	quote = 0;

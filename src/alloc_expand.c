@@ -23,6 +23,7 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 
 	i = 0;
 	count = 0;
+	variable = NULL;
 	while (input[i])
 	{
 		while (input[i] == '$')
@@ -40,6 +41,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		i++;
 		count++;
 	}
-	return (count + 1);
+	return (count + count_characters(variable, "|<>") * 2);
 }
 

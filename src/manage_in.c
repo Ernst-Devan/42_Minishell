@@ -151,7 +151,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 
 	i = 0;
 	fd = 0;
-	while (cmd->str_in[i])
+	while (cmd->str_in && cmd->str_in[i])
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2]
 			&& cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<'
@@ -175,7 +175,7 @@ int	open_in_cmd(t_cmd *cmd)
 
 	i = -1;
 	fd = 0;
-	while (cmd->str_in[++i])
+	while (cmd->str_in && cmd->str_in[++i])
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '<')
 		{

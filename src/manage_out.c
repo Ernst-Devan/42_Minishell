@@ -93,7 +93,7 @@ int	open_out_cmd(t_cmd *cmd)
 
 	i = 0;
 	fd = 0;
-	while (cmd->str_out[i])
+	while (cmd->str_out && cmd->str_out[i])
 	{
 		fd = manage_open_out(i, cmd, fd);
 		if (fd == -1)

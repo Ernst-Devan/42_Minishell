@@ -4,12 +4,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-char	*get_command(char *input, t_shell *shell)
+char	*get_command(t_shell *shell)
 {
 	char	prompt[PATH_MAX];
+	char	*input;
 
 	ft_strlcpy(prompt, "\0", PATH_MAX);	
-
 	if (!shell->error_code)
 	{
 		ft_strlcat(prompt, "\001\e[0;36m\002", PATH_MAX);
