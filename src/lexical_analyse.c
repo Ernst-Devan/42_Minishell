@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 15:35:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 14:10:53 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,17 @@ int	choose_define(char *input, int *i, char quote)
 	return (CMD);
 }
 
-int	*init_new_tab(int len, int define, int *tab)
+int	*init_new_tab(int len, int define, int *tab, int *check)
 {
 	int	*new_tab;
 	int	j;
 
 	new_tab = malloc(sizeof(int) * (len + 1));
 	if (!new_tab)
+	{
+		*check = 1;
 		return (NULL);
+	}
 	j = 0;
 	while (j < len)
 	{
@@ -84,7 +87,7 @@ int	*init_new_tab(int len, int define, int *tab)
 	return (tab);
 }
 
-int	*lexical_analyser_define(char *input, int *len)
+int	*lexical_analyser_define(char *input, int *len, int *check)
 {
 	int		i;
 	int		*tab;
@@ -105,7 +108,7 @@ int	*lexical_analyser_define(char *input, int *len)
 			if (input[i])
 			{
 				define = choose_define(&input[i], &i, quote);
-				tab = init_new_tab((*len)++, define, tab);
+				tab = init_new_tab((*len)++, define, tab, check);
 				if (!tab)
 					return (NULL);
 			}
@@ -144,14 +147,17 @@ int	lexical_analyser(char *input)
 	int		check_quote;
 
 	len = 0;
-	tab = lexical_analyser_define(input, &len);
+	check = 0;
+	tab = lexical_analyser_define(input, &len, &check);
+	if (!tab && check)
+		return (1);
 	check = check_lexical(tab, len);
 	check_quote = quote_check(input);
 	free(tab);
 	if (check == 1 || check_quote)
 	{
 		write(2, "Syntax error\n", ft_strlen("Syntax error\n"));
-		return (1);
+		return (2);
 	}
 	return (0);
 }

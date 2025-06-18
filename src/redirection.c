@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:29 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 11:28:32 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 14:00:05 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,6 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <stddef.h>
-
-char	*ft_ignore_str(char *str, char *ignore)
-{
-	char	*cpy_str;
-	char	*temp;
-	size_t	i;
-
-	cpy_str = str;
-	i = 0;
-	temp = malloc(ft_strlen(str) + 1);
-	while (*cpy_str)
-	{
-		if (*cpy_str == *ignore)
-		{
-			if (!ft_strncmp(cpy_str, ignore, ft_strlen(ignore)))
-				cpy_str += ft_strlen(ignore);
-		}
-		if (!*cpy_str)
-			break;
-		temp[i] = *cpy_str;
-		i++;
-		cpy_str++;
-	}
-	temp[i] = '\0';
-	free(str);
-	return (temp);
-}
-
-
 
 char	*remove_quote(char *str)
 {
@@ -56,7 +27,9 @@ char	*remove_quote(char *str)
 	i = 0;
 	j = 0;
 	quote = 0;
-	temp = malloc(ft_strlen(str) + 1);
+	temp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!temp)
+		return(NULL);
 	while (str[i])
 	{
 		if (inside_quote(str[i], &quote) > 1)
@@ -216,7 +189,10 @@ size_t	init_redirection(char **in, char **out, char *cmd)
 	(*in)[0] = '\0';
 	*out = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
 	if (!*out)
+	{
+		free(*in);
 		return (1);
+	}
 	(*out)[0] = '\0';
 	return (0);
 }
@@ -235,7 +211,11 @@ char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 		return(split_cmd);
 	while (check_empty(split_cmd) == 1 && split_cmd[i])
 	{
-		init_redirection(&in, &out, split_cmd[i]);
+		if (init_redirection(&in, &out, split_cmd[i]))
+		{
+			free_lstr(split_cmd);
+			return (NULL);
+		}
 		j = 0;
 		while (split_cmd[i][j])
 		{
@@ -250,7 +230,18 @@ char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 			j++;
 		}
 		(*cmds)[i].str_in = remove_quote(in);
+		if (!(*cmds)[i].str_in)
+		{
+			free_lstr(split_cmd);
+			return (NULL);
+		}
 		(*cmds)[i++].str_out = remove_quote(out);
+		if (!(*cmds)[i - 1].str_out)
+		{
+			free(split_cmd);
+			free((*cmds)[i - 1].str_in);
+			return (NULL);
+		}
 	}
 	return (skip_redirection(split_cmd));
 }

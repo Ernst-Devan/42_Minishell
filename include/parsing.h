@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 12:24:18 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/06/17 13:54:49 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
-# define END_COLOR ""
 
 typedef struct s_shell
 {
@@ -76,7 +75,7 @@ size_t	parsing(t_shell *shell, t_table *table);
 
 // Init.c
 void	init_cmd(t_cmd *cmd, int nb_cmd);
-int		init_table(t_table *table, int nb_cmd);
+size_t		init_table(t_table *table, int nb_cmd);
 
 //Quotes.c
 char	**remove_quotes(char **splited_cmd);
@@ -95,16 +94,16 @@ size_t	nb_letter(char *input, char c);
 char	**split_cmd(char *input, char c);
 
 // Utils.c
-char	*skip_characters(char *input, char c);
-int		count_lstr(char **list_str);
 int		ft_strlen_c(char *str, char delimiter);
 size_t	check_delimiter(char c, char *delimiter);
-size_t	count_characters(char *s, char *cs);
-size_t	ft_strccat(char *dest, char *src, char c);
-size_t	ft_strccpy(char *dest, const char *src, char c);
-size_t	lstrlen(char **lstr);
 void	display_lstr(char **lstr);
 void	display_table(t_table table);
+size_t	count_characters(char *s, char *cs);
+int		count_lstr(char **list_str);
+size_t	ft_strccpy(char *dest, const char *src, char c);
+size_t	lstrlen(char **lstr);
+char	*skip_characters(char *input, char c);
+size_t	ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
 char	*manage_expand(char *input, t_shell shell);
@@ -114,7 +113,6 @@ char	*detect_full_variable(char *input);
 
 // Check.c
 char	*valid_command(char *path, char *command, size_t *type);
-char	*ft_ignore_str(char *str, char *ignore);
 
 //Prompt.c
 char	*get_command(t_shell *shell);
