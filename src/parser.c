@@ -75,7 +75,10 @@ size_t	parser(t_table *table, char **env, char *input)
 		return (1);
 	splited_cmds = remove_quotes(splited_cmds);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
+	{
+		free_lstr(splited_cmds);
 		return (1);
+	}
 	free_lstr(splited_cmds);
 	return(0);
 }
