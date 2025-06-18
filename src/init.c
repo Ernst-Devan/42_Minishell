@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:01 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 11:28:04 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:17:38 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	init_cmd(t_cmd *cmd, int nb_cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < nb_cmd)
@@ -55,4 +55,3 @@ size_t	init_expand(t_expand *expand, char *input, t_shell shell)
 		return (1);
 	return (0);
 }
-

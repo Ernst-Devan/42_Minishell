@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:19 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:57:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:20:48 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_command(t_shell *shell)
 	char	prompt[PATH_MAX];
 	char	*input;
 
-	ft_strlcpy(prompt, "\0", PATH_MAX);	
+	ft_strlcpy(prompt, "\0", PATH_MAX);
 	if (!shell->error_code)
 	{
 		ft_strlcat(prompt, RED, PATH_MAX);

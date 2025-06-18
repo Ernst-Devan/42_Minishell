@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:07:56 by ernstdevan        #+#    #+#             */
-/*   Updated: 2025/01/30 22:24:32 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/06/18 15:11:49 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**ft_split(char const *s, char c);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 void	*ft_bzero(void *s, size_t n);
-int   ft_count_word(char *line);
+int		ft_count_word(char *line);
 
 	// FT_MEM
 	//=======================================
@@ -93,7 +93,7 @@ char	*ft_itoa(int n);
 size_t	ft_intlen(long int n);
 size_t	ft_intlen_base(int n, int base);
 size_t	ft_uintlen_base(unsigned long int n, size_t base);
-int     abs_value(int x);
+int		abs_value(int x);
 
 	//FT_ALLOC
 	//=======================================

@@ -41,7 +41,15 @@ size_t	count_nb_pipe(char *input)
 	while (input[i])
 	{
 		inside_quote(input[i], &quote);
-		if (quote == 0 && (i > 1 && input[i - 1] != '\x1E') && input[i] == '|')
+		if (input[i] == SEP_TEXT)
+		{
+			i++;
+			while (input[i] == '|')
+			{
+				i++;
+			}
+		}
+		if (quote == 0 && input[i] == '|')
 			count++;	
 		i++;
 	}

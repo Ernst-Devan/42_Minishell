@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_count_word.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/04/03 11:34:13 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "libft.h"
+
 int	ft_count_word(char *line)
 {
 	int	i;

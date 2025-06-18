@@ -1,14 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/18 15:14:26 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/18 15:15:29 by njooris          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef EXEC_H 
 # define EXEC_H
 
-#include "parsing.h"
+# include "parsing.h"
 
 /** 
  * This function executes the binary file provided to it.
  *
- * @param table A table struct containing the path and the command/binary used for execution. It executes only one binary or command.
- * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
+ * @param table A table struct containing the path and the command/binary used
+ * for execution. It executes only one binary or command.
+ * @return On succes, these function return 0. On error, 1 is returned and errno
+ * is set appropriately  
  */
 int		exec_bin(t_table table, char **env);
 int		exec_bin(t_table table, char **env);
@@ -16,8 +29,10 @@ int		exec_bin(t_table table, char **env);
 /** 
  * The main function for the execution part.
  *
- * @param table A table struct that contains the path and the command(s) / bin(s) used to execute the code.
- * @return On succes, these function return 0. On error, 1 is returned and errno is set appropriately  
+ * @param table A table struct that contains the path and the command(s) / bin(s)
+ * used to execute the code.
+ * @return On succes, these function return 0. On error, 1 is returned and errno
+ * is set appropriately  
  */
 t_shell	exec(t_table table, char ***env, t_shell shell);
 
@@ -50,7 +65,7 @@ int		useless_function(void);
 
 int		open_heredoc(char *str, char **eof, char **name);
 int		open_in_file(char *str);
-void	heredoc(int	fd, char *eof);
+void	heredoc(int fd, char *eof);
 int		open_in_heredoc_cmd(t_cmd *cmd, int *nb_files);
 int		open_in_cmd(t_cmd *cmd);
 int		manage_in(t_cmd *cmds, t_table table, int *nb_files);

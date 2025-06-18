@@ -48,6 +48,7 @@ SRCS		=	minishell.c 	\
 				utils_lexical_analyse.c \
 				manage_heredoc.c 		\
 				remove_cd_utils.c 		\
+				debug.c 				\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)
