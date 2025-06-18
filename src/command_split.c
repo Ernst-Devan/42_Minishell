@@ -97,15 +97,23 @@ char	**split_cmd(char *input, char c)
 	size_t	i;
 
 	count_w = count_split(input, c) + 1;
-	split = malloc((count_w + 1) * sizeof(char *));
+	split = ft_calloc((count_w + 1), sizeof(char *));
 	if (!split)
+	{
 		free(split);
+		return (NULL);
+	}
 	cpy_input = input;
 	i = 0;
 	while (i < count_w)
 	{
 		count_l = nb_letter(cpy_input, c);
-		split[i] = malloc((count_l + 1) * sizeof(char));
+		split[i] = ft_calloc((count_l + 1),sizeof(char));
+		if (!split[i])
+		{
+			free_lstr(split);
+			return (NULL);
+		}
 		split[i] = split_insert(split[i], cpy_input, c);
 		cpy_input += count_l + 1;
 		i++;

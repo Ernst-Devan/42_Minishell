@@ -45,6 +45,11 @@ char	*manage_space(char *input)
 	size_t	j;
 
 	buffer = ft_calloc(ft_strlen(input) + 1, sizeof(char));
+	if (!buffer)
+	{
+		free(input);
+		return (NULL);
+	}
 	quote = 0;
 	i = count_fist_space(input);
 	j = 0;

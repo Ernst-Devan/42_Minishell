@@ -27,6 +27,11 @@ char	*lexer(char *input)
 	j = 0;
 	quote = 0;
 	buffer = ft_calloc(ft_strlen(input) + count_characters(input, DELIMITER) + 1, 1);
+	if (!buffer)
+	{
+		free(input);
+		return (NULL);
+	}
 	while (input[i])
 	{
 		if (input[i] && !inside_quote(input[i], &quote) && check_delimiter(input[i], "<>|\x1E"))

@@ -6,29 +6,29 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 15:36:31 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:41:20 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "env_manage.h"
-#include "libft.h"
 #include "exec.h"
 #include "parsing.h"
 #include <signal.h>
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
 #include <unistd.h>
 
 int	minishell(char **env)
 {
-	t_table table;
-	t_shell shell;
-	char	**ms_env;
-	t_cmd	cmd;
+	t_table		table;
+	t_shell		shell;
+	char		**ms_env;
+	t_cmd		cmd;
+	size_t		check;
 
+	check = 0;
 	table.cmds = &cmd; rl_catch_signals = 0;
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
@@ -45,11 +45,17 @@ int	minishell(char **env)
 	{
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
-		table = parsing(&shell);
-		display_table(table);
-		if ((manage_ctrl_c_var(3) != 1 && table.cmd_len > 0) || table.cmds)
-		 	shell = exec(table, &ms_env, shell);
-		free_table(table);
+		check = parsing(&shell, &table);
+		if (check == 1)
+		{
+			free_lstr(ms_env);
+			return (1);
+		}
+		if ((check == 0 && (manage_ctrl_c_var(3) != 1 && (table.cmd_len > 0 || table.cmds))))
+		{
+			shell = exec(table, &ms_env, shell);
+			free_table(table);
+		}
     }
 	return (0);
 }
