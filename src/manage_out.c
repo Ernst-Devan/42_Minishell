@@ -6,25 +6,14 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:53:41 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:20:54 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 #include <stdio.h>
-#include "parsing.h"
-#include "builtins.h"
 #include "libft.h"
 #include "exec.h"
-#include "pipe.h"
-#include "env_manage.h"
-#include <signal.h>
-#include <signal.h>
 #include <fcntl.h>
-#include <readline/history.h>
-#include <readline/readline.h>
 
 int	open_append(char *str)
 {

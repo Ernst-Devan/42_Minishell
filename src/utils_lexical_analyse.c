@@ -6,14 +6,10 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 13:10:46 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 13:11:57 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:18:40 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "parsing.h"
 
 size_t	quote_check(char *input)

@@ -6,25 +6,15 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 13:24:05 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 13:25:26 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:30:43 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdio.h>
-#include "parsing.h"
-#include "builtins.h"
-#include "libft.h"
-#include "exec.h"
-#include "pipe.h"
-#include "env_manage.h"
-#include <signal.h>
-#include <signal.h>
 #include <fcntl.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include "libft.h"
+#include "exec.h"
 
 int	make_file_heredoc(char **eof, char **name, char *str, int n)
 {

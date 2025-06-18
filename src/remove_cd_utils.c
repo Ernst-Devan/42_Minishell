@@ -6,16 +6,11 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:42:33 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 15:44:22 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:16:06 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <limits.h>
-#include "parsing.h"
 #include "exec.h"
-#include "libft.h"
 
 int	len_without_slashslash(char *path)
 {

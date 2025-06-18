@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 12:21:09 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:34:48 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "parsing.h"
-#include "builtins.h"
+#include <stdlib.h>
+#include <signal.h>
 #include "libft.h"
 #include "exec.h"
-#include "pipe.h"
+#include "builtins.h"
 #include "env_manage.h"
-#include <signal.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <readline/history.h>
-#include <readline/readline.h>
+#include "pipe.h"
 
 static void	exec_child_process(t_table table, char **env)
 {
@@ -58,8 +54,6 @@ int	exec_bin(t_table table, char **env)
 		exec_child_process(table, env);
 	if (waitpid(pid, &status, 0) == -1)
 		return (perror("waitpid failed in exec_bin"), 1);
-	if (manage_ctrl_c_var(3) == 1)
-		printf("\n");
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
@@ -121,6 +115,7 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	}
 	if (manage_ctrl_c_var(3) == 1)
 	{
+		printf("^C\n");
 		shell.error_code = 130;
 		return (shell);
 	}
@@ -130,6 +125,8 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 		shell.error_code = exec_bin(table, *env);
 	else if (table.cmds->type == 1)
 		shell.error_code = manage_builtins(table, env, &shell);
+	if (manage_ctrl_c_var(3) == 1)
+		printf("\n");
 	close_fd(table);
 	return (shell);
 }

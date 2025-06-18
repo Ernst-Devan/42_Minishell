@@ -6,11 +6,10 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:59:09 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/26 09:48:00 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:08:54 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "parsing.h"
 #include "libft.h"

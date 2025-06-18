@@ -6,16 +6,16 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 12:57:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:12:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "parsing.h"
+#include <unistd.h>
+#include <stdlib.h>
 #include "exec.h"
 #include "libft.h"
 #include "env_manage.h"
-#include "builtins.h"
 
 int	add_variable_env(char ***env, char *data)
 {

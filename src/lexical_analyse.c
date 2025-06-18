@@ -6,23 +6,15 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 11:01:05 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:14:48 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stddef.h>
-#include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
+#include "libft.h"
 #include "parsing.h"
-
-#define CMD 0
-#define LESSLESS 1
-#define GREAT 2
-#define PIPE 3
-#define LESS 4
-#define GREATGREAT 5
-#define ERROR 6
 
 int	choose_define(char *input, int *i, char quote)
 {

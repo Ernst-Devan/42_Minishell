@@ -6,17 +6,11 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 13:34:59 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:46:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "env_manage.h"
-#include "libft.h"
-#include "exec.h"
-#include "parsing.h"
 #include <signal.h>
-#include <readline/history.h>
 #include <readline/readline.h>
 
 int	manage_ctrl_c_var(int val)

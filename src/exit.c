@@ -6,17 +6,15 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 12:47:28 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:10:57 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <stdio.h>
-#include "parsing.h"
-#include "exec.h"
+#include <stdlib.h>
 #include "libft.h"
+#include "exec.h"
 
 unsigned char	ms_atoi(const char *nptr, int *check)
 {

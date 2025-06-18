@@ -6,17 +6,13 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 14:02:39 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:33:51 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
 #include <signal.h>
-#include <signal.h>
-#include "parsing.h"
 #include "pipe.h"
 #include "exec.h"
 #include "libft.h"
@@ -106,8 +102,6 @@ int	waiter(pid_t last_pid)
 		return (WEXITSTATUS(last_status));
 	else if (WIFSIGNALED(last_status))
 		return (128 + WTERMSIG(last_status));
-	if (manage_ctrl_c_var(3) == 1)
-		printf("\n");
 	return (last_status);
 }
 

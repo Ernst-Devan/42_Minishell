@@ -6,16 +6,12 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 12:56:16 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 13:10:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:18:12 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "parsing.h"
 #include "exec.h"
 #include "libft.h"
-#include "env_manage.h"
-#include "builtins.h"
 
 char	*find_first(char **env)
 {

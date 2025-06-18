@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 15:41:20 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/18 13:41:01 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ int	minishell(char **env)
 			return (1);
 		}
 		if ((check == 0 && (manage_ctrl_c_var(3) != 1 && (table.cmd_len > 0 || table.cmds))))
-		{
 			shell = exec(table, &ms_env, shell);
-			free_table(table);
-		}
+		free_table(table);
     }
 	return (0);
 }

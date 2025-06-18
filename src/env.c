@@ -6,14 +6,12 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 12:16:46 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:09:53 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//! Secure if the env is empty
-
-#include "libft.h"
 #include <stdio.h>
+#include "libft.h"
 #include "parsing.h"
 
 char	*find_env(char *str, char **env)

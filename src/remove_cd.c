@@ -6,14 +6,10 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 15:42:12 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:17:01 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <limits.h>
-#include "parsing.h"
 #include "exec.h"
 #include "libft.h"
 

@@ -6,15 +6,11 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:13:22 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/20 10:04:49 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:15:05 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <stdio.h>
-#include "parsing.h"
 #include "exec.h"
 #include "libft.h"
 

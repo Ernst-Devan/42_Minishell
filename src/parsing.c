@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 15:47:38 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/18 13:42:26 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	char	*input;
 	size_t	lexical_check;
 
-	input = get_command(shell);
+	input = get_command(shell);\
 	input = manage_space(input);
 	if (!input)
 		return (1);
@@ -81,6 +81,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	input = manage_expand(input, *shell);
 	if (!input)
 		return (1);
+	
 	if (init_table(table, count_nb_cmd(input)))
 	{
 		free(input);

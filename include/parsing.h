@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 10:35:55 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 11:13:36 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
+
+#define CMD 0
+#define LESSLESS 1
+#define GREAT 2
+#define PIPE 3
+#define LESS 4
+#define GREATGREAT 5
+#define ERROR 6
 
 typedef struct s_shell
 {
