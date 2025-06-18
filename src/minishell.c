@@ -6,11 +6,10 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 14:57:52 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:36:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "env_manage.h"
 #include "exec.h"
 #include "parsing.h"

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:34:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:36:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <signal.h>
 #include "libft.h"
 #include "exec.h"
-#include "builtins.h"
 #include "env_manage.h"
 #include "pipe.h"
 
