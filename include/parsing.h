@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 11:24:55 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 13:14:44 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,7 @@ char	*lexer(char *input);
 
 // Parser.c
 size_t	parser(t_table *table, char **env, char *lexer);
+
+size_t	quote_check(char *input);
 
 #endif

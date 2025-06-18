@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 13:17:18 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 14:02:39 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	manage_close_in_pipe(t_cmd command, int in, int pipefd[2])
 		close(pipefd[1]);
 }
 
-int	use_pipe(t_cmd command, int in, int pipefd[2], t_shell *shell, t_table table)
+int	use_pipe(t_cmd command, int in, int pipefd[2], t_pack_pipe pp)
 {
 	pid_t	pid;
 
@@ -71,17 +71,17 @@ int	use_pipe(t_cmd command, int in, int pipefd[2], t_shell *shell, t_table table
 	{
 		manage_dup_pipe(command, pipefd, in);
 		if (command.type == 0)
-		{ 
+		{
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGPIPE, SIG_DFL);
-			execve(command.path, command.args,shell->env);
+			execve(command.path, command.args, pp.shell->env);
 			perror("Commande not found");
 			exit(1);
 		}
-		exec_builtins(command, &shell->env, shell, table);
-		close_fd(table);
-		free_table(table);
-		free_lstr(shell->env);
+		exec_builtins(command, &pp.shell->env, pp.shell, pp.table);
+		close_fd(pp.table);
+		free_table(pp.table);
+		free_lstr(pp.shell->env);
 		exit(1);
 	}
 	manage_close_in_pipe(command, in, pipefd);
@@ -113,12 +113,15 @@ int	waiter(pid_t last_pid)
 
 int	ms_pipe(t_table table, t_shell *shell)
 {
+	t_pack_pipe	pack_pipe;
 	size_t		i;
 	int			pipefd[2];
 	int			save_in;
 	int			val_return;
 
 	i = 0;
+	pack_pipe.shell = shell;
+	pack_pipe.table = table;
 	pipefd[0] = table.cmds[0].in;
 	while (i < table.cmd_len)
 	{
@@ -127,7 +130,7 @@ int	ms_pipe(t_table table, t_shell *shell)
 			return (perror("pipe error"), 1);
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
-		val_return = use_pipe(table.cmds[i], save_in, pipefd, shell, table);
+		val_return = use_pipe(table.cmds[i], save_in, pipefd, pack_pipe);
 		if (val_return == 1 || val_return == -1)
 			return (val_return);
 		i++;

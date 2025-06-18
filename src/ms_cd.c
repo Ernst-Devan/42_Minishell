@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/03 14:39:20 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 13:53:44 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,32 @@ int	manage_old_pwd(char *pwd, char ***env)
 	return (0);
 }
 
+int	cd_with_arg(char ***env, char *pwd, char *arg)
+{
+	char	*new_pwd;
+
+	new_pwd = build_pwd(pwd, arg);
+	if (!new_pwd)
+		return (1);
+	if (!new_pwd[4])
+	{
+		free(new_pwd);
+		return (0);
+	}
+	if (chdir(&new_pwd[4]) != 0)
+	{
+		free(new_pwd);
+		return (perror("Error in chdir"), 1);
+	}
+	if (set_pwd(new_pwd, env))
+	{
+		free(new_pwd);
+		return (1);
+	}
+	free(new_pwd);
+	return (0);
+}
+
 int	set_cd(char ***env, char *pwd, t_cmd cmd, char *temp)
 {
 	char	*new_pwd;
@@ -57,30 +83,13 @@ int	set_cd(char ***env, char *pwd, t_cmd cmd, char *temp)
 	if (manage_old_pwd(pwd, env))
 		return (1);
 	if (cmd.args[1])
-	{
-		new_pwd = build_pwd(pwd, cmd.args[1]);
-		if (!new_pwd)
-			return (1);
-		if (!new_pwd[4])
-		{
-			free(new_pwd);
-			return (0);
-		}
-		if (chdir(&new_pwd[4]) != 0)
-		{
-			free(new_pwd);
-			return (perror("Error in chdir"), 1);
-		}
-	}
-	else
-	{
-		free(pwd);
-		new_pwd = ft_strjoin("PWD=", &temp[5]);
-		if (chdir(&temp[5]) != 0 || !new_pwd)
-			return (write(2, "fail on cd\n", 11), 1);
-	}
+		return (cd_with_arg(env, pwd, cmd.args[1]));
+	free(pwd);
+	new_pwd = ft_strjoin("PWD=", &temp[5]);
+	if (chdir(&temp[5]) != 0 || !new_pwd)
+		return (write(2, "fail on cd\n", 11), 1);
 	if (set_pwd(new_pwd, env))
-	{	
+	{
 		free(new_pwd);
 		return (1);
 	}

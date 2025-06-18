@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/04 15:35:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 13:21:15 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,6 @@
 #define LESS 4
 #define GREATGREAT 5
 #define ERROR 6
-
-size_t	quote_check(char *input)
-{
-	char	quote;
-	size_t	j;
-
-	j = 0;
-	quote = 0;
-	while(input[j])
-	{
-		inside_quote(input[j], &quote);
-		j++;
-	}
-	if (quote)
-		return (2);	
-	return (0);
-}
 
 int	choose_define(char *input, int *i, char quote)
 {
@@ -59,7 +42,8 @@ int	choose_define(char *input, int *i, char quote)
 		return ((*i)++, GREAT);
 	if (input[0] == '|' && quote == 0)
 		return ((*i)++, PIPE);
-	while (input[j] && input[j] != '|' && input[j] != '"' && input[j] != '\''  && input[j] != '<' && input[j++] != '>')
+	while (input[j] && input[j] != '|' && input[j] != '"' && input[j] != '\''
+		&& input[j] != '<' && input[j++] != '>')
 		(*i)++;
 	return (CMD);
 }
@@ -98,18 +82,14 @@ int	*lexical_analyser_define(char *input, int *len)
 	{
 		while (input[i] == SEPARATOR)
 			i++;
+		while (input[i] && inside_quote(input[i], &quote))
+			i++;
 		if (input[i])
 		{
-			while (input[i] && inside_quote(input[i], &quote))
-				i++;
-			if (input[i])
-			{
-				define = choose_define(&input[i], &i, quote);
-				tab = init_new_tab((*len)++, define, tab);
-				if (!tab)
-					return (NULL);
-			}
-			
+			define = choose_define(&input[i], &i, quote);
+			tab = init_new_tab((*len)++, define, tab);
+			if (!tab)
+				return (NULL);
 		}
 	}
 	return (tab);

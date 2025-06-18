@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/29 18:28:12 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:44:55 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	del_env_var(char ***env, char *str, char **new_env)
 char	**reset_val_unset(char *str, char ***env)
 {
 	char	**new_env;
-	
+
 	new_env = malloc(sizeof(char *) * (size_of_env(*env)));
 	if (!new_env)
 	{
