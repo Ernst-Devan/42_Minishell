@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/03 15:18:16 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 12:47:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,23 @@ int	check_args(char *str)
 	return (0);
 }
 
+void	unumeric_param(t_table table, char **env)
+{
+	write(2, "numeric argument required\n", 27);
+	close_fd(table);
+	free_table(table);
+	free_lstr(env);
+	exit (2);
+}
+
+void	unparam(t_table table, char **env, t_shell *shell)
+{
+	close_fd(table);
+	free_lstr(env);
+	free_table(table);
+	exit(shell->error_code);
+}
+
 void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 {
 	unsigned char	ret;
@@ -70,35 +87,16 @@ void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table)
 	printf("exit\n");
 	if (cmd.args[1])
 		ret = ms_atoi(cmd.args[1], &check);
-	if (!ret && cmd.args[1])
-	{
-		free_lstr(env);
-		close_fd(table);
-		free_table(table);
-		write(2, "Exit failed\n", 11);
-		exit(2);
-	}
 	if (check == -1 || (cmd.args[1] && check_args(cmd.args[1])))
-	{
-		write(2, "numeric argument required\n", ft_strlen("numeric argument required\n"));
-		close_fd(table);
-		free_table(table);
-		free_lstr(env);
-		exit (2);
-	}
+		unumeric_param(table, env);
 	if (cmd.args[1] && cmd.args[2])
 	{
 		shell->error_code = 1;
-		write(2, "exit : too many arguments\n", ft_strlen("exit : too many arguments\n"));
+		write(2, "too many arguments\n", 19);
 		return ;
 	}
 	if (!cmd.args[1])
-	{
-		close_fd(table);
-		free_lstr(env);
-		free_table(table);
-		exit(shell->error_code);
-	}
+		unparam(table, env, shell);
 	close_fd(table);
 	free_lstr(env);
 	free_table(table);

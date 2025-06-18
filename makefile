@@ -43,6 +43,11 @@ SRCS		=	minishell.c 	\
 				lexical_analyse.c \
 				alloc_expand.c	\
 				space.c			\
+				manage_fd.c		\
+				utils_export.c 	\
+				utils_lexical_analyse.c \
+				manage_heredoc.c 		\
+				remove_cd_utils.c 		\
 
 OBJS		= $(SRCS:.c=.o)
 DEPS		= $(OBJS:.o=.d)

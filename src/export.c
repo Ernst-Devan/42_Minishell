@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/05/30 15:00:36 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/17 12:57:43 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,6 @@
 #include "libft.h"
 #include "env_manage.h"
 #include "builtins.h"
-
-int	var_env_len(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i] != '=' && str[i] != '\0')
-		i++;
-	return (i);
-}
-
-int	find_env_variable(char **env, char *str)
-{
-	int	i;
-	int	len;
-
-	len = var_env_len(str);
-	i = 0;
-	while (env && env[i])
-	{
-		if (ft_strncmp(env[i], str, len) == 0 && (env[i][len] == '=' || !env[i][len]))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
 
 int	add_variable_env(char ***env, char *data)
 {
@@ -83,52 +57,6 @@ int	edit_variable_env(char ***env, char *data)
 		return (1);
 	}
 	return (0);
-}
-
-char	*find_first(char **env)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], env[j], ft_strlen(env[j] + 1)) >= 0)
-			j = i;
-		i++;
-	}
-	return (env[j]);
-}
-
-int	count_bigger_than(char *str, char **env)
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(str, env[i], ft_strlen(str) + 1) > 0)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-char	*find_n(char **env, int nb)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (count_bigger_than(env[i], env) == nb)
-			return (env[i]);
-		i++;
-	}
-	return (env[i]);
 }
 
 void	print_export_one_val(char *str)
