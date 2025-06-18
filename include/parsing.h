@@ -19,8 +19,9 @@
 # define NAME_MAX 255
 # define ENV_MAX 32760
 # define DELIMITER " -<>|"
-# define SEPARATOR ':'
-# define SEPARATOR2 ":"
+# define SEPARATOR '\x1F'
+# define SEPARATOR2 "\x1F"
+# define SEP_TEXT '*'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"

@@ -73,7 +73,7 @@ size_t count_characters(char *s, char *cs) {
 	{
 		while (cs[j])
 		{
-			if ((s[i + 1] != '\x1E') && s[i] == cs[j])
+			if ((s[i + 1] != SEP_TEXT) && s[i] == cs[j])
 				count++;
 			j++;
 		}

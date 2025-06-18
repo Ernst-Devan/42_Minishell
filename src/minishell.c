@@ -51,9 +51,9 @@ int	minishell(char **env)
 			free_lstr(ms_env);
 			return (1);
 		}
-		display_table(table);
 		if ((check == 0 && (manage_ctrl_c_var(3) != 1 && (table.cmd_len > 0 || table.cmds))))
 		{
+			display_table(table);
 			shell = exec(table, &ms_env, shell);
 			free_table(table);
 		}

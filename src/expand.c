@@ -66,14 +66,14 @@ char	*word_beetween_quote(char *variable)
 		return (NULL);
 	i = 0;
 	j = 0;
-	buffer[i++] = '\x1E';
+	buffer[i++] = SEP_TEXT;
 	while(check_delimiter(variable[j], "<>|"))  
 	{
 		buffer[i] = variable[j];
 		j++;
 		i++;
 	}
-	buffer[i++] = '\x1E';
+	buffer[i++] = SEP_TEXT;
 	buffer[i] = '\0';
 	return (buffer);
 }

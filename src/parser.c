@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include "libft.h"
 
-int insert_cmds(t_cmd *cmd, char **list_cmds, char *path) 
+int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len) 
 {
 	size_t	i;
 	size_t	type;
@@ -26,7 +26,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path)
 	i = 0;
 	type = 0;
 	args = NULL;
-	while (list_cmds && *list_cmds != NULL) 
+	while (i < table_len) 
 	{
 		if (**list_cmds)
 		{
@@ -74,7 +74,7 @@ size_t	parser(t_table *table, char **env, char *input)
 	if (!splited_cmds)
 		return (1);
 	splited_cmds = remove_quotes(splited_cmds);
-	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env)))
+	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env), table->cmd_len))
 	{
 		free_lstr(splited_cmds);
 		return (1);

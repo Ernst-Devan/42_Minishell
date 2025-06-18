@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <parsing.h>
+#include "parsing.h"
 #include <stddef.h>
 
 // Check | not inside quotes
@@ -27,7 +27,7 @@ size_t	count_split(char *input, char c)
 	i = 0;
 	while (input[i])
 	{
-		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != '\x1E')))
+		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != SEP_TEXT)))
 		{
 			if (input[i] == c)
 				count++;
@@ -48,7 +48,7 @@ size_t	nb_letter(char *input, char c)
 	i = 0;
 	while(input[i])
 	{
-		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != '\x1E')))
+		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != SEP_TEXT)))
 
 		{
 			if (input[i] == c)
@@ -73,8 +73,19 @@ char	*split_insert(char *splited, char *input, char c)
 	quotes = 0;
 	while (input[j])
 	{
-		if ((!inside_quote(input[j], &quotes) && (input[j + 1] && input [j + 1] != '\x1E')))
+		if ((!inside_quote(input[j], &quotes)))
 		{
+			if (input[j] == SEP_TEXT)
+			{
+				j++;
+				while (check_delimiter(input[j], "|"))
+				{
+					splited[i] = input[j];
+					i++;
+					j++;
+				}
+				j++;
+			} 
 			if (input[j] == c)
 				break;
 		}
@@ -86,8 +97,22 @@ char	*split_insert(char *splited, char *input, char c)
 	return (splited);
 }
 
+size_t	count_char(char *input, char c)
+{
+	size_t	i;
+	size_t	count;
 
-// FREE THE FUNCTION IF MALLOC FAILED
+	count = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char	**split_cmd(char *input, char c)
 {
 	char	**split;
@@ -107,8 +132,8 @@ char	**split_cmd(char *input, char c)
 	i = 0;
 	while (i < count_w)
 	{
-		count_l = nb_letter(cpy_input, c);
-		split[i] = ft_calloc((count_l + 1),sizeof(char));
+		count_l = count_char(cpy_input, '|');
+		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1),sizeof(char));
 		if (!split[i])
 		{
 			free_lstr(split);
