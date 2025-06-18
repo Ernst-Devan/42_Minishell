@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:19 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:48:07 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/18 13:57:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*get_command(t_shell *shell)
 		ft_strlcat(prompt, WHITE " : " WHITE, PATH_MAX);
 	}
 	input = readline(prompt);
-	printf("test\n");
 	if (!input)
 	{
 		free_lstr(shell->env);
