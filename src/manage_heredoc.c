@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 13:24:05 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:30:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:17:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	heredoc(int fd, char *eof)
 	if (manage_ctrl_c_var(3) == 1)
 		return ;
 	input = readline("heredoc>");
-	while (ft_strncmp(eof, input, ft_strlen(eof))
-		&& input && manage_ctrl_c_var(3) != 1)
+	while (input && ft_strncmp(eof, input, ft_strlen(eof))
+		&& manage_ctrl_c_var(3) != 1)
 	{
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);

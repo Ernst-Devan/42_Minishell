@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:52:31 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 11:12:59 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/19 15:38:39 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,25 @@ void	export_without_param(char **env)
 	}
 }
 
+static int	check_name(char	*str)
+{
+	int	i;
+
+	i = 0;
+	if (str && str[0])
+	{
+		if (!ft_isalpha(str[0]) && str[i] != '_')
+			return (1);
+	}
+	while (str && str[i] && str[i] != '=')
+	{
+		if (str[i] != '_' && !ft_isalnum(str[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	export(t_cmd cmd, char ***env)
 {
 	int	i;
@@ -111,9 +130,9 @@ int	export(t_cmd cmd, char ***env)
 	i = 0;
 	while (cmd.args[++i])
 	{
-		if (cmd.args[i] && !ft_isalpha(cmd.args[i][0]))
+		if (cmd.args[i] && check_name(cmd.args[i]))
 		{
-			if (check2++ == 1)
+			if (++check2 == 1)
 				printf("Bad param(s)\n");
 		}
 		else
@@ -125,5 +144,5 @@ int	export(t_cmd cmd, char ***env)
 				edit_variable_env(env, cmd.args[i]);
 		}
 	}
-	return (0);
+	return (check2 > 0);
 }

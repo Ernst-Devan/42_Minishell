@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 11:20:54 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/19 17:09:50 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	manage_out(t_cmd *cmds, t_table table)
 
 	i = 0;
 	check = 1;
-	while (i < table.cmd_len)
+	while (manage_ctrl_c_var(3) != 1 && i < table.cmd_len)
 	{
 		check = open_out_cmd(&cmds[i]);
 		if (check == -1)
