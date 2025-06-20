@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:07:56 by ernstdevan        #+#    #+#             */
-/*   Updated: 2025/06/18 15:11:49 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 13:15:26 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ size_t	ft_intlen(long int n);
 size_t	ft_intlen_base(int n, int base);
 size_t	ft_uintlen_base(unsigned long int n, size_t base);
 int		abs_value(int x);
+size_t	count_words(const char *s, char c);
 
 	//FT_ALLOC
 	//=======================================

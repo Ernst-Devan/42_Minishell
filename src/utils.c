@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:55 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 15:09:05 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 12:43:53 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 #include <stddef.h>
 #include "stdio.h"
 
-size_t	count_characters(char *s, char *cs)
-{
+size_t count_characters(char *s, char *cs) {
 	size_t	count;
 	size_t	i;
 	size_t	j;
@@ -30,7 +29,15 @@ size_t	count_characters(char *s, char *cs)
 	{
 		while (cs[j])
 		{
-			if ((s[i + 1] != SEP_TEXT) && s[i] == cs[j])
+			if (s[i] == EXPAND)
+			{
+				i++;
+				while (s[i] && s[i] != EXPAND)
+					i++;
+				if (!s[i])
+					return (count);
+			}
+			if (s[i] == cs[j])
 				count++;
 			j++;
 		}
@@ -52,6 +59,17 @@ size_t	check_delimiter(char c, char *delimter)
 		i++;
 	}
 	return (0);
+}
+
+int count_lstr(char **lstr) {
+  int i;
+
+  i = 0;
+  while (*lstr != NULL) {
+    i++;
+    lstr++;
+  }
+  return (i);
 }
 
 int	ft_strlen_c(char *str, char delimiter)

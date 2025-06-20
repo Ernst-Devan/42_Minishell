@@ -53,6 +53,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		i++;
 		count++;
 	}
-	return (count + count_characters(variable, "|<>") * 2);
+	return (count * 2 + 3);
 }
 

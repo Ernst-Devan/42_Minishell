@@ -53,87 +53,58 @@
 // 
 // MAKE THE MANAGEMENT OF ERROR RETURN
 
-char	*word_beetween_quote(char *variable)
+char	*adding_ifs(char *variable)
 {
 	char	*buffer;
 	size_t	i;
 	size_t	j;
 
-	if (!variable)
-		return (NULL);
-	buffer = calloc(ft_strlen(variable) + 3, sizeof(char));
-	if (!buffer)
-		return (NULL);
 	i = 0;
 	j = 0;
-	buffer[i++] = SEP_TEXT;
-	while(check_delimiter(variable[j], "<>|"))  
-	{
-		buffer[i] = variable[j];
-		j++;
-		i++;
-	}
-	buffer[i++] = SEP_TEXT;
-	buffer[i] = '\0';
-	return (buffer);
-}
-
-char	*adding_quotes_word(char *variable)
-{
-	char	*buffer;
-	char	*temp;
-	size_t	i;
-	size_t	j;
-
-	if (!variable)
-		return(NULL);
-	i = 0;
-	j = 0;
-	buffer = calloc((ft_strlen(variable) * 2) + 1, sizeof(char));
+	buffer = ft_calloc(ft_strlen(variable) + 10, sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while(variable[i] && ft_isspace(variable[i]))
-		buffer[j++] = variable[i++];
-	while(variable[i] && !ft_isspace(variable[i]))
+	while (variable[i])
 	{
-		if (check_delimiter(variable[i], "|<>"))
+		while (variable[i] && ft_isspace(variable[i]))
 		{
-			temp = word_beetween_quote(&variable[i]);
-			if (!temp)
-				break;
-			ft_strlcat(buffer, temp, ft_strlen(variable) * 2 + 1);
-			i += ft_strlen(temp) - 2;
-			j += ft_strlen(temp);
-			free(temp);
-		}
-		else
 			buffer[j++] = variable[i++];
-	}
-	if (ft_strlen(variable) >= i && variable[i])
-	{
-		buffer[j++] = SEPARATOR;
-		i++;
-	}
-	while(ft_strlen(variable) >= i && variable[i])
-	{
-		if (check_delimiter(variable[i], "|<>"))
+		}
+		while (variable[i] && !ft_isspace(variable[i]))
 		{
-			temp = word_beetween_quote(&variable[i]);
-			if (!temp)
-				break;
-			ft_strlcat(buffer, temp, ft_strlen(variable) * 2);
-			i += ft_strlen(temp) - 2;
-			j += ft_strlen(temp);
-			free(temp);
-		}
-		else
 			buffer[j++] = variable[i++];
+		}
 	}
 	buffer[j] = '\0';
 	return (buffer);
 }
 
 
+char	*define_expand(char *variable)
+{
+	char	*buffer;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (!variable)
+		return(NULL);
+	buffer = ft_calloc(ft_strlen(variable) + 3, sizeof(char));
+	if (!buffer)
+		return (NULL);
+	buffer[j++] = EXPAND;
+	while (variable[i])
+	{
+		buffer[j] = variable[i];
+		j++;
+		i++;
+	}
+	buffer[j++] = EXPAND;
+	buffer[j] = '\0';
+	return (buffer);
+
+}
 
 char	*replace_var(char *str, char **env)
 {
@@ -143,7 +114,7 @@ char	*replace_var(char *str, char **env)
 	variable = find_env(str, env);
 	if (ft_strlen(variable) == 0)
 		return (NULL);
-	variable = adding_quotes_word(variable);
+	variable = define_expand(variable);
 	if (!variable)
 		return (NULL);
 	buffer = ft_strdup(variable);

@@ -34,7 +34,7 @@ char	*lexer(char *input)
 	}
 	while (input[i])
 	{
-		if (input[i] && !inside_quote(input[i], &quote) && check_delimiter(input[i], "<>|*"))
+		if (input[i] && !inside_quote(input[i], &quote) && check_delimiter(input[i], "<>|\xE1"))
 		{
 			if (ft_isspace(input[i]))
 				i++;

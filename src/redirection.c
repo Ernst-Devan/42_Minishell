@@ -168,11 +168,13 @@ char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote)
 size_t	check_redirection(char **split_cmd)
 {
 	size_t	i;
+	size_t	count;
 
 	i = 0;
 	while (split_cmd[i])
 	{
-		if (count_characters(split_cmd[i], "><") > 0)
+		count = count_characters(split_cmd[i], "><");
+		if (count > 0)
 			return(1);
 		i++;
 	}

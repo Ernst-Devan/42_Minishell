@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:14:05 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 13:42:26 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 12:47:33 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,11 @@ size_t	count_nb_pipe(char *input)
 	while (input[i])
 	{
 		inside_quote(input[i], &quote);
-		if (input[i] == SEP_TEXT)
+		if (input[i] == EXPAND)
 		{
 			i++;
-			while (input[i] == '|')
-			{
+			while (input[i] != EXPAND)
 				i++;
-			}
 		}
 		if (quote == 0 && input[i] == '|')
 			count++;	
@@ -81,6 +79,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	lexical_check = lexical_analyser(input);
 	if (lexical_check)
 	{
+		init_table(table, 0);
 		free(input);
 		if (lexical_check == 2)
 			shell->error_code = 2;

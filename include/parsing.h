@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:13:23 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 12:42:25 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # define NAME_MAX 255
 # define ENV_MAX 32760
 # define DELIMITER " -<>|"
-# define SEPARATOR '\x1F'
-# define SEPARATOR2 "\x1F"
-# define SEP_TEXT '*'
+# define SEPARATOR '#'
+# define SEPARATOR2 "#"
+# define EXPAND '*'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
@@ -103,6 +103,7 @@ size_t		nb_letter(char *input, char c);
 char		**split_cmd(char *input, char c);
 
 // Utils.c
+int			count_lstr(char **lstr);
 int			ft_strlen_c(char *str, char delimiter);
 size_t		check_delimiter(char c, char *delimiter);
 void		display_lstr(char **lstr);

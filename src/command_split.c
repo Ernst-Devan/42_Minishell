@@ -27,8 +27,14 @@ size_t	count_split(char *input, char c)
 	i = 0;
 	while (input[i])
 	{
-		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != SEP_TEXT)))
+		if (!inside_quote(input[i], &quotes))
 		{
+			if (input[i] == EXPAND)
+			{
+				i++;
+				while (input[i] != EXPAND)
+					i++;
+			}
 			if (input[i] == c)
 				count++;
 		}
@@ -36,31 +42,6 @@ size_t	count_split(char *input, char c)
 	}
 	return (count);
 }
-
-size_t	nb_letter(char *input, char c)
-{
-	char	quotes;
-	size_t	count;
-	size_t	i;
-	
-	count = 0;
-	quotes = 0;
-	i = 0;
-	while(input[i])
-	{
-		if ((!inside_quote(input[i], &quotes) && ( input[i + 1] && input [i + 1] != SEP_TEXT)))
-
-		{
-			if (input[i] == c)
-				break;
-		} 
-		count++; 
-		i++;
-	}
-	return (count);
-}
-
-//! free correctly the splited malloc
 
 char	*split_insert(char *splited, char *input, char c)
 {
@@ -75,20 +56,22 @@ char	*split_insert(char *splited, char *input, char c)
 	{
 		if ((!inside_quote(input[j], &quotes)))
 		{
-			if (input[j] == SEP_TEXT)
+			if (input[j] == EXPAND)
 			{
-				j++;
-				while (check_delimiter(input[j], "|"))
+				splited[i++] = input[j++];
+				while (input[j] && input[j] != EXPAND)
 				{
 					splited[i] = input[j];
 					i++;
 					j++;
 				}
-				j++;
+				splited[i++] = input[j++];
 			} 
-			if (input[j] == c)
+			if (!input[j] && input[j] == c)
 				break;
 		}
+		if (!input[j])
+			break;
 		splited[i] = input[j];
 		i++;
 		j++;
@@ -113,6 +96,36 @@ size_t	count_char(char *input, char c)
 	return (count);
 }
 
+size_t	nb_letter(char *input, char c)
+{
+	char	quotes;
+	size_t	count;
+	
+	count = 0;
+	quotes = 0;
+	while(*input)
+	{
+		if (!inside_quote(*input, &quotes))
+		{
+			if (*input == EXPAND)
+			{
+				input++;
+				count++;
+				while (*input != EXPAND)
+				{
+					input++;
+					count++;
+				}
+			}
+			if (*input == c)
+				break;
+		} 
+		count++; 
+		input++;
+	}
+	return (count);
+}
+
 char	**split_cmd(char *input, char c)
 {
 	char	**split;
@@ -132,7 +145,7 @@ char	**split_cmd(char *input, char c)
 	i = 0;
 	while (i < count_w)
 	{
-		count_l = count_char(cpy_input, '|');
+		count_l = nb_letter(cpy_input, c);
 		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1),sizeof(char));
 		if (!split[i])
 		{
