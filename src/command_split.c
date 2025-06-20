@@ -67,7 +67,7 @@ char	*split_insert(char *splited, char *input, char c)
 				}
 				splited[i++] = input[j++];
 			} 
-			if (!input[j] && input[j] == c)
+			if (!input[j] || input[j] == c)
 				break;
 		}
 		if (!input[j])
