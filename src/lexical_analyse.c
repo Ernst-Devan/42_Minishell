@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 11:14:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 14:38:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,28 @@ int	*init_new_tab(int len, int define, int *tab, int *check)
 	return (tab);
 }
 
+void	print_tab_int(int *tab, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		printf("%d", tab[i]);
+		i++;
+	}
+	printf("\n");
+}
+
 int	*lexical_analyser_define(char *input, int *len, int *check)
 {
 	int		i;
 	int		*tab;
 	int		define;
 	char	quote;
+	int		is_word;
 
+	is_word = 0;
 	i = 0;
 	quote = 0;
 	tab = NULL;
@@ -78,14 +93,20 @@ int	*lexical_analyser_define(char *input, int *len, int *check)
 		while (input[i] == SEPARATOR)
 			i++;
 		while (input[i] && inside_quote(input[i], &quote))
-			i++;
-		if (input[i])
 		{
-			define = choose_define(&input[i], &i, quote);
+			i++;
+			is_word = 1;
+		}
+		if (input[i] || is_word)
+		{
+			define = CMD;
+			if (!(!input[i] && is_word))
+				define = choose_define(&input[i], &i, quote);
 			tab = init_new_tab((*len)++, define, tab, check);
 			if (!tab)
 				return (NULL);
 		}
+		is_word = 0;
 	}
 	return (tab);
 }

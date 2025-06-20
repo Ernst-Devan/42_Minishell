@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/20 13:19:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 14:39:15 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	minishell(char **env)
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		check = parsing(&shell, &table);
-		display_table(table);
 		if (check == 1)
 		{
 			free_lstr(ms_env);
