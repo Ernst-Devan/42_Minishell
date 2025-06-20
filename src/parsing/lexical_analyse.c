@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/20 14:38:59 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/20 14:59:50 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,6 @@ int	*init_new_tab(int len, int define, int *tab, int *check)
 	free(tab);
 	tab = new_tab;
 	return (tab);
-}
-
-void	print_tab_int(int *tab, int len)
-{
-	int	i;
-
-	i = 0;
-	while (i < len)
-	{
-		printf("%d", tab[i]);
-		i++;
-	}
-	printf("\n");
 }
 
 int	*lexical_analyser_define(char *input, int *len, int *check)
