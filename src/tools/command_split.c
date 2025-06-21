@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:54:27 by dernst            #+#    #+#             */
-/*   Updated: 2025/05/06 12:21:07 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/21 12:04:13 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,5 @@ char	**split_cmd(char *input, char c)
 		i++;
 	}
 	split[i] = NULL;
-	display_lstr(split);
 	return (split);
 }

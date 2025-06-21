@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/20 13:14:37 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/21 12:03:25 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 	size_t	type;
 	char	**args;
 	char	*path_command;
-	display_lstr(list_cmds);
 
 	i = 0;
 	type = 0;
