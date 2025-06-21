@@ -68,6 +68,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 	size_t	type;
 	char	**args;
 	char	*path_command;
+	display_lstr(list_cmds);
 
 	i = 0;
 	type = 0;
@@ -96,6 +97,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 			cmd[i].type = 2;
 			i++;
 		}
+		args = NULL;
 		list_cmds++;
 	}
   	return (0);

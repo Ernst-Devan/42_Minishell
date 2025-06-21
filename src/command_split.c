@@ -157,5 +157,6 @@ char	**split_cmd(char *input, char c)
 		i++;
 	}
 	split[i] = NULL;
+	display_lstr(split);
 	return (split);
 }
