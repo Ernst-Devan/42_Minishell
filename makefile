@@ -137,7 +137,7 @@ re:
 	$(MAKE) all
 
 debug: $(NAME)
-	valgrind --leak-check=full --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
 
 print-%:
 	@echo $(patsubst print-%,%,$@)=

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 15:36:45 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/21 10:18:56 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ static void	exec_child_process(t_table table, char **env)
 		|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 	{
 		perror("dup2 failed in exec_bin");
-		exit(1);
+		free_table(table);
+		free_lstr(env);
+		exit(0);
 	}
 	signal(SIGPIPE, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -36,7 +38,7 @@ static void	exec_child_process(t_table table, char **env)
 		perror("Command not found");
 		free_table(table);
 		free_lstr(env);
-		exit(1);
+		exit(0);
 	}
 }
 
@@ -64,6 +66,8 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
 {
 	int	len;
 
+	if (!cmd.path)
+		return (0);
 	len = ft_strlen(cmd.args[0]);
 	if (!ft_strncmp("export", cmd.args[0], len + 1))
 		return (export(cmd, env));
