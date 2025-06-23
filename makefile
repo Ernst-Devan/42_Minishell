@@ -85,9 +85,8 @@ OBJS_DIR := .build/objs/
 
 OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 
-DEPS_DIR := .build/deps/
 
-DEPS := $(addprefix $(DEPS_DIR), $(OBJS:.o=.d))
+DEPS := $(OBJS:.o=.d)
 
 # --- FLAGS --- #
 
@@ -118,8 +117,6 @@ $(OBJS_DIR)%.o: $(SRC_DIR)%.c
 $(LIBS_TARGET) : force
 	$(MAKE) -C $(dir $@)
 
--include $(DEPS)
-
 force:
 
 .PHONY : clean fclean all re print-% debug force
@@ -142,3 +139,5 @@ debug: $(NAME)
 print-%:
 	@echo $(patsubst print-%,%,$@)=
 	@echo $($(patsubst print-%,%,$@))
+
+-include $(DEPS)
