@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:14:26 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 15:15:29 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 11:17:30 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		unset(t_cmd cmd, char ***env);
 void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table);
 int		env_builtin(char **env, t_cmd cmd);
 
-int		exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table);
+int		exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table, int save_std[2]);
 
 char	*remove_consecutiv_slash(char *path);
 char	*remove_dot_slash(char *path);

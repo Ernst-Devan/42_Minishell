@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/19 17:07:44 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/21 12:35:03 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 		cmds[i].in = open_in_heredoc_cmd(&cmds[i], nb_files);
 		i++;
 	}
+	if (manage_ctrl_c_var(3) == 1)
+		return (130);
 	i = 0;
 	while (i < table.cmd_len)
 	{

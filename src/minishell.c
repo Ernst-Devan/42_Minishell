@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/20 18:30:00 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 11:25:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	minishell(char **env)
 	size_t		check;
 
 	check = 0;
-	table.cmds = &cmd; rl_catch_signals = 0;
+	table.cmds = &cmd;
+	rl_catch_signals = 0;
 	rl_event_hook = &useless_function;
 	signal(SIGINT, sig_hand);
 	signal(SIGQUIT, SIG_IGN);
@@ -37,7 +38,7 @@ int	minishell(char **env)
 	if (!ms_env)
 	{
 		write (2, "ENV fail\n", 9);
-		return(1);
+		return (1);
 	}
 	shell.error_code = 0;
 	while (1)
@@ -50,17 +51,20 @@ int	minishell(char **env)
 			free_lstr(ms_env);
 			return (1);
 		}
-		if ((check == 0 && (manage_ctrl_c_var(3) != 1 && (table.cmd_len > 0 || table.cmds))))
+		if (manage_ctrl_c_var(3) == 1)
+			shell.error_code = 130;
+		else if ((check == 0 && (table.cmd_len > 0 || table.cmds)))
 			shell = exec(table, &ms_env, shell);
 		free_table(table);
-    }
+	}
 	return (0);
 }
 
-int main(int ac, char **argv, char **env) {
-  (void)ac;
-  (void)argv;
-  if (minishell(env))
-    return (1);
-  return (0);
+int	main(int ac, char **argv, char **env)
+{
+	(void)ac;
+	(void)argv;
+	if (minishell(env))
+		return (1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/21 10:18:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 11:29:35 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	exec_bin(t_table table, char **env)
 	return (status);
 }
 
-int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
+int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table, int save_std[2])
 {
 	int	len;
 
@@ -82,26 +82,29 @@ int	exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table)
 	else if (!ft_strncmp("unset", cmd.args[0], len + 1))
 		return (unset(cmd, env));
 	else if (!ft_strncmp("exit", cmd.args[0], len + 1))
+	{
+		close(save_std[0]);
+		close(save_std[1]);
 		ms_exit(cmd, *env, shell, table);
+	}
 	return (0);
 }
 
 int	manage_builtins(t_table table, char ***env, t_shell *shell)
 {
-	int	save_stdin;
-	int	save_stdout;
+	int	save_std[2];
 	int	ret;
 
-	save_stdin = dup(STDIN_FILENO);
-	save_stdout = dup(STDOUT_FILENO);
+	save_std[0] = dup(STDIN_FILENO);
+	save_std[1] = dup(STDOUT_FILENO);
 	if (dup2(table.cmds->in, STDIN_FILENO) == -1
 		|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
 		return (perror("pid faild on exec_src_bin"), 1);
-	ret = exec_builtins(table.cmds[0], env, shell, table);
-	dup2(save_stdin, STDIN_FILENO);
-	dup2(save_stdout, STDOUT_FILENO);
-	close(save_stdin);
-	close(save_stdout);
+	ret = exec_builtins(table.cmds[0], env, shell, table, save_std);
+	dup2(save_std[0], STDIN_FILENO);
+	dup2(save_std[1], STDOUT_FILENO);
+	close(save_std[0]);
+	close(save_std[1]);
 	return (ret);
 }
 
@@ -113,6 +116,7 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	if (manage_in(table.cmds, table, &nb_files)
 		|| manage_out(table.cmds, table))
 	{
+		close_fd(table);
 		shell.error_code = 1;
 		return (shell);
 	}
