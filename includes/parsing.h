@@ -19,13 +19,12 @@
 # define NAME_MAX 255
 # define ENV_MAX 32760
 # define DELIMITER " -<>|"
-# define SEPARATOR '#'
-# define SEPARATOR2 "#"
-# define EXPAND '*'
+# define SEPARATOR '\x1F'
+# define SEPARATOR2 "\x1F"
+# define EXPAND '\x1E'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
-
 # define CMD 0
 # define LESSLESS 1
 # define GREAT 2
@@ -129,7 +128,7 @@ char		*manage_space(char *input);
 void		skip_space(char **bufer, char *input, size_t *i, size_t *j);
 
 // Lexer.c
-char		*lexer(char *input);
+size_t		lexer(char **input);
 
 // Parser.c
 size_t		parser(t_table *table, char **env, char *lexer);

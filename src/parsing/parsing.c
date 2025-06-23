@@ -21,14 +21,6 @@
 #include <stdio.h>
 #include "exec.h"
 
-// DONT FORGOT TO ADD THE HEADER
-// ERROR IN THIS CASE : $(NOT_VALID_ENV) | ls
-// MANAGE IF NAME FILE ARE TWO LONG
-  
-// NOT JUST SPACE BE CAREFUL TO ALL delimiter
-// SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
-//
-
 size_t	count_nb_pipe(char *input)
 {
 	size_t	i;
@@ -48,7 +40,7 @@ size_t	count_nb_pipe(char *input)
 				i++;
 		}
 		if (quote == 0 && input[i] == '|')
-			count++;	
+			count++;
 		i++;
 	}
 	return (count);
@@ -64,7 +56,7 @@ size_t	count_nb_cmd(char *input)
 	return (nb_cmd);
 }
 
-size_t	parsing(t_shell *shell, t_table *table) 
+size_t	parsing(t_shell *shell, t_table *table)
 {
 	char	*input;
 	size_t	lexical_check;
@@ -73,7 +65,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	input = manage_space(input);
 	if (!input)
 		return (1);
-	input = lexer(input);
+	lexer(&input);
 	if (! input)
 		return (1);
 	lexical_check = lexical_analyser(input);
@@ -88,13 +80,12 @@ size_t	parsing(t_shell *shell, t_table *table)
 	input = manage_expand(input, *shell);
 	if (!input)
 		return (1);
-	
 	if (init_table(table, count_nb_cmd(input)))
 	{
 		free(input);
 		return (1);
 	}
-	if (parser(table, shell->env,input))
+	if (parser(table, shell->env, input))
 	{
 		free_table(*table);
 		return (1);

@@ -79,9 +79,13 @@ char	*valid_command(char *path, char *command, size_t *type)
 
 
 	cpy_command = ft_strdup(command);
-
 	if (!cpy_command)
 		return (NULL);
+	if (ft_strlen(cpy_command) == 0)
+	{
+		free(cpy_command);
+		return (NULL);
+	}
 	if (count_characters(cpy_command, "/") >= 1)
 	{
 		*type = 0;

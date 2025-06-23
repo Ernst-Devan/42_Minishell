@@ -16,7 +16,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-char	*lexer(char *input)
+size_t	lexer(char **input)
 {
 	char	*buffer;
 	char	quote;
@@ -26,29 +26,30 @@ char	*lexer(char *input)
 	i = 0;
 	j = 0;
 	quote = 0;
-	buffer = ft_calloc(ft_strlen(input) + count_characters(input, DELIMITER) + 1, 1);
+	buffer = ft_calloc(ft_strlen(*input) + count_characters(*input, DELIMITER) + 1, 1);
 	if (!buffer)
 	{
-		free(input);
-		return (NULL);
+		free(*input);
+		return (1);
 	}
-	while (input[i])
+	while ((*input)[i])
 	{
-		if (input[i] && !inside_quote(input[i], &quote) && check_delimiter(input[i], "<>|\xE1"))
+		if ((*input)[i] && !inside_quote((*input)[i], &quote) && check_delimiter((*input)[i], "<>|\xE1"))
 		{
-			if (ft_isspace(input[i]))
+			if (ft_isspace((*input)[i]))
 				i++;
-			while (check_delimiter(input[i], "<>|"))
-				buffer[j++] = input[i++];
+			while (check_delimiter((*input[i]), "<>|"))
+				buffer[j++] = (*input)[i++];
 			if (buffer[j - 1] != SEPARATOR)
 				buffer[j++] = SEPARATOR;
 		}
-		else if (j >= 1 && buffer[j - 1] == SEPARATOR && input[i] == SEPARATOR)
+		else if (j >= 1 && buffer[j - 1] == SEPARATOR && (*input)[i] == SEPARATOR)
 			i++;
-		else if (input[i])
-			buffer[j++] = input[i++];
+		else if ((*input)[i])
+			buffer[j++] = (*input)[i++];
 	}
 	buffer[j] = '\0';
-	free(input);
-	return (buffer);
+	free(*input);
+	*input = buffer;
+	return (0);
 }
