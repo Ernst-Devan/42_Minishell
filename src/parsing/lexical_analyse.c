@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "exec.h"
 #include "libft.h"
 #include "parsing.h"
 
@@ -115,6 +116,22 @@ int	check_lexical(int *tab, int len)
 				|| ((i + 1 < len && tab[i + 1] == PIPE))))
 			return (1);
 		i++;
+	}
+	return (0);
+}
+
+int	lexical(t_shell *shell, char **input, t_table **table)
+{
+	int	check;
+
+	check = lexical_analyser(*input);
+	if (check)
+	{
+		init_table(table, input, 0);
+		free(*input);
+		if (check == 2)
+			shell->error_code = 2;
+		return (check);
 	}
 	return (0);
 }

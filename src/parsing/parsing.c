@@ -66,18 +66,12 @@ size_t	parsing(t_shell *shell, t_table *table)
 		return (1);
 	if (lexer(&input))
 		return (1);
-	check = lexical_analyser(input);
-	if (check)
-	{
-		init_table(table, &input, 0);
-		free(input);
-		if (check == 2)
-			shell->error_code = 2;
+	check = lexical(shell, &input, &table);
+	if (check)	
 		return (check);
-	}
 	if (manage_expand(*shell, &input) == 2)
 		return (1);
-	if (init_table(table, &input, count_nb_cmd(input)))
+	if (init_table(&table, &input, count_nb_cmd(input)))
 		return (1);
 	if (parser(table, shell->env, input))
 		return (1);

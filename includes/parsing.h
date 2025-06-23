@@ -85,18 +85,23 @@ size_t		parsing(t_shell *shell, t_table *table);
 
 // Init.c
 void		init_cmd(t_cmd *cmd, int nb_cmd);
-size_t		init_table(t_table *table, char **input, int nb_cmd);
+size_t		init_table(t_table **table, char **input, int nb_cmd);
 
 //Quotes.c
 char		**remove_quotes(char **splited_cmd);
 
+
 // Free.c
 void		free_lstr(char **lstr);
-void		free_cmds(t_table table);
+void		free_cmds(t_table tabl);
 void		free_table(t_table table);
 
 // Env.c
 char		*find_env(char *str, char **env);
+
+//Lexical.c
+int	lexical(t_shell *shell, char **input, t_table **table);
+
 
 // Command_split.c
 size_t		count_split(char *input, char c);
@@ -127,7 +132,6 @@ size_t		get_command(t_shell *shell, char **input);
 //Quotes.c
 size_t		inside_quote(char c, char *quote);
 size_t		manage_space(char **input);
-void		skip_space(char **bufer, char *input, size_t *i, size_t *j);
 
 // Lexer.c
 size_t		lexer(char **input);

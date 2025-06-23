@@ -12,8 +12,9 @@
 
 #include "parsing.h"
 #include "libft.h"
+#include <stddef.h>
 
-size_t	count_fist_space(char *input)
+size_t	count_first_space(char *input)
 {
 	size_t	count;
 	
@@ -26,7 +27,7 @@ size_t	count_fist_space(char *input)
 	return (count);
 }
 
-void	skip_space(char **buffer, char *input, size_t *i, size_t *j)
+size_t	skip_space(char **buffer, char *input, size_t *i, size_t *j)
 {
 	if (ft_isspace(input[*i]))
 	{
@@ -35,6 +36,9 @@ void	skip_space(char **buffer, char *input, size_t *i, size_t *j)
 		while (input[*i] && ft_isspace(input[*i]))
 			*i += 1;
 	}
+	if (!(input[*i]))
+		return (1);
+	return (0);
 }
 
 size_t	manage_space(char **input)
@@ -51,14 +55,13 @@ size_t	manage_space(char **input)
 		return (E_MALLOC);
 	}
 	quote = 0;
-	i = count_fist_space(*input);
+	i = count_first_space(*input);
 	j = 0;
 	while ((*input)[i])
 	{
 		if (quote == 0)
-			skip_space(&buffer, *input, &i, &j);
-		if (!(*input)[i])
-			break ;
+			if (skip_space(&buffer, *input, &i, &j))
+				break ;
 		inside_quote((*input)[i], &quote);
 		buffer[j++] = (*input)[i++];
 	}
