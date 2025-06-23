@@ -15,11 +15,11 @@
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stddef.h>
 
-char	*get_command(t_shell *shell)
+size_t	get_command(t_shell *shell, char **input)
 {
 	char	prompt[PATH_MAX];
-	char	*input;
 
 	ft_strlcpy(prompt, "\0", PATH_MAX);
 	if (!shell->error_code)
@@ -34,13 +34,13 @@ char	*get_command(t_shell *shell)
 		ft_strlcat(prompt, find_env("PWD=", shell->env), PATH_MAX);
 		ft_strlcat(prompt, WHITE " : " WHITE, PATH_MAX);
 	}
-	input = readline(prompt);
-	if (!input)
+	*input = readline(prompt);
+	if (!*input)
 	{
 		free_lstr(shell->env);
 		printf("exit\n");
-		exit(0);
+		exit(E_MALLOC);
 	}
-	add_history(input);
-	return (input);
+	add_history(*input);
+	return (0);
 }

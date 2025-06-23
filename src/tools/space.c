@@ -37,34 +37,33 @@ void	skip_space(char **buffer, char *input, size_t *i, size_t *j)
 	}
 }
 
-char	*manage_space(char *input)
+size_t	manage_space(char **input)
 {
 	char	*buffer;
 	char	quote;
 	size_t	i;
 	size_t	j;
 
-	buffer = ft_calloc(ft_strlen(input) + 1, sizeof(char));
+	buffer = ft_calloc(ft_strlen(*input) + 1, sizeof(char));
 	if (!buffer)
 	{
-		free(input);
-		return (NULL);
+		free(*input);
+		return (E_MALLOC);
 	}
 	quote = 0;
-	i = count_fist_space(input);
+	i = count_fist_space(*input);
 	j = 0;
-	while (input[i])
+	while ((*input)[i])
 	{
 		if (quote == 0)
-			skip_space(&buffer, input, &i, &j);
-		if (!input[i])
-			break;
-		inside_quote(input[i], &quote);
-		buffer[j] = input[i];
-		i++;
-		j++;
+			skip_space(&buffer, *input, &i, &j);
+		if (!(*input)[i])
+			break ;
+		inside_quote((*input)[i], &quote);
+		buffer[j++] = (*input)[i++];
 	}
 	buffer[j] = '\0';
-	free(input);
-	return (buffer);
+	free(*input);
+	*input = buffer;
+	return (0);
 }

@@ -165,7 +165,7 @@ char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 	if (quote == 0 && expanded)
 	{
 		expanded = skip_first_space(expanded);
-		expanded = manage_space(expanded);
+		manage_space(&expanded);
 	}
 	expand->i += ft_strlen(variable);
 	if (!expanded)
@@ -204,15 +204,15 @@ size_t	need_expand(char *input, t_expand *expand, t_shell shell, char quote)
 	return (0);
 }
 
-char *manage_expand(char *input, t_shell shell)
+size_t	manage_expand(t_shell shell, char **input)
 {
 	t_expand	expand;
 	char		quote;
 	
 	if (!count_characters(input, "$"))
-		return(input);
+		return(SKIP);
 	if(init_expand(&expand, input, shell))
-		return(NULL);
+		return(E_MALLOC);
 	quote = 0;
 	while (input[expand.i])
 	{

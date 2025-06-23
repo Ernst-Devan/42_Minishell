@@ -59,23 +59,21 @@ size_t	count_nb_cmd(char *input)
 size_t	parsing(t_shell *shell, t_table *table)
 {
 	char	*input;
-	size_t	lexical_check;
+	int		check;
 
-	input = get_command(shell);
-	input = manage_space(input);
-	if (!input)
+	get_command(shell, &input);
+	if (manage_space(&input))
 		return (1);
-	lexer(&input);
-	if (! input)
+	if (lexer(&input))
 		return (1);
-	lexical_check = lexical_analyser(input);
-	if (lexical_check)
+	check = lexical_analyser(input);
+	if (check)
 	{
 		init_table(table, 0);
 		free(input);
-		if (lexical_check == 2)
+		if (check == 2)
 			shell->error_code = 2;
-		return (lexical_check);
+		return (check);
 	}
 	input = manage_expand(input, *shell);
 	if (!input)

@@ -18,7 +18,7 @@
 
 # define NAME_MAX 255
 # define ENV_MAX 32760
-# define DELIMITER " -<>|"
+# define DELIMITER "<>|"
 # define SEPARATOR '\x1F'
 # define SEPARATOR2 "\x1F"
 # define EXPAND '\x1E'
@@ -32,6 +32,8 @@
 # define LESS 4
 # define GREATGREAT 5
 # define ERROR 6
+# define E_MALLOC 2
+# define SKIP 3
 
 typedef struct s_shell
 {
@@ -120,11 +122,11 @@ char		*detect_full_variable(char *input);
 char		*valid_command(char *path, char *command, size_t *type);
 
 //Prompt.c
-char		*get_command(t_shell *shell);
+size_t		get_command(t_shell *shell, char **input);
 
 //Quotes.c
 size_t		inside_quote(char c, char *quote);
-char		*manage_space(char *input);
+size_t		manage_space(char **input);
 void		skip_space(char **bufer, char *input, size_t *i, size_t *j);
 
 // Lexer.c

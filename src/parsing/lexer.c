@@ -30,11 +30,11 @@ size_t	lexer(char **input)
 	if (!buffer)
 	{
 		free(*input);
-		return (1);
+		return (EXPAND);
 	}
 	while ((*input)[i])
 	{
-		if ((*input)[i] && !inside_quote((*input)[i], &quote) && check_delimiter((*input)[i], "<>|\xE1"))
+		if ((*input)[i] && !inside_quote((*input)[i], &quote) && check_delimiter((*input)[i], DELIMITER))
 		{
 			if (ft_isspace((*input)[i]))
 				i++;
