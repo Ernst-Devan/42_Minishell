@@ -53,7 +53,7 @@
 // 
 // MAKE THE MANAGEMENT OF ERROR RETURN
 
-char	*adding_ifs(char *variable)
+char	*skip_first_space(char *variable)
 {
 	char	*buffer;
 	size_t	i;
@@ -61,21 +61,21 @@ char	*adding_ifs(char *variable)
 
 	i = 0;
 	j = 0;
-	buffer = ft_calloc(ft_strlen(variable) + 10, sizeof(char));
+	buffer = ft_calloc(ft_strlen(variable) + 1, sizeof(char));
 	if (!buffer)
-		return (NULL);
+		return (NULL);	
+	if (variable[i] == EXPAND)
+		buffer[j++] = variable[i++];
+	while (variable[i] && ft_isspace(variable[i]))
+	{
+		i++;
+	}
 	while (variable[i])
 	{
-		while (variable[i] && ft_isspace(variable[i]))
-		{
-			buffer[j++] = variable[i++];
-		}
-		while (variable[i] && !ft_isspace(variable[i]))
-		{
-			buffer[j++] = variable[i++];
-		}
+		buffer[j++] = variable[i++];
 	}
 	buffer[j] = '\0';
+	free(variable);
 	return (buffer);
 }
 
@@ -163,7 +163,10 @@ char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 	
 	expanded = replace_var(variable, env);
 	if (quote == 0 && expanded)
+	{
+		expanded = skip_first_space(expanded);
 		expanded = manage_space(expanded);
+	}
 	expand->i += ft_strlen(variable);
 	if (!expanded)
 		return (expand->buffer);

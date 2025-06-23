@@ -39,6 +39,8 @@ size_t count_characters(char *s, char *cs) {
 			}
 			if (s[i] == cs[j])
 				count++;
+			if (s[i] == EXPAND)
+				break;
 			j++;
 		}
 		j = 0;

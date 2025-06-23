@@ -52,7 +52,7 @@ int	echo(t_cmd command)
 		write(1, "\n", 1);
 		return (0);
 	}
-	if (command.args[1][1] && command.args[1][0] == '-'
+	if (command.args[1][0] && command.args[1][0] == '-'
 		&& !check_n(&command.args[1][1]))
 	{
 		while (command.args[i] && command.args[i][0] && command.args[i][1]

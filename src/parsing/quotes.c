@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include <stdlib.h>
 #include "libft.h"
 #include "parsing.h"
@@ -36,11 +37,42 @@ size_t	inside_quote(char c, char *quote)
 	}
 }
 
-char	**remove_quotes(char **splited_cmds)
+
+void	rm_inside_quote(char *args, size_t *j, char *quote)
+{
+	*j += 1;
+	if (args[*j] && args[*j] == *quote)
+	{
+		*quote = 0;
+		*j += 1;
+	}
+}
+
+
+void	rm_inside_expand(char **temp, char *args, size_t *j, size_t *k, size_t *expand)
+{
+	*expand = 1;
+	(*temp)[*k] = args[*j];
+	*j += 1;
+	*k += 1;
+	while (args[*j] && args[*j] != EXPAND)
+	{
+		(*temp)[*k] = args[*j];
+		*j += 1;
+		*k += 1;
+	}
+	if (args[*j] == EXPAND)
+	{
+		*expand = 0;
+	}
+}
+
+char	**remove_quotes(char **args)
 {
 	size_t	i;
 	size_t	j;
 	size_t	k;
+	size_t	expand;
 	char	*temp;
 	char	quote;
 
@@ -48,30 +80,26 @@ char	**remove_quotes(char **splited_cmds)
 	j = 0;
 	k = 0;
 	quote = 0;
-	if (!splited_cmds)
+	expand = 0;
+	if (!args)
 		return (NULL);
-	while (splited_cmds[i])
+	while (args[i])
 	{
-		temp = malloc(ft_strlen(splited_cmds[i]) + 1);
-		while (splited_cmds[i][j])
+		temp = malloc(ft_strlen(args[i]) + 1);
+		while (args[i][j])
 		{
-			if (inside_quote(splited_cmds[i][j], &quote) > 1)
-			{
-				j++;
-				if (splited_cmds[i][j] && splited_cmds[i][j] == quote)
-				{
-					quote = 0;
-					j++;
-				}
-			}
-			else
-				temp[k++] = splited_cmds[i][j++];
+			if (args[i][j] == EXPAND || expand)
+				rm_inside_expand(&temp, args[i], &j, &k, &expand);
+			if (!expand && inside_quote(args[i][j], &quote) > 1)
+				rm_inside_quote(args[i], &j, &quote);
+			else if (!expand)
+				temp[k++] = args[i][j++];
 		}
 		temp[k] = '\0';
 		k = 0;
 		j = 0;
-		free(splited_cmds[i]);
-		splited_cmds[i++] = temp;
+		free(args[i]);
+		args[i++] = temp;
 	}
-	return (splited_cmds);
+	return (args);
 }

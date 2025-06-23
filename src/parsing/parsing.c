@@ -69,7 +69,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 	char	*input;
 	size_t	lexical_check;
 
-	input = get_command(shell);\
+	input = get_command(shell);
 	input = manage_space(input);
 	if (!input)
 		return (1);

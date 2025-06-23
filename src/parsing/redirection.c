@@ -92,6 +92,12 @@ char **skip_redirection(char **split_cmd)
 		temp = malloc((ft_strlen(split_cmd[i]) + 1 ) * sizeof(char));
 		while(split_cmd[i][j])
 		{
+			if (split_cmd[i][j] == EXPAND)
+			{
+				temp[k++] = split_cmd[i][j++];
+				while (split_cmd[i][j] != EXPAND)
+					temp[k++] = split_cmd[i][j++];
+			}
 			inside_quote(split_cmd[i][j], &quote);
 			if (quote == 0)
 			{
@@ -211,6 +217,7 @@ char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 	quote = 0;
 	if (!check_redirection(split_cmd))
 		return(split_cmd);
+
 	while (check_empty(split_cmd) == 1 && split_cmd[i])
 	{
 		if (init_redirection(&in, &out, split_cmd[i]))
@@ -221,6 +228,12 @@ char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 		j = 0;
 		while (split_cmd[i][j])
 		{
+			if (split_cmd[i][j] == EXPAND)
+			{
+				j++;
+				while (split_cmd[i][j] != EXPAND)
+					j++;
+			}
 			inside_quote(split_cmd[i][j], &quote);
 			if (quote == 0)
 			{

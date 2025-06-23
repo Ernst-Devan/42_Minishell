@@ -85,6 +85,8 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 		}
 		if (args && args[0])
 		{
+			args = remove_quotes(args);
+			args = remove_expand_list(args);
 			path_command = valid_command(path, args[0], &type);
 			cmd[i].path = path_command;
 			cmd[i].args = args;
@@ -122,8 +124,6 @@ size_t	parser(t_table *table, char **env, char *input)
 	splited_cmds = manage_redirection(&table->cmds, splited_cmds);
 	if (!splited_cmds)
 		return (1);
-	splited_cmds = remove_quotes(splited_cmds);
-	splited_cmds = remove_expand_list(splited_cmds);
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env), table->cmd_len))
 	{
 		free_lstr(splited_cmds);
