@@ -75,8 +75,7 @@ size_t	parsing(t_shell *shell, t_table *table)
 			shell->error_code = 2;
 		return (check);
 	}
-	input = manage_expand(input, *shell);
-	if (!input)
+	if (manage_expand(*shell, &input) == 2)
 		return (1);
 	if (init_table(table, count_nb_cmd(input)))
 	{

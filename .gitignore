@@ -1,3 +1,5 @@
+.gitignore
+
 .vscode
 
 .env
@@ -9,3 +11,5 @@
 minishell
 
 libs/libft/libft.a
+
+*.txt

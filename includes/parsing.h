@@ -113,7 +113,7 @@ size_t		count_characters(char *s, char *cs);
 size_t		ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
-char		*manage_expand(char *input, t_shell shell);
+size_t		manage_expand(t_shell shell, char **input);
 size_t		init_expand(t_expand *expand, char *input, t_shell shell);
 size_t		size_allocation_expand(char *input, t_shell shell);
 char		*detect_full_variable(char *input);

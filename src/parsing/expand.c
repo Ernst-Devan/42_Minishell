@@ -209,26 +209,29 @@ size_t	manage_expand(t_shell shell, char **input)
 	t_expand	expand;
 	char		quote;
 	
-	if (!count_characters(input, "$"))
+	if (!count_characters(*input, "$"))
+	{
 		return(SKIP);
-	if(init_expand(&expand, input, shell))
+	}
+	if(init_expand(&expand, *input, shell))
 		return(E_MALLOC);
 	quote = 0;
-	while (input[expand.i])
+	while ((*input)[expand.i])
 	{
-		inside_quote(input[expand.i], &quote);
+		inside_quote((*input)[expand.i], &quote);
 		if (quote != '\'')
 		{
-			while (input[expand.i] == '$')
+			while ((*input)[expand.i] == '$')
 			{
-				if(need_expand(input, &expand, shell, quote))
+				if(need_expand(*input, &expand, shell, quote))
 					break;
 			}
 		}
-		if (input[expand.i])
-			expand.buffer[expand.j++] = input[expand.i++];
+		if ((*input)[expand.i])
+			expand.buffer[expand.j++] = (*input)[expand.i++];
 	}
 	expand.buffer[expand.j] = '\0';
-	free(input);
-	return (expand.buffer);
+	free(*input);
+	*input = expand.buffer;
+	return (0);
 }

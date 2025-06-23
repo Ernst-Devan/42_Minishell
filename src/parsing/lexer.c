@@ -38,7 +38,7 @@ size_t	lexer(char **input)
 		{
 			if (ft_isspace((*input)[i]))
 				i++;
-			while (check_delimiter((*input[i]), "<>|"))
+			while (check_delimiter((*input)[i], "<>|"))
 				buffer[j++] = (*input)[i++];
 			if (buffer[j - 1] != SEPARATOR)
 				buffer[j++] = SEPARATOR;
