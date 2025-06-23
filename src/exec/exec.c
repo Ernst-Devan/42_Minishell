@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 11:48:48 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 16:03:32 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	exec_child_process(t_table table, char **env)
 		perror("dup2 failed in exec_bin");
 		free_table(table);
 		free_lstr(env);
-		exit(0);
+		exit(1);
 	}
 	signal(SIGPIPE, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -38,7 +38,7 @@ static void	exec_child_process(t_table table, char **env)
 		perror("Command not found");
 		free_table(table);
 		free_lstr(env);
-		exit(0);
+		exit(1);
 	}
 }
 
@@ -122,9 +122,8 @@ t_shell	exec(t_table table, char ***env, t_shell shell)
 	}
 	if (manage_ctrl_c_var(3) == 1)
 	{
-		printf("^C\n");
 		shell.error_code = 130;
-		return (shell);
+		return (printf("^C\n"), shell);
 	}
 	if (table.cmd_len > 1)
 		shell.error_code = ms_pipe(table, &shell);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 11:22:42 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 14:05:05 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	unset(t_cmd cmd, char ***env)
 		if (check != -1)
 		{
 			new_env = reset_val_unset(str, env);
-			
 			if (!new_env)
 				return (free(str), 1);
 		}

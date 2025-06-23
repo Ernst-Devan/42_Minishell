@@ -17,6 +17,7 @@ BUILTINS_SRCS :=	echo.c \
 					remove_cd.c 		\
 					unset.c 			\
 					utils_export.c 		\
+					utils_export2.c 		\
 
 SRCS += $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
 
@@ -24,6 +25,7 @@ EXEC_DIR :=	exec/
 
 EXEC_SRCS :=	exec.c	\
 				pipe.c 	\
+				pipe_utils.c \
 
 SRCS += $(addprefix $(EXEC_DIR), $(EXEC_SRCS))
 
