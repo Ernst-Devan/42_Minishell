@@ -76,9 +76,9 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 	{
 		if (*list_cmds)
 		{
-			if (count_words(*list_cmds, SEPARATOR) > 0)
+			if (count_words(*list_cmds, SEP) > 0)
 	    	{
-				args = ft_split(*list_cmds, SEPARATOR);
+				args = ft_split(*list_cmds, SEP);
 				if (!args)
 					return (1);
 			}

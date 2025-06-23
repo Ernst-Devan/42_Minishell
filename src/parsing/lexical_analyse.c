@@ -78,7 +78,7 @@ int	*lexical_analyser_define(char *input, int *len, int *check)
 	tab = NULL;
 	while (input[i])
 	{
-		while (input[i] == SEPARATOR)
+		while (input[i] == SEP)
 			i++;
 		while (input[i] && inside_quote(input[i], &quote))
 		{

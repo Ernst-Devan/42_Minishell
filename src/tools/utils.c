@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include "stdio.h"
 
-size_t count_characters(char *s, char *cs) {
+size_t count_chars(char *s, char *cs) {
 	size_t	count;
 	size_t	i;
 	size_t	j;

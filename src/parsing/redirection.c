@@ -22,7 +22,7 @@ char	*remove_quote(char *str)
 	char	*temp;
 	char	quote;
 
-	if (!count_characters(str, "\"\'"))
+	if (!count_chars(str, "\"\'"))
 		return(str);
 	i = 0;
 	j = 0;
@@ -60,7 +60,7 @@ size_t	check_empty(char **lstr)
 	{
 		while(lstr[i][j])
 		{
-			if (ft_isascii(lstr[i][j]) && lstr[i][j] != SEPARATOR)
+			if (ft_isascii(lstr[i][j]) && lstr[i][j] != SEP)
 				return (1);
 			j++;
 		}
@@ -103,10 +103,10 @@ char **skip_redirection(char **split_cmd)
 			{
 				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
 				{
-					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
+					j += ft_strlen_c(&split_cmd[i][j], SEP);
 					if (split_cmd[i][j])
 						j++;
-					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
+					j += ft_strlen_c(&split_cmd[i][j], SEP);
 				}
 			}
 			if (!split_cmd[i][j])
@@ -133,17 +133,17 @@ char	*redirection_in(char *in, char *split_cmd, size_t *j, char *quote)
 	len = ft_strlen(split_cmd);
 		if (split_cmd[*j] == '<')
 		{
-			(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
+			(*j) += ft_strccat(in, &split_cmd[*j], SEP);
+			ft_strlcat(in, SEP2, ft_strlen(split_cmd) + 1);
 			inside_quote(split_cmd[*j], quote);
 			if (*quote != 0)
-				ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
+				ft_strlcat(in, SEP2, ft_strlen(split_cmd) + 1);
 			if (*j < len)
 			{
 				(*j)++;
-				(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
+				(*j) += ft_strccat(in, &split_cmd[*j], SEP);
 			}
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd + 1));
+			ft_strlcat(in, SEP2, ft_strlen(split_cmd + 1));
 	}
 	return (in);
 }
@@ -155,17 +155,17 @@ char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote)
 	len = ft_strlen(split_cmd);
 	if (split_cmd[*j] == '>')
 	{	
-		(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
-		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
+		(*j) += ft_strccat(out, &split_cmd[*j], SEP);
+		ft_strlcat(out, SEP2, ft_strlen(split_cmd) + 1);
 		inside_quote(split_cmd[*j], quote);
 		if (*quote != 0)
-			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
+			ft_strlcat(out, SEP2, ft_strlen(split_cmd) + 1);
 		if (*j < len)
 		{
 			(*j)++;
-			(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
+			(*j) += ft_strccat(out, &split_cmd[*j], SEP);
 		}
-		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd + 1));
+		ft_strlcat(out, SEP2, ft_strlen(split_cmd + 1));
 	}
 	return (out);
 }
@@ -179,7 +179,7 @@ size_t	check_redirection(char **split_cmd)
 	i = 0;
 	while (split_cmd[i])
 	{
-		count = count_characters(split_cmd[i], "><");
+		count = count_chars(split_cmd[i], "><");
 		if (count > 0)
 			return(1);
 		i++;

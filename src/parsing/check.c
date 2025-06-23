@@ -86,7 +86,7 @@ char	*valid_command(char *path, char *command, size_t *type)
 		free(cpy_command);
 		return (NULL);
 	}
-	if (count_characters(cpy_command, "/") >= 1)
+	if (count_chars(cpy_command, "/") >= 1)
 	{
 		*type = 0;
 		return(cpy_command);

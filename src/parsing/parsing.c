@@ -11,15 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <fcntl.h>
-#include <limits.h>
-#include <linux/limits.h>
-#include <stddef.h>
-#include <stdlib.h>
 #include <libft.h>
-#include <unistd.h>
-#include <stdio.h>
-#include "exec.h"
 
 size_t	count_nb_pipe(char *input)
 {
@@ -65,9 +57,12 @@ size_t	parsing(t_shell *shell, t_table *table)
 	if (manage_space(&input))
 		return (1);
 	if (lexer(&input))
+	{
+		free(input);
 		return (1);
+	}
 	check = lexical(shell, &input, &table);
-	if (check)	
+	if (check)
 		return (check);
 	if (manage_expand(*shell, &input) == 2)
 		return (1);

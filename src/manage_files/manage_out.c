@@ -21,7 +21,7 @@ int	open_append(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != SEPARATOR)
+	while (str[n] && str[n] != SEP)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -38,7 +38,7 @@ int	open_out_file(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != SEPARATOR)
+	while (str[n] && str[n] != SEP)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -54,7 +54,7 @@ int	manage_open_out(int i, t_cmd *cmd, int fd)
 	if (cmd->str_out[i] && cmd->str_out[i + 1] && cmd->str_out[i] == '>')
 	{
 		if (cmd->str_out[i + 1] && cmd->str_out[i + 2]
-			&& cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == SEPARATOR)
+			&& cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == SEP)
 		{
 			if (fd)
 				close(fd);
@@ -63,7 +63,7 @@ int	manage_open_out(int i, t_cmd *cmd, int fd)
 				return (-1);
 			i += 2;
 		}
-		else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == SEPARATOR)
+		else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == SEP)
 		{
 			if (fd)
 				close(fd);

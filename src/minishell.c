@@ -46,7 +46,6 @@ int	minishell(char **env)
 		manage_ctrl_c_var(0);
 		shell.env = ms_env;
 		check = parsing(&shell, &table);
-		display_table(table);
 		if (check == 1)
 		{
 			free_lstr(ms_env);

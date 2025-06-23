@@ -18,9 +18,9 @@
 
 # define NAME_MAX 255
 # define ENV_MAX 32760
-# define DELIMITER "<>|"
-# define SEPARATOR '\x1F'
-# define SEPARATOR2 "\x1F"
+# define LIM "<>|"
+# define SEP '\x1F'
+# define SEP2 "\x1F"
 # define EXPAND '\x1E'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
@@ -108,13 +108,17 @@ size_t		count_split(char *input, char c);
 size_t		nb_letter(char *input, char c);
 char		**split_cmd(char *input, char c);
 
+// Space.c
+size_t		manage_space(char **input);
+char	*skip_first_space(char *variable);
+
 // Utils.c
 int			count_lstr(char **lstr);
 int			ft_strlen_c(char *str, char delimiter);
 size_t		check_delimiter(char c, char *delimiter);
 void		display_lstr(char **lstr);
 void		display_table(t_table table);
-size_t		count_characters(char *s, char *cs);
+size_t		count_chars(char *s, char *cs);
 size_t		ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
@@ -131,7 +135,6 @@ size_t		get_command(t_shell *shell, char **input);
 
 //Quotes.c
 size_t		inside_quote(char c, char *quote);
-size_t		manage_space(char **input);
 
 // Lexer.c
 size_t		lexer(char **input);
