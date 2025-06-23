@@ -120,13 +120,20 @@ size_t	parser(t_table *table, char **env, char *input)
 	char **splited_cmds;
 	splited_cmds = tokenisation(input);
 	if (!splited_cmds)
+	{
+		free_table(*table);
 		return(1);
+	}
 	splited_cmds = manage_redirection(&table->cmds, splited_cmds);
 	if (!splited_cmds)
+	{
+		free_table(*table);
 		return (1);
+	}
 	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env), table->cmd_len))
 	{
 		free_lstr(splited_cmds);
+		free_table(*table);
 		return (1);
 	}
 	free_lstr(splited_cmds);

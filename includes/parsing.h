@@ -85,7 +85,7 @@ size_t		parsing(t_shell *shell, t_table *table);
 
 // Init.c
 void		init_cmd(t_cmd *cmd, int nb_cmd);
-size_t		init_table(t_table *table, int nb_cmd);
+size_t		init_table(t_table *table, char **input, int nb_cmd);
 
 //Quotes.c
 char		**remove_quotes(char **splited_cmd);

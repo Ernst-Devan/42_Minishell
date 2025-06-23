@@ -32,11 +32,14 @@ void	init_cmd(t_cmd *cmd, int nb_cmd)
 	}
 }
 
-size_t	init_table(t_table *table, int nb_cmd)
+size_t	init_table(t_table *table, char **input, int nb_cmd)
 {
 	table->cmds = ft_calloc((nb_cmd + 1), sizeof(t_cmd));
 	if (!table->cmds)
+	{
+		free(*input);
 		return (1);
+	}
 	table->cmd_len = nb_cmd;
 	init_cmd(table->cmds, nb_cmd + 1);
 	return (0);
