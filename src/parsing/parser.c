@@ -11,12 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "libft.h"
-
-
 
 char	*remove_expand_sep(char *cmd)
 {
@@ -25,10 +20,10 @@ char	*remove_expand_sep(char *cmd)
 	size_t	j;
 
 	if (!cmd)
-		return(cmd);
+		return (cmd);
 	buffer = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
 	if (!buffer)
-		return(NULL);
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (cmd[i])
@@ -36,7 +31,7 @@ char	*remove_expand_sep(char *cmd)
 		if (cmd[i] == EXPAND)
 			i++;
 		if (cmd[i])
-			buffer[j++] = cmd[i++]; 
+			buffer[j++] = cmd[i++];
 	}
 	buffer[j] = '\0';
 	free(cmd);
@@ -45,7 +40,7 @@ char	*remove_expand_sep(char *cmd)
 
 char	**remove_expand_list(char	**list_cmds)
 {
-	char **buffer;
+	char	**buffer;
 	size_t	i;
 
 	buffer = ft_calloc(count_lstr(list_cmds) + 1, sizeof(char *));
@@ -62,7 +57,7 @@ char	**remove_expand_list(char	**list_cmds)
 	return (buffer);
 }
 
-int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len) 
+int	insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 {
 	size_t	i;
 	size_t	type;
@@ -72,12 +67,12 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 	i = 0;
 	type = 0;
 	args = NULL;
-	while (i < table_len) 
+	while (i < table_len)
 	{
 		if (*list_cmds)
 		{
 			if (count_words(*list_cmds, SEP) > 0)
-	    	{
+			{
 				args = ft_split(*list_cmds, SEP);
 				if (!args)
 					return (1);
@@ -93,7 +88,7 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 			cmd[i].type = type;
 			i++;
 		}
-		else 
+		else
 		{
 			cmd[i].type = 2;
 			i++;
@@ -101,12 +96,12 @@ int insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 		args = NULL;
 		list_cmds++;
 	}
-  	return (0);
+	return (0);
 }
 
-char **tokenisation(char *input) 
+char	**tokenisation(char *input)
 {
-	char **splited_cmds;
+	char	**splited_cmds;
 
 	splited_cmds = split_cmd(input, '|');
 	free(input);
@@ -117,12 +112,13 @@ char **tokenisation(char *input)
 
 size_t	parser(t_table *table, char **env, char *input)
 {
-	char **splited_cmds;
+	char	**splited_cmds;
+
 	splited_cmds = tokenisation(input);
 	if (!splited_cmds)
 	{
 		free_table(*table);
-		return(1);
+		return (1);
 	}
 	splited_cmds = manage_redirection(&table->cmds, splited_cmds);
 	if (!splited_cmds)
@@ -137,5 +133,5 @@ size_t	parser(t_table *table, char **env, char *input)
 		return (1);
 	}
 	free_lstr(splited_cmds);
-	return(0);
+	return (0);
 }

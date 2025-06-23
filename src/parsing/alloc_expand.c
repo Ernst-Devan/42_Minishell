@@ -42,7 +42,7 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 		{
 			full = detect_full_variable(&input[i]);
 			if (!full)
-				break;
+				break ;
 			variable = find_env(full, shell.env);
 			if (full[0] == '?')
 				count += alloc_error_code(shell, &i);
@@ -55,4 +55,3 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 	}
 	return (count * 2 + 3);
 }
-

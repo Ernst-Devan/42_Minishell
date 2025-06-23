@@ -12,10 +12,9 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
-#include "stdio.h"
 
-size_t count_chars(char *s, char *cs) {
+size_t	count_chars(char *s, char *cs)
+{
 	size_t	count;
 	size_t	i;
 	size_t	j;
@@ -40,7 +39,7 @@ size_t count_chars(char *s, char *cs) {
 			if (s[i] == cs[j])
 				count++;
 			if (s[i] == EXPAND)
-				break;
+				break ;
 			j++;
 		}
 		j = 0;
@@ -63,15 +62,17 @@ size_t	check_delimiter(char c, char *delimter)
 	return (0);
 }
 
-int count_lstr(char **lstr) {
-  int i;
+int	count_lstr(char **lstr)
+{
+	int	i;
 
-  i = 0;
-  while (*lstr != NULL) {
-    i++;
-    lstr++;
-  }
-  return (i);
+	i = 0;
+	while (*lstr != NULL)
+	{
+		i++;
+		lstr++;
+	}
+	return (i);
 }
 
 int	ft_strlen_c(char *str, char delimiter)

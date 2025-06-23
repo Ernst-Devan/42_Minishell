@@ -76,7 +76,8 @@ char	*detect_full_variable(char *input)
 	{
 		if (!ft_isalnum(*input) && *input != '_')
 			break ;
-		buffer[i++] = (*input)++;
+		buffer[i++] = *input;
+		input++;
 	}
 	buffer[i] = '=';
 	buffer[i + 1] = '\0';
@@ -141,9 +142,7 @@ size_t	manage_expand(t_shell shell, char **input)
 	char		quote;
 
 	if (!count_chars(*input, "$"))
-	{
 		return (SKIP);
-	}
 	if (init_expand(&expand, *input, shell))
 		return (E_MALLOC);
 	quote = 0;
@@ -153,10 +152,8 @@ size_t	manage_expand(t_shell shell, char **input)
 		if (quote != '\'')
 		{
 			while ((*input)[expand.i] == '$')
-			{
 				if (need_expand(*input, &expand, shell, quote))
 					break ;
-			}
 		}
 		if ((*input)[expand.i])
 			expand.buffer[expand.j++] = (*input)[expand.i++];

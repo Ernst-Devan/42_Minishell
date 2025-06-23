@@ -90,7 +90,6 @@ size_t		init_table(t_table **table, char **input, int nb_cmd);
 //Quotes.c
 char		**remove_quotes(char **splited_cmd);
 
-
 // Free.c
 void		free_lstr(char **lstr);
 void		free_cmds(t_table tabl);
@@ -100,8 +99,7 @@ void		free_table(t_table table);
 char		*find_env(char *str, char **env);
 
 //Lexical.c
-int	lexical(t_shell *shell, char **input, t_table **table);
-
+int			lexical(t_shell *shell, char **input, t_table **table);
 
 // Command_split.c
 size_t		count_split(char *input, char c);
@@ -110,7 +108,7 @@ char		**split_cmd(char *input, char c);
 
 // Space.c
 size_t		manage_space(char **input);
-char	*skip_first_space(char *variable);
+char		*skip_first_space(char *variable);
 
 // Utils.c
 int			count_lstr(char **lstr);

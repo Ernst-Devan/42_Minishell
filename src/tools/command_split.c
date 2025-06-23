@@ -12,9 +12,6 @@
 
 #include <libft.h>
 #include "parsing.h"
-#include <stddef.h>
-
-// Check | not inside quotes
 
 size_t	count_split(char *input, char c)
 {
@@ -66,12 +63,12 @@ char	*split_insert(char *splited, char *input, char c)
 					j++;
 				}
 				splited[i++] = input[j++];
-			} 
+			}
 			if (!input[j] || input[j] == c)
-				break;
+				break ;
 		}
 		if (!input[j])
-			break;
+			break ;
 		splited[i] = input[j];
 		i++;
 		j++;
@@ -100,10 +97,10 @@ size_t	nb_letter(char *input, char c)
 {
 	char	quotes;
 	size_t	count;
-	
+
 	count = 0;
 	quotes = 0;
-	while(*input)
+	while (*input)
 	{
 		if (!inside_quote(*input, &quotes))
 		{
@@ -118,9 +115,9 @@ size_t	nb_letter(char *input, char c)
 				}
 			}
 			if (*input == c)
-				break;
-		} 
-		count++; 
+				break ;
+		}
+		count++;
 		input++;
 	}
 	return (count);
@@ -146,7 +143,7 @@ char	**split_cmd(char *input, char c)
 	while (i < count_w)
 	{
 		count_l = nb_letter(cpy_input, c);
-		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1),sizeof(char));
+		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1), sizeof(char));
 		if (!split[i])
 		{
 			free_lstr(split);

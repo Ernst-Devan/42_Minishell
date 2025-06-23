@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <stdlib.h>
 #include "libft.h"
 #include "parsing.h"
 
@@ -37,7 +35,6 @@ size_t	inside_quote(char c, char *quote)
 	}
 }
 
-
 void	rm_inside_quote(char *args, size_t *j, char *quote)
 {
 	*j += 1;
@@ -47,7 +44,6 @@ void	rm_inside_quote(char *args, size_t *j, char *quote)
 		*j += 1;
 	}
 }
-
 
 void	rm_inside_expand(char **temp, char *args, size_t *j, size_t *k, size_t *expand)
 {
@@ -85,7 +81,9 @@ char	**remove_quotes(char **args)
 		return (NULL);
 	while (args[i])
 	{
-		temp = malloc(ft_strlen(args[i]) + 1);
+		temp = ft_calloc((ft_strlen(args[i]) + 1), sizeof(char));
+		if (temp)
+			return (NULL);
 		while (args[i][j])
 		{
 			if (args[i][j] == EXPAND || expand)

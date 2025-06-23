@@ -19,41 +19,41 @@
 #include <time.h>
 #include <unistd.h>
 
-size_t check_bultin(char *command)
+size_t	check_bultin(char *command)
 {
 	if (!ft_strncmp(command, "echo", ft_strlen(command) + 4))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "cd", ft_strlen(command) + 2))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "pwd", ft_strlen(command) + 3))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "export", ft_strlen(command) + 6))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "unset", ft_strlen(command) + 5))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "env", ft_strlen(command) + 3))
-		return(1);
+		return (1);
 	else if (!ft_strncmp(command, "exit", ft_strlen(command)+ 4))
-		return(1);
-return(0);
+		return (1);
+	return (0);
 }
 
-char  *check_command(char *path, char *command)
+char	*check_command(char *path, char *command)
 {
-	char    **splited_path;
-	char    temp_path[PATH_MAX];
-	char    *final_path;
+	char	**splited_path;
+	char	temp_path[PATH_MAX];
+	char	*final_path;
 	int		i;
 
 	i = 0;
 	if (command == NULL)
-		return(NULL);
+		return (NULL);
 	if (!path)
-		return(NULL);
+		return (NULL);
 	splited_path = ft_split(path, ':');
 	if (!splited_path)
-		return(NULL);
-	while(splited_path[i] != NULL)
+		return (NULL);
+	while (splited_path[i] != NULL)
 	{
 		ft_strlcpy(temp_path, splited_path[i], PATH_MAX);
 		ft_strlcat(temp_path, "/", PATH_MAX);
@@ -63,7 +63,7 @@ char  *check_command(char *path, char *command)
 			final_path = ft_strdup(temp_path);
 			free_lstr(splited_path);
 			if (!final_path)
-				return (NULL); 
+				return (NULL);
 			return (final_path);
 		}
 		i++;
@@ -77,7 +77,6 @@ char	*valid_command(char *path, char *command, size_t *type)
 	char	*temp;
 	char	*cpy_command;
 
-
 	cpy_command = ft_strdup(command);
 	if (!cpy_command)
 		return (NULL);
@@ -89,7 +88,7 @@ char	*valid_command(char *path, char *command, size_t *type)
 	if (count_chars(cpy_command, "/") >= 1)
 	{
 		*type = 0;
-		return(cpy_command);
+		return (cpy_command);
 	}
 	if (check_bultin(cpy_command))
 	{
@@ -101,10 +100,8 @@ char	*valid_command(char *path, char *command, size_t *type)
 	{
 		*type = 0;
 		free(cpy_command);
-		return(temp);
+		return (temp);
 	}
 	*type = 3;
 	return (cpy_command);
 }
-
-

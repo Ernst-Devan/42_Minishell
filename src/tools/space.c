@@ -43,7 +43,7 @@ char	*skip_first_space(char *variable)
 size_t	count_first_space(char *input)
 {
 	size_t	count;
-	
+
 	count = 0;
 	while (*input && ft_isspace(*input))
 	{
