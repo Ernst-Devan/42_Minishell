@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/20 14:59:50 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 10:40:39 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,39 +63,33 @@ int	*init_new_tab(int len, int define, int *tab, int *check)
 	return (tab);
 }
 
-int	*lexical_analyser_define(char *input, int *len, int *check)
+void	lexical_analyser_define(char *input, int *len, int *check, int **tab)
 {
 	int		i;
-	int		*tab;
 	int		define;
 	char	quote;
 	int		is_word;
 
-	is_word = 0;
 	i = 0;
 	quote = 0;
-	tab = NULL;
+	*tab = NULL;
 	while (input[i])
 	{
+		is_word = 0;
 		while (input[i] == SEPARATOR)
 			i++;
-		while (input[i] && inside_quote(input[i], &quote))
-		{
-			i++;
+		while (input[i] && inside_quote(input[i], &quote) && i++)
 			is_word = 1;
-		}
 		if (input[i] || is_word)
 		{
 			define = CMD;
 			if (!(!input[i] && is_word))
 				define = choose_define(&input[i], &i, quote);
-			tab = init_new_tab((*len)++, define, tab, check);
-			if (!tab)
-				return (NULL);
+			*tab = init_new_tab((*len)++, define, *tab, check);
+			if (!*tab)
+				return ;
 		}
-		is_word = 0;
 	}
-	return (tab);
 }
 
 int	check_lexical(int *tab, int len)
@@ -128,7 +122,7 @@ int	lexical_analyser(char *input)
 
 	len = 0;
 	check = 0;
-	tab = lexical_analyser_define(input, &len, &check);
+	lexical_analyser_define(input, &len, &check, &tab);
 	if (!tab && check)
 		return (1);
 	check = check_lexical(tab, len);

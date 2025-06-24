@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:14:26 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 16:30:27 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 10:43:55 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		add_variable_env(char ***env, char *data);
 
 int		env_builtin(char **env, t_cmd cmd);
 
-int		exec_builtins(t_cmd cmd, t_shell *shell, t_table table, int save_std[2]);
+int		exec_builtins(t_cmd cmd, t_shell *shl, t_table tbl, int sv_std[2]);
 
 char	*remove_consecutiv_slash(char *path);
 char	*remove_dot_slash(char *path);

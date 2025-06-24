@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 16:26:24 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 10:42:14 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	manage_signals(void)
 
 static char	**manage_env(char **env)
 {
-	char 	**ms_env;
+	char	**ms_env;
 
 	ms_env = new_env(env);
 	if (!ms_env)
