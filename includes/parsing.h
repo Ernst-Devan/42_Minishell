@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 15:40:20 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 17:18:14 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,11 @@ typedef struct s_expand
 	char	*buffer;
 }	t_expand;
 
-
 // Redirection_utils.c
-char	*redirection_in(char *in, char *split_cmd, size_t *j, char *quote);
-char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote);
-size_t	check_redirection(char **split_cmd);
-size_t	init_redirection(char **in, char **out, char *cmd);
+char		*redirection_in(char *in, char *split_cmd, size_t *j, char *quote);
+char		*redirection_out(char *out, char *split_cmd, size_t *j, char *quote);
+size_t		check_redirection(char **split_cmd);
+size_t		init_redirection(char **in, char **out, char *cmd);
 
 // Redirection.c
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
@@ -107,6 +106,7 @@ void		free_table(t_table table);
 
 // Env.c
 char		*find_env(char *str, char **env);
+char		*detect_full_variable(char *input);
 
 //Lexical.c
 int			lexical(t_shell *shell, char **input, t_table **table);
@@ -123,9 +123,9 @@ char		*skip_first_space(char *variable);
 
 // Expand_utils.c 
 size_t		count_expand(char *s, size_t *i, size_t *j, char *cs);
-char	**remove_expand_list(char	**list_cmds);
-char	*replace_var(char *str, char **env);
-char	*define_expand(char *variable);
+char		**remove_expand_list(char	**list_cmds);
+char		*replace_var(char *str, char **env);
+char		*define_expand(char *variable);
 
 // Utils.c
 int			count_lstr(char **lstr);

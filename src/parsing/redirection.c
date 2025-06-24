@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:29 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 15:40:48 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 16:53:00 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ char	**skip_redirection(char **split_cmd)
 	{
 		k = 0;
 		temp = malloc((ft_strlen(split_cmd[i]) + 1) * sizeof(char));
+		if (!temp)
+			return (NULL);
 		while (split_cmd[i][j])
 		{
 			if (split_cmd[i][j] == EXPAND)
@@ -123,7 +125,6 @@ char	**skip_redirection(char **split_cmd)
 	}
 	return (split_cmd);
 }
-
 
 char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 {

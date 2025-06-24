@@ -6,12 +6,13 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 14:59:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 15:30:43 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 17:19:04 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include "libft.h"
+
 char	*define_expand(char *variable)
 {
 	char	*buffer;

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:20:19 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 10:26:36 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:24:07 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ void	rm_inside_expand(char **temp, char *args, size_t *j, size_t *k, size_t *exp
 		*k += 1;
 	}
 	if (args[*j] == EXPAND)
-	{
 		*expand = 0;
-	}
 }
 
 char	**remove_quotes(char **args)

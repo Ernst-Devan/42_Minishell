@@ -6,44 +6,24 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 10:13:06 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 15:33:29 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 17:18:40 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <parsing.h>
+#include <stddef.h>
 
-char	*detect_full_variable(char *input)
+void	adding_inside_var(char *input, char **buffer, size_t *i)
 {
-	char	*buffer;
-	size_t	i;
-
-	i = 0;
-	buffer = calloc(ft_strlen(input) + 2, sizeof(char));
-	if (!buffer)
-		return (NULL);
-	input++;
-	if (*input == '?')
-	{
-		buffer[i++] = *input;
-		buffer[i] = '\0';
-		return (buffer);
-	}
 	while (*input)
 	{
 		if (!ft_isalnum(*input) && *input != '_')
 			break ;
-		buffer[i++] = *input;
+		(*buffer)[*i] = *input;
+		*i += 1;
 		input++;
 	}
-	buffer[i] = '=';
-	buffer[i + 1] = '\0';
-	if (ft_strlen(buffer) == 1 || ft_isdigit(buffer[0]))
-	{
-		free(buffer);
-		return (NULL);
-	}
-	return (buffer);
 }
 
 char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:54:27 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/21 12:04:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:58:37 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,13 @@ char	*split_insert(char *splited, char *input, char c)
 			{
 				splited[i++] = input[j++];
 				while (input[j] && input[j] != EXPAND)
-				{
-					splited[i] = input[j];
-					i++;
-					j++;
-				}
+					splited[i++] = input[j++];
 				splited[i++] = input[j++];
 			}
 			if (!input[j] || input[j] == c)
 				break ;
 		}
-		if (!input[j])
-			break ;
-		splited[i] = input[j];
-		i++;
-		j++;
+		splited[i++] = input[j++];
 	}
 	splited[i] = '\0';
 	return (splited);
@@ -100,25 +92,20 @@ size_t	nb_letter(char *input, char c)
 
 	count = 0;
 	quotes = 0;
-	while (*input)
+	while (input[count])
 	{
-		if (!inside_quote(*input, &quotes))
+		if (!inside_quote(input[count], &quotes))
 		{
-			if (*input == EXPAND)
+			if (input[count] == EXPAND)
 			{
-				input++;
 				count++;
-				while (*input != EXPAND)
-				{
-					input++;
+				while (input[count] != EXPAND)
 					count++;
-				}
 			}
-			if (*input == c)
+			if (input[count] == c)
 				break ;
 		}
 		count++;
-		input++;
 	}
 	return (count);
 }
