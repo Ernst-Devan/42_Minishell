@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:17:01 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:45:04 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*remove_dot_slash(char *path)
 	len = len_without_dotslash(path);
 	new_path = malloc(sizeof(char) * (len + 1));
 	if (!new_path)
-		return (NULL);
+		return (free(path), NULL);
 	make_newpath_without_dotslash(len, path, new_path);
 	new_path[len] = '\0';
 	return (new_path);
@@ -61,6 +61,7 @@ char	*ignore_slashslash(char *path, int j, int i)
 	while (j >= 4 && path[j] && path[j] != '/')
 		j--;
 	temp = path;
+	(void)i;
 	path = strljoin(path, &path[i + 2], j);
 	free (temp);
 	return (path);

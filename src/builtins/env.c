@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 11:09:53 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:49:28 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*find_env(char *str, char **env)
 
 	i = 0;
 	count = ft_strlen(str);
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(str, env[i], count) == 0)
 		{

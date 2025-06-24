@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/19 17:09:50 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:16:27 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	manage_out(t_cmd *cmds, t_table table)
 		if (check == -1)
 		{
 			cmds[i].in = 0;
-			perror("Error in manage in");
+			perror("Error in manage out");
 			return (1);
 		}
 		i++;

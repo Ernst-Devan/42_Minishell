@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:18 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 13:53:44 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:54:46 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,8 @@ int	cd(t_cmd cmd, char ***env)
 	if (!new_pwd)
 		return (write(2, "fail on cd\n", 11), 1);
 	pwd = ft_strjoin("PWD=", new_pwd);
+	free(new_pwd);
 	if (!pwd)
 		return (write(2, "fail on cd\n", 11), 1);
-	free(new_pwd);
 	return (set_cd(env, pwd, cmd, temp));
 }

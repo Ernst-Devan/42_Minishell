@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 16:31:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:47:02 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ t_shell	exec(t_table table, t_shell shell)
 	if (manage_ctrl_c_var(3) == 1)
 	{
 		shell.error_code = 130;
-		return (printf("^C\n"), shell);
+		return (printf("\n"), shell);
 	}
 	if (table.cmd_len > 1)
 		shell.error_code = ms_pipe(table, &shell);

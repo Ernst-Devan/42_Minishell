@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:13:22 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:15:05 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:02:08 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	pwd(t_cmd cmd)
 	str = getcwd(NULL, 0);
 	if (!str)
 	{
-		perror("getcwd");
+		perror("getcwd error");
 		return (1);
 	}
 	printf("%s\n", str);
