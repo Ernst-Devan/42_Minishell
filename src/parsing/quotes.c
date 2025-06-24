@@ -82,7 +82,7 @@ char	**remove_quotes(char **args)
 	while (args[i])
 	{
 		temp = ft_calloc((ft_strlen(args[i]) + 1), sizeof(char));
-		if (temp)
+		if (!temp)
 			return (NULL);
 		while (args[i][j])
 		{

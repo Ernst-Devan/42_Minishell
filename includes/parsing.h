@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/20 12:42:25 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:40:20 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # define ERROR 6
 # define E_MALLOC 2
 # define SKIP 3
+# define BUILTIN 1
+# define COMMAND 0
+# define REDIRECTION 3
 
 typedef struct s_shell
 {
@@ -74,7 +77,14 @@ typedef struct s_expand
 	char	*buffer;
 }	t_expand;
 
-// Redirection.command
+
+// Redirection_utils.c
+char	*redirection_in(char *in, char *split_cmd, size_t *j, char *quote);
+char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote);
+size_t	check_redirection(char **split_cmd);
+size_t	init_redirection(char **in, char **out, char *cmd);
+
+// Redirection.c
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
 char		**skip_redirection(char **split_cmd);
 
@@ -100,6 +110,7 @@ char		*find_env(char *str, char **env);
 
 //Lexical.c
 int			lexical(t_shell *shell, char **input, t_table **table);
+int			choose_define(char *input, int *i, char quote);
 
 // Command_split.c
 size_t		count_split(char *input, char c);
@@ -109,6 +120,12 @@ char		**split_cmd(char *input, char c);
 // Space.c
 size_t		manage_space(char **input);
 char		*skip_first_space(char *variable);
+
+// Expand_utils.c 
+size_t		count_expand(char *s, size_t *i, size_t *j, char *cs);
+char	**remove_expand_list(char	**list_cmds);
+char	*replace_var(char *str, char **env);
+char	*define_expand(char *variable);
 
 // Utils.c
 int			count_lstr(char **lstr);

@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:14:26 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 11:17:30 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 10:43:55 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,9 @@
 
 # include "parsing.h"
 
-/** 
- * This function executes the binary file provided to it.
- *
- * @param table A table struct containing the path and the command/binary used
- * for execution. It executes only one binary or command.
- * @return On succes, these function return 0. On error, 1 is returned and errno
- * is set appropriately  
- */
 int		exec_bin(t_table table, char **env);
 int		exec_bin(t_table table, char **env);
-
-/** 
- * The main function for the execution part.
- *
- * @param table A table struct that contains the path and the command(s) / bin(s)
- * used to execute the code.
- * @return On succes, these function return 0. On error, 1 is returned and errno
- * is set appropriately  
- */
-t_shell	exec(t_table table, char ***env, t_shell shell);
+t_shell	exec(t_table table, t_shell shell);
 
 int		export(t_cmd cmd, char ***env);
 int		find_env_variable(char **env, char *str);
@@ -46,9 +29,15 @@ int		echo(t_cmd command);
 int		pwd(t_cmd cmd);
 int		unset(t_cmd cmd, char ***env);
 void	ms_exit(t_cmd cmd, char **env, t_shell *shell, t_table table);
+int		check_name(char	*str);
+void	export_without_param(char **env);
+void	print_export_one_val(char *str);
+int		edit_variable_env(char ***env, char *data);
+int		add_variable_env(char ***env, char *data);
+
 int		env_builtin(char **env, t_cmd cmd);
 
-int		exec_builtins(t_cmd cmd, char ***env, t_shell *shell, t_table table, int save_std[2]);
+int		exec_builtins(t_cmd cmd, t_shell *shl, t_table tbl, int sv_std[2]);
 
 char	*remove_consecutiv_slash(char *path);
 char	*remove_dot_slash(char *path);

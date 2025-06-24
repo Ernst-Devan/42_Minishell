@@ -6,66 +6,35 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 11:12:40 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/21 12:03:25 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:30:08 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include "libft.h"
+#include <stddef.h>
 
-char	*remove_expand_sep(char *cmd)
+void	insert_cmd(char **args, t_cmd **cmd, size_t *i, char *path)
 {
-	char	*buffer;
-	size_t	i;
-	size_t	j;
+	size_t	type;
+	char	*path_command;
 
-	if (!cmd)
-		return (cmd);
-	buffer = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
-	if (!buffer)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == EXPAND)
-			i++;
-		if (cmd[i])
-			buffer[j++] = cmd[i++];
-	}
-	buffer[j] = '\0';
-	free(cmd);
-	return (buffer);
-}
-
-char	**remove_expand_list(char	**list_cmds)
-{
-	char	**buffer;
-	size_t	i;
-
-	buffer = ft_calloc(count_lstr(list_cmds) + 1, sizeof(char *));
-	if (!buffer)
-		return (NULL);
-	i = 0;
-	while (list_cmds[i])
-	{
-		buffer[i] = remove_expand_sep(list_cmds[i]);
-		i++;
-	}
-	buffer[i] = NULL;
-	free(list_cmds);
-	return (buffer);
+	type = 3;
+	args = remove_quotes(args);
+	args = remove_expand_list(args);
+	path_command = valid_command(path, args[0], &type);
+	(*cmd)[*i].path = path_command;
+	(*cmd)[*i].args = args;
+	(*cmd)[*i].type = type;
+	*i += 1;
 }
 
 int	insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 {
 	size_t	i;
-	size_t	type;
 	char	**args;
-	char	*path_command;
 
 	i = 0;
-	type = 0;
 	args = NULL;
 	while (i < table_len)
 	{
@@ -79,20 +48,9 @@ int	insert_cmds(t_cmd *cmd, char **list_cmds, char *path, size_t table_len)
 			}
 		}
 		if (args && args[0])
-		{
-			args = remove_quotes(args);
-			args = remove_expand_list(args);
-			path_command = valid_command(path, args[0], &type);
-			cmd[i].path = path_command;
-			cmd[i].args = args;
-			cmd[i].type = type;
-			i++;
-		}
+			insert_cmd(args, &cmd, &i, path);
 		else
-		{
-			cmd[i].type = 2;
-			i++;
-		}
+			cmd[i++].type = 2;
 		args = NULL;
 		list_cmds++;
 	}
@@ -126,7 +84,8 @@ size_t	parser(t_table *table, char **env, char *input)
 		free_table(*table);
 		return (1);
 	}
-	if (insert_cmds(table->cmds, splited_cmds, find_env("PATH=", env), table->cmd_len))
+	if (insert_cmds(table->cmds, splited_cmds,
+			find_env("PATH=", env), table->cmd_len))
 	{
 		free_lstr(splited_cmds);
 		free_table(*table);

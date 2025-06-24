@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/21 12:35:03 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 15:46:32 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 	size_t		i;
 	int			check;
 
-	check = 0;
 	i = 0;
+	check = 0;
 	while (i < table.cmd_len)
 	{
 		cmds[i].in = open_in_heredoc_cmd(&cmds[i], nb_files);
@@ -101,8 +101,7 @@ int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 		if (check == -1)
 		{
 			cmds[i].in = -1;
-			perror("Error in manage in");
-			return (1);
+			return (perror("Error in manage in"), 1);
 		}
 		cmds[i].out = 1;
 		i++;

@@ -6,55 +6,12 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 10:13:06 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 12:25:10 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/06/24 15:33:29 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <parsing.h>
-
-char	*define_expand(char *variable)
-{
-	char	*buffer;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	if (!variable)
-		return (NULL);
-	buffer = ft_calloc(ft_strlen(variable) + 3, sizeof(char));
-	if (!buffer)
-		return (NULL);
-	buffer[j++] = EXPAND;
-	while (variable[i])
-	{
-		buffer[j] = variable[i];
-		j++;
-		i++;
-	}
-	buffer[j++] = EXPAND;
-	buffer[j] = '\0';
-	return (buffer);
-}
-
-char	*replace_var(char *str, char **env)
-{
-	char	*variable;
-	char	*buffer;
-
-	variable = find_env(str, env);
-	if (ft_strlen(variable) == 0)
-		return (NULL);
-	variable = define_expand(variable);
-	if (!variable)
-		return (NULL);
-	buffer = ft_strdup(variable);
-	if (!buffer)
-		return (NULL);
-	free(variable);
-	return (buffer);
-}
 
 char	*detect_full_variable(char *input)
 {

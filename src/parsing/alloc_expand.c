@@ -35,7 +35,6 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 
 	i = 0;
 	count = 0;
-	variable = NULL;
 	while (input[i])
 	{
 		while (input[i] == '$')
@@ -48,7 +47,7 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 				count += alloc_error_code(shell, &i);
 			i += ft_strlen(full) - 1;
 			free(full);
-			count += ft_strlen(variable);
+			count += ft_strlen(variable) + 1;
 		}
 		i++;
 		count++;
