@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 16:03:16 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/23 16:30:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	use_pipe(t_cmd command, int in, int pipefd[2], t_pack_pipe pp)
 			perror("Commande not found");
 		}
 		else
-			exec_builtins(command, &pp.shell->env, pp.shell, pp.table, pipefd);
+			exec_builtins(command, pp.shell, pp.table, pipefd);
 		exit_pipe(pipefd, pp); // close_fd(pp.table); free_table(pp.table); free_lstr(pp.shell->env);
 	}
 	manage_close_in_pipe(command, in, pipefd);
