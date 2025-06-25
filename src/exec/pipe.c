@@ -81,7 +81,6 @@ int	ms_pipe(t_table table, t_shell *shell)
 	int			save_in;
 	int			val_return;
 
-	display_table(table);
 	i = 0;
 	pack_pipe.shell = shell;
 	pack_pipe.table = table;
