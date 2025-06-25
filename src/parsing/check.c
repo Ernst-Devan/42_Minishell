@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:27:36 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 11:27:40 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 18:22:25 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,29 @@ char	*check_command(char *path, char *command)
 
 char	*valid_command(char *path, char *command, size_t *type)
 {
-	char	*buffer;
-	char	*cpy_command;
+	char	*arr[2];
 
-	cpy_command = ft_strdup(command);
-	if (!cpy_command || ft_strlen(cpy_command) == 0)
-	{
-		free(cpy_command);
+	if (!command || !ft_strlen(command))
 		return (NULL);
-	}
-	if (count_chars(cpy_command, "/") >= 1)
+	arr[0] = ft_strdup(command);
+	if (!arr[0])
+		return (NULL);
+	if (count_chars(arr[0], "/") >= 1)
 	{
 		*type = COMMAND;
-		return (cpy_command);
+		return (arr[0]);
 	}
-	else if (check_bultin(cpy_command))
+	else if (check_bultin(arr[0]))
 	{
 		*type = BUILTIN;
-		return (cpy_command);
+		return (arr[0]);
 	}
-	buffer = check_command(path, cpy_command);
-	if (buffer)
+	arr[1] = check_command(path, arr[0]);
+	if (arr[1])
 	{
 		*type = COMMAND;
-		free(cpy_command);
-		return (buffer);
+		free(arr[0]);
+		return (arr[1]);
 	}
-	return (cpy_command);
+	return (arr[0]);
 }

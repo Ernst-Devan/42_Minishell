@@ -56,48 +56,36 @@ char	*replace_var(char *str, char **env)
 	return (buffer);
 }
 
-char	*remove_expand_sep(char *cmd)
+void	remove_expand_sep(char *cmd)
 {
-	char	*buffer;
 	size_t	i;
 	size_t	j;
 
-	if (!cmd)
-		return (cmd);
-	buffer = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
-	if (!buffer)
-		return (NULL);
 	i = 0;
 	j = 0;
-	while (cmd[i])
+	while (cmd[j])
 	{
-		if (cmd[i] == EXPAND)
-			i++;
-		if (cmd[i])
-			buffer[j++] = cmd[i++];
+		if (cmd[j] == EXPAND)
+		{
+			j++;
+			continue ;
+		}
+		if (cmd[i] && cmd[j])
+			cmd[i++] = cmd[j++];
 	}
-	buffer[j] = '\0';
-	free(cmd);
-	return (buffer);
+	cmd[i] = '\0';
 }
 
-char	**remove_expand_list(char	**list_cmds)
+void	remove_expand_list(char	**list_cmds)
 {
-	char	**buffer;
 	size_t	i;
 
-	buffer = ft_calloc(count_lstr(list_cmds) + 1, sizeof(char *));
-	if (!buffer)
-		return (NULL);
 	i = 0;
 	while (list_cmds[i])
 	{
-		buffer[i] = remove_expand_sep(list_cmds[i]);
+		remove_expand_sep(list_cmds[i]);
 		i++;
 	}
-	buffer[i] = NULL;
-	free(list_cmds);
-	return (buffer);
 }
 
 size_t	count_expand(char *s, size_t *i, size_t *j, char *cs)

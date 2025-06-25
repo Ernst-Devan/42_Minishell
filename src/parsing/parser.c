@@ -20,8 +20,8 @@ void	insert_cmd(char **args, t_cmd **cmd, size_t *i, char *path)
 	char	*path_command;
 
 	type = 3;
-	args = remove_quotes(args);
-	args = remove_expand_list(args);
+	manage_quotes(args);
+	remove_expand_list(args);
 	path_command = valid_command(path, args[0], &type);
 	(*cmd)[*i].path = path_command;
 	(*cmd)[*i].args = args;

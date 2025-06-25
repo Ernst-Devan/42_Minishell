@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 17:18:14 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 18:17:02 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define LIM "<>|"
 # define SEP '\x1F'
 # define SEP2 "\x1F"
-# define EXPAND '\x1E'
+# define EXPAND '*'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
@@ -79,14 +79,14 @@ typedef struct s_expand
 
 // Redirection_utils.c
 char		*redirection_in(char *in, char *split_cmd, size_t *j, char *quote);
-char		*redirection_out(char *out, char *split_cmd, size_t *j, char *quote);
+char		*redirection_out(char *out, char *split_cmd,
+				size_t *j, char *quote);
 size_t		check_redirection(char **split_cmd);
 size_t		init_redirection(char **in, char **out, char *cmd);
 
 // Redirection.c
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
 char		**skip_redirection(char **split_cmd);
-
 char		*remove_quote(char *str);
 
 // Parsing.c
@@ -98,6 +98,7 @@ size_t		init_table(t_table **table, char **input, int nb_cmd);
 
 //Quotes.c
 char		**remove_quotes(char **splited_cmd);
+size_t		manage_quotes(char **args);
 
 // Free.c
 void		free_lstr(char **lstr);
@@ -106,11 +107,11 @@ void		free_table(t_table table);
 
 // Env.c
 char		*find_env(char *str, char **env);
-char		*detect_full_variable(char *input);
 
 //Lexical.c
 int			lexical(t_shell *shell, char **input, t_table **table);
 int			choose_define(char *input, int *i, char quote);
+void		adding_inside_var(char *input, char **buffer, size_t *i);
 
 // Command_split.c
 size_t		count_split(char *input, char c);
@@ -123,7 +124,7 @@ char		*skip_first_space(char *variable);
 
 // Expand_utils.c 
 size_t		count_expand(char *s, size_t *i, size_t *j, char *cs);
-char		**remove_expand_list(char	**list_cmds);
+void		remove_expand_list(char	**list_cmds);
 char		*replace_var(char *str, char **env);
 char		*define_expand(char *variable);
 

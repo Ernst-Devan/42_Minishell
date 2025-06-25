@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:54:27 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 16:58:37 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 18:14:46 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,33 +113,27 @@ size_t	nb_letter(char *input, char c)
 char	**split_cmd(char *input, char c)
 {
 	char	**split;
-	char	*cpy_input;
+	char	*cpy;
 	size_t	count_w;
 	size_t	count_l;
 	size_t	i;
 
 	count_w = count_split(input, c) + 1;
 	split = ft_calloc((count_w + 1), sizeof(char *));
-	if (!split)
-	{
-		free(split);
-		return (NULL);
-	}
-	cpy_input = input;
+	cpy = input;
 	i = 0;
-	while (i < count_w)
+	while (split && i < count_w)
 	{
-		count_l = nb_letter(cpy_input, c);
-		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1), sizeof(char));
+		count_l = nb_letter(cpy, c);
+		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy) + 1), sizeof(char));
 		if (!split[i])
 		{
 			free_lstr(split);
 			return (NULL);
 		}
-		split[i] = split_insert(split[i], cpy_input, c);
-		cpy_input += count_l + 1;
+		split[i] = split_insert(split[i], cpy, c);
+		cpy += count_l + 1;
 		i++;
 	}
-	split[i] = NULL;
 	return (split);
 }
