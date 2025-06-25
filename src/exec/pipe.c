@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 10:43:08 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/25 16:34:49 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	manage_dup_pipe(t_cmd command, int pipefd[2], int in, t_pack_pipe pp)
 	}
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
 	{
-		dprintf(2, "cmd : %d et %d\n", command.in, in);
 		perror("dup2 faild in usepipe");
 		close(in);
 		exit_pipe(pipefd, pp);
