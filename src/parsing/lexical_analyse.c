@@ -3,42 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexical_analyse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:45:56 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 10:40:39 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 13:48:39 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "exec.h"
 #include "libft.h"
 #include "parsing.h"
-
-int	choose_define(char *input, int *i, char quote)
-{
-	int	j;
-
-	j = 0;
-	if ((input[0] == '"' && input[1] == '"')
-		|| (input[0] == '\'' && input[1] == '\''))
-		return ((*i) += 2, ERROR);
-	if (input[0] == '<' && input[1] == '<')
-		return ((*i) += 2, LESSLESS);
-	if (input[0] == '>' && input[1] == '>')
-		return ((*i) += 2, GREATGREAT);
-	if (input[0] == '<')
-		return ((*i)++, LESS);
-	if (input[0] == '>')
-		return ((*i)++, GREAT);
-	if (input[0] == '|' && quote == 0)
-		return ((*i)++, PIPE);
-	while (input[j] && input[j] != '|' && input[j] != '"' && input[j] != '\''
-		&& input[j] != '<' && input[j++] != '>')
-		(*i)++;
-	return (CMD);
-}
 
 int	*init_new_tab(int len, int define, int *tab, int *check)
 {
@@ -76,7 +53,7 @@ void	lexical_analyser_define(char *input, int *len, int *check, int **tab)
 	while (input[i])
 	{
 		is_word = 0;
-		while (input[i] == SEPARATOR)
+		while (input[i] == SEP)
 			i++;
 		while (input[i] && inside_quote(input[i], &quote) && i++)
 			is_word = 1;
@@ -109,6 +86,22 @@ int	check_lexical(int *tab, int len)
 				|| ((i + 1 < len && tab[i + 1] == PIPE))))
 			return (1);
 		i++;
+	}
+	return (0);
+}
+
+int	lexical(t_shell *shell, char **input, t_table **table)
+{
+	int	check;
+
+	check = lexical_analyser(*input);
+	if (check)
+	{
+		init_table(table, input, 0);
+		free(*input);
+		if (check == 2)
+			shell->error_code = 2;
+		return (check);
 	}
 	return (0);
 }

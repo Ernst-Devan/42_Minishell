@@ -40,7 +40,7 @@ int	open_in_file(char *str)
 	int		n;
 
 	n = 0;
-	while (str[n] && str[n] != SEPARATOR)
+	while (str[n] && str[n] != SEP)
 		n++;
 	new_str = malloc(sizeof(char) * (n + 1));
 	if (!new_str)
@@ -63,12 +63,12 @@ int	open_in_cmd(t_cmd *cmd)
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i] == '<')
 		{
 			if (cmd->str_in[i + 1] && cmd->str_in[i + 2]
-				&& cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEPARATOR)
+				&& cmd->str_in[i + 1] == '<' && cmd->str_in[i + 2] == SEP)
 			{
 				i += 2;
 				fd = cmd->in;
 			}
-			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == SEPARATOR)
+			else if (cmd->str_in[i + 1] && cmd->str_in[i + 1] == SEP)
 			{
 				fd = open_in_file(&cmd->str_in[i + 2]);
 				if (fd == -1)

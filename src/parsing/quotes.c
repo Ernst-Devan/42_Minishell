@@ -6,12 +6,10 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 16:20:19 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/17 10:26:36 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 17:24:07 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <stdlib.h>
 #include "libft.h"
 #include "parsing.h"
 
@@ -37,7 +35,6 @@ size_t	inside_quote(char c, char *quote)
 	}
 }
 
-
 void	rm_inside_quote(char *args, size_t *j, char *quote)
 {
 	*j += 1;
@@ -47,7 +44,6 @@ void	rm_inside_quote(char *args, size_t *j, char *quote)
 		*j += 1;
 	}
 }
-
 
 void	rm_inside_expand(char **temp, char *args, size_t *j, size_t *k, size_t *expand)
 {
@@ -62,9 +58,7 @@ void	rm_inside_expand(char **temp, char *args, size_t *j, size_t *k, size_t *exp
 		*k += 1;
 	}
 	if (args[*j] == EXPAND)
-	{
 		*expand = 0;
-	}
 }
 
 char	**remove_quotes(char **args)
@@ -85,7 +79,9 @@ char	**remove_quotes(char **args)
 		return (NULL);
 	while (args[i])
 	{
-		temp = malloc(ft_strlen(args[i]) + 1);
+		temp = ft_calloc((ft_strlen(args[i]) + 1), sizeof(char));
+		if (!temp)
+			return (NULL);
 		while (args[i][j])
 		{
 			if (args[i][j] == EXPAND || expand)

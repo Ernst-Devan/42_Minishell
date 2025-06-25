@@ -6,46 +6,27 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:55 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/20 12:43:53 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:05:33 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "parsing.h"
 #include <stddef.h>
-#include "stdio.h"
 
-size_t count_characters(char *s, char *cs) {
+size_t	count_chars(char *s, char *cs)
+{
 	size_t	count;
 	size_t	i;
 	size_t	j;
 
-	count = 0;
 	i = 0;
 	j = 0;
+	count = 0;
 	if (!s)
 		return (0);
 	while (s[i])
-	{
-		while (cs[j])
-		{
-			if (s[i] == EXPAND)
-			{
-				i++;
-				while (s[i] && s[i] != EXPAND)
-					i++;
-				if (!s[i])
-					return (count);
-			}
-			if (s[i] == cs[j])
-				count++;
-			if (s[i] == EXPAND)
-				break;
-			j++;
-		}
-		j = 0;
-		i++;
-	}
+		count += count_expand(s, &i, &j, cs);
 	return (count);
 }
 
@@ -63,15 +44,17 @@ size_t	check_delimiter(char c, char *delimter)
 	return (0);
 }
 
-int count_lstr(char **lstr) {
-  int i;
+int	count_lstr(char **lstr)
+{
+	int	i;
 
-  i = 0;
-  while (*lstr != NULL) {
-    i++;
-    lstr++;
-  }
-  return (i);
+	i = 0;
+	while (*lstr != NULL)
+	{
+		i++;
+		lstr++;
+	}
+	return (i);
 }
 
 int	ft_strlen_c(char *str, char delimiter)

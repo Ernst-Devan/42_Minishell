@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/23 13:21:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 18:21:15 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@
 
 # define NAME_MAX 255
 # define ENV_MAX 32760
-# define DELIMITER " -<>|"
-# define SEPARATOR '#'
-# define SEPARATOR2 "#"
-# define EXPAND '*'
+# define LIM "<>|"
+# define SEP '\x1F'
+# define SEP2 "\x1F"
+# define EXPAND '\x1E'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
-
 # define CMD 0
 # define LESSLESS 1
 # define GREAT 2
@@ -33,6 +32,11 @@
 # define LESS 4
 # define GREATGREAT 5
 # define ERROR 6
+# define E_MALLOC 2
+# define SKIP 3
+# define BUILTIN 1
+# define COMMAND 0
+# define REDIRECTION 3
 
 typedef struct s_shell
 {
@@ -73,7 +77,13 @@ typedef struct s_expand
 	char	*buffer;
 }	t_expand;
 
-// Redirection.command
+// Redirection_utils.c
+char		*redirection_in(char *in, char *split_cmd, size_t *j, char *quote);
+char		*redirection_out(char *out, char *split_cmd, size_t *j, char *quote);
+size_t		check_redirection(char **split_cmd);
+size_t		init_redirection(char **in, char **out, char *cmd);
+
+// Redirection.c
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
 char		**skip_redirection(char **split_cmd);
 
@@ -84,23 +94,38 @@ size_t		parsing(t_shell *shell, t_table *table);
 
 // Init.c
 void		init_cmd(t_cmd *cmd, int nb_cmd);
-size_t		init_table(t_table *table, int nb_cmd);
+size_t		init_table(t_table **table, char **input, int nb_cmd);
 
 //Quotes.c
 char		**remove_quotes(char **splited_cmd);
 
 // Free.c
 void		free_lstr(char **lstr);
-void		free_cmds(t_table table);
+void		free_cmds(t_table tabl);
 void		free_table(t_table table);
 
 // Env.c
 char		*find_env(char *str, char **env);
+char		*detect_full_variable(char *input);
+
+//Lexical.c
+int			lexical(t_shell *shell, char **input, t_table **table);
+int			choose_define(char *input, int *i, char quote);
 
 // Command_split.c
 size_t		count_split(char *input, char c);
 size_t		nb_letter(char *input, char c);
 char		**split_cmd(char *input, char c);
+
+// Space.c
+size_t		manage_space(char **input);
+char		*skip_first_space(char *variable);
+
+// Expand_utils.c 
+size_t		count_expand(char *s, size_t *i, size_t *j, char *cs);
+char		**remove_expand_list(char	**list_cmds);
+char		*replace_var(char *str, char **env);
+char		*define_expand(char *variable);
 
 // Utils.c
 int			count_lstr(char **lstr);
@@ -108,11 +133,11 @@ int			ft_strlen_c(char *str, char delimiter);
 size_t		check_delimiter(char c, char *delimiter);
 void		display_lstr(char **lstr);
 void		display_table(t_table table);
-size_t		count_characters(char *s, char *cs);
+size_t		count_chars(char *s, char *cs);
 size_t		ft_strccat(char *dest, char *src, char c);
 
 // Expand.c
-char		*manage_expand(char *input, t_shell shell);
+size_t		manage_expand(t_shell shell, char **input);
 size_t		init_expand(t_expand *expand, char *input, t_shell shell);
 size_t		size_allocation_expand(char *input, t_shell shell);
 char		*detect_full_variable(char *input);
@@ -121,19 +146,18 @@ char		*detect_full_variable(char *input);
 char		*valid_command(char *path, char *command, size_t *type);
 
 //Prompt.c
-char		*get_command(t_shell *shell);
+size_t		get_command(t_shell *shell, char **input);
 
 //Quotes.c
 size_t		inside_quote(char c, char *quote);
-char		*manage_space(char *input);
-void		skip_space(char **bufer, char *input, size_t *i, size_t *j);
 
 // Lexer.c
-char		*lexer(char *input);
+size_t		lexer(char **input);
 
 // Parser.c
 size_t		parser(t_table *table, char **env, char *lexer);
 
 size_t		quote_check(char *input);
+void		adding_inside_var(char *input, char **buffer, size_t *i);
 
 #endif

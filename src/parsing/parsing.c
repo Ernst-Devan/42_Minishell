@@ -11,23 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <fcntl.h>
-#include <limits.h>
-#include <linux/limits.h>
-#include <stddef.h>
-#include <stdlib.h>
 #include <libft.h>
-#include <unistd.h>
-#include <stdio.h>
-#include "exec.h"
-
-// DONT FORGOT TO ADD THE HEADER
-// ERROR IN THIS CASE : $(NOT_VALID_ENV) | ls
-// MANAGE IF NAME FILE ARE TWO LONG
-  
-// NOT JUST SPACE BE CAREFUL TO ALL delimiter
-// SKIP THE SPACE BUT TOO ALL SPACE DELIMITER LIKE TAB etc
-//
 
 size_t	count_nb_pipe(char *input)
 {
@@ -48,7 +32,7 @@ size_t	count_nb_pipe(char *input)
 				i++;
 		}
 		if (quote == 0 && input[i] == '|')
-			count++;	
+			count++;
 		i++;
 	}
 	return (count);
@@ -64,40 +48,27 @@ size_t	count_nb_cmd(char *input)
 	return (nb_cmd);
 }
 
-size_t	parsing(t_shell *shell, t_table *table) 
+size_t	parsing(t_shell *shell, t_table *table)
 {
 	char	*input;
-	size_t	lexical_check;
+	int		check;
 
-	input = get_command(shell);
-	input = manage_space(input);
-	if (!input)
+	get_command(shell, &input);
+	if (manage_space(&input))
 		return (1);
-	input = lexer(input);
-	if (! input)
-		return (1);
-	lexical_check = lexical_analyser(input);
-	if (lexical_check)
-	{
-		init_table(table, 0);
-		free(input);
-		if (lexical_check == 2)
-			shell->error_code = 2;
-		return (lexical_check);
-	}
-	input = manage_expand(input, *shell);
-	if (!input)
-		return (1);
-	
-	if (init_table(table, count_nb_cmd(input)))
+	if (lexer(&input))
 	{
 		free(input);
 		return (1);
 	}
-	if (parser(table, shell->env,input))
-	{
-		free_table(*table);
+	check = lexical(shell, &input, &table);
+	if (check)
+		return (check);
+	if (manage_expand(*shell, &input) == 2)
 		return (1);
-	}
+	if (init_table(&table, &input, count_nb_cmd(input)))
+		return (1);
+	if (parser(table, shell->env, input))
+		return (1);
 	return (0);
 }

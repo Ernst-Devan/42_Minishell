@@ -92,7 +92,7 @@ int	open_heredoc(char *str, char **eof, char **name)
 		return (-1);
 	name = try_access(name, i);
 	i++;
-	while (str[n] && str[n] != SEPARATOR)
+	while (str[n] && str[n] != SEP)
 		n++;
 	n = make_file_heredoc(eof, name, str, n);
 	return (n);
@@ -109,7 +109,7 @@ int	open_in_heredoc_cmd(t_cmd *cmd, int *nb_files)
 	{
 		if (cmd->str_in[i] && cmd->str_in[i + 1] && cmd->str_in[i + 2]
 			&& cmd->str_in[i] == '<' && cmd->str_in[i + 1] == '<'
-			&& cmd->str_in[i + 2] == SEPARATOR)
+			&& cmd->str_in[i + 2] == SEP)
 		{
 			fd = manage_heredoc(fd, &cmd->str_in[i + 3]);
 			if (fd == -1)

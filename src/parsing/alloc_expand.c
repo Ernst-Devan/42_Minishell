@@ -35,24 +35,22 @@ size_t	size_allocation_expand(char *input, t_shell shell)
 
 	i = 0;
 	count = 0;
-	variable = NULL;
 	while (input[i])
 	{
 		while (input[i] == '$')
 		{
 			full = detect_full_variable(&input[i]);
 			if (!full)
-				break;
+				break ;
 			variable = find_env(full, shell.env);
 			if (full[0] == '?')
 				count += alloc_error_code(shell, &i);
 			i += ft_strlen(full) - 1;
 			free(full);
-			count += ft_strlen(variable);
+			count += ft_strlen(variable) + 1;
 		}
 		i++;
 		count++;
 	}
 	return (count * 2 + 3);
 }
-

@@ -6,15 +6,12 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:54:27 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/21 12:04:13 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/24 16:58:37 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include "parsing.h"
-#include <stddef.h>
-
-// Check | not inside quotes
 
 size_t	count_split(char *input, char c)
 {
@@ -60,21 +57,13 @@ char	*split_insert(char *splited, char *input, char c)
 			{
 				splited[i++] = input[j++];
 				while (input[j] && input[j] != EXPAND)
-				{
-					splited[i] = input[j];
-					i++;
-					j++;
-				}
+					splited[i++] = input[j++];
 				splited[i++] = input[j++];
-			} 
+			}
 			if (!input[j] || input[j] == c)
-				break;
+				break ;
 		}
-		if (!input[j])
-			break;
-		splited[i] = input[j];
-		i++;
-		j++;
+		splited[i++] = input[j++];
 	}
 	splited[i] = '\0';
 	return (splited);
@@ -100,28 +89,23 @@ size_t	nb_letter(char *input, char c)
 {
 	char	quotes;
 	size_t	count;
-	
+
 	count = 0;
 	quotes = 0;
-	while(*input)
+	while (input[count])
 	{
-		if (!inside_quote(*input, &quotes))
+		if (!inside_quote(input[count], &quotes))
 		{
-			if (*input == EXPAND)
+			if (input[count] == EXPAND)
 			{
-				input++;
 				count++;
-				while (*input != EXPAND)
-				{
-					input++;
+				while (input[count] != EXPAND)
 					count++;
-				}
 			}
-			if (*input == c)
-				break;
-		} 
-		count++; 
-		input++;
+			if (input[count] == c)
+				break ;
+		}
+		count++;
 	}
 	return (count);
 }
@@ -146,7 +130,7 @@ char	**split_cmd(char *input, char c)
 	while (i < count_w)
 	{
 		count_l = nb_letter(cpy_input, c);
-		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1),sizeof(char));
+		split[i] = ft_calloc((count_l * 2 + ft_strlen(cpy_input) + 1), sizeof(char));
 		if (!split[i])
 		{
 			free_lstr(split);

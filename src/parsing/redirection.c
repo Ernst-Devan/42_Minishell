@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:29 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/17 14:00:05 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:49:47 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <stddef.h>
+#include <stdio.h>
 
 char	*remove_quote(char *str)
 {
@@ -22,31 +23,26 @@ char	*remove_quote(char *str)
 	char	*temp;
 	char	quote;
 
-	if (!count_characters(str, "\"\'"))
-		return(str);
+	if (!count_chars(str, "\"\'"))
+		return (str);
 	i = 0;
 	j = 0;
 	quote = 0;
 	temp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!temp)
-		return(NULL);
-	while (str[i])
+		return (NULL);
+	while (str && str[i])
 	{
-		if (inside_quote(str[i], &quote) > 1)
+		if (inside_quote(str[i], &quote) > 1 && i++)
 		{
-			i++;
-			if (str[i] && str[i] == quote)
-			{
+			if (str[i] && str[i] == quote && i++)
 				quote = 0;
-				i++;
-			}
 		}
 		else
 			temp[j++] = str[i++];
 	}
 	temp[j] = '\0';
-	free(str);
-	return (temp);
+	return (free(str), temp);
 }
 
 size_t	check_empty(char **lstr)
@@ -58,9 +54,9 @@ size_t	check_empty(char **lstr)
 	j = 0;
 	while (lstr[i])
 	{
-		while(lstr[i][j])
+		while (lstr[i][j])
 		{
-			if (ft_isascii(lstr[i][j]) && lstr[i][j] != SEPARATOR)
+			if (ft_isascii(lstr[i][j]) && lstr[i][j] != SEP)
 				return (1);
 			j++;
 		}
@@ -70,53 +66,49 @@ size_t	check_empty(char **lstr)
 	return (0);
 }
 
-char **skip_redirection(char **split_cmd)
+char	*useless_function5(char *split_cmd, char *temp)
+{
+	int		k;
+	int		j;
+	char	quote;
+
+	j = 0;
+	k = 0;
+	quote = 0;
+	while (split_cmd[j])
+	{
+		if (split_cmd[j] == EXPAND)
+			while (split_cmd[++j] != EXPAND)
+				temp[k++] = split_cmd[j];
+		inside_quote(split_cmd[j], &quote);
+		if (quote == 0 && (split_cmd[j] == '>' || split_cmd[j] == '<'))
+		{
+			j += ft_strlen_c(&split_cmd[j], SEP);
+			if (split_cmd[j])
+				j++;
+			j += ft_strlen_c(&split_cmd[j], SEP);
+		}
+		if (split_cmd[j])
+			temp[k++] = split_cmd[j++];
+	}
+	temp[k] = '\0';
+	return (temp);
+}
+
+char	**skip_redirection(char **split_cmd)
 {
 	size_t	i;
-	size_t	j;
-	size_t	k;
 	char	*temp;
-	char	quote;
-	
+
 	i = 0;
-	j = 0;
-	quote = 0;
 	if (check_empty(split_cmd) == 0)
-	{
-		free_lstr(split_cmd);
-		return (NULL);
-	}
+		return (free_lstr(split_cmd), NULL);
 	while (split_cmd[i])
 	{
-		k = 0;
-		temp = malloc((ft_strlen(split_cmd[i]) + 1 ) * sizeof(char));
-		while(split_cmd[i][j])
-		{
-			if (split_cmd[i][j] == EXPAND)
-			{
-				temp[k++] = split_cmd[i][j++];
-				while (split_cmd[i][j] != EXPAND)
-					temp[k++] = split_cmd[i][j++];
-			}
-			inside_quote(split_cmd[i][j], &quote);
-			if (quote == 0)
-			{
-				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
-				{
-					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
-					if (split_cmd[i][j])
-						j++;
-					j += ft_strlen_c(&split_cmd[i][j], SEPARATOR);
-				}
-			}
-			if (!split_cmd[i][j])
-				break;
-			temp[k] = split_cmd[i][j];
-			k++;
-			j++;
-		}
-		j = 0;
-		temp[k] = '\0';
+		temp = malloc((ft_strlen(split_cmd[i]) + 1) * sizeof(char));
+		if (!temp)
+			return (NULL);
+		temp = useless_function5(split_cmd[i], temp);
 		free(split_cmd[i]);
 		split_cmd[i] = temp;
 		i++;
@@ -124,138 +116,54 @@ char **skip_redirection(char **split_cmd)
 	return (split_cmd);
 }
 
-// ADDING max for all other category like Path_max Name_max Command_max etc..
-
-char	*redirection_in(char *in, char *split_cmd, size_t *j, char *quote)
+void	useless_function6(char *split_cmd, char **in, char **out)
 {
-	size_t	len;
+	size_t		j;
+	char		quote;
 
-	len = ft_strlen(split_cmd);
-		if (split_cmd[*j] == '<')
+	j = 0;
+	quote = 0;
+	while (split_cmd[j])
+	{
+		if (split_cmd[j] && split_cmd[j++] == EXPAND)
+			while (split_cmd[j] != EXPAND)
+				j++;
+		inside_quote(split_cmd[j], &quote);
+		if (quote == 0)
 		{
-			(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
-			inside_quote(split_cmd[*j], quote);
-			if (*quote != 0)
-				ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd) + 1);
-			if (*j < len)
-			{
-				(*j)++;
-				(*j) += ft_strccat(in, &split_cmd[*j], SEPARATOR);
-			}
-			ft_strlcat(in, SEPARATOR2, ft_strlen(split_cmd + 1));
-	}
-	return (in);
-}
-
-char	*redirection_out(char *out, char *split_cmd, size_t *j, char *quote)
-{
-	size_t	len;
-
-	len = ft_strlen(split_cmd);
-	if (split_cmd[*j] == '>')
-	{	
-		(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
-		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
-		inside_quote(split_cmd[*j], quote);
-		if (*quote != 0)
-			ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd) + 1);
-		if (*j < len)
-		{
-			(*j)++;
-			(*j) += ft_strccat(out, &split_cmd[*j], SEPARATOR);
+			*in = redirection_in(*in, split_cmd, &j, &quote);
+			*out = redirection_out(*out, split_cmd, &j, &quote);
 		}
-		ft_strlcat(out, SEPARATOR2, ft_strlen(split_cmd + 1));
+		if (!split_cmd[j])
+			break ;
+		j++;
 	}
-	return (out);
-}
-
-
-size_t	check_redirection(char **split_cmd)
-{
-	size_t	i;
-	size_t	count;
-
-	i = 0;
-	while (split_cmd[i])
-	{
-		count = count_characters(split_cmd[i], "><");
-		if (count > 0)
-			return(1);
-		i++;
-	}
-	return (0);
-}
-
-
-
-size_t	init_redirection(char **in, char **out, char *cmd)
-{
-	*in = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
-	if (!*in)
-		return (1);
-	(*in)[0] = '\0';
-	*out = ft_calloc(ft_strlen(cmd) + 1, sizeof(char));
-	if (!*out)
-	{
-		free(*in);
-		return (1);
-	}
-	(*out)[0] = '\0';
-	return (0);
 }
 
 char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 {
 	size_t	i;
-	size_t	j;
 	char	*in;
 	char	*out;
 	char	quote;
 
-	i = 0;	
+	i = 0;
 	quote = 0;
 	if (!check_redirection(split_cmd))
-		return(split_cmd);
-
+		return (split_cmd);
 	while (check_empty(split_cmd) == 1 && split_cmd[i])
 	{
 		if (init_redirection(&in, &out, split_cmd[i]))
-		{
-			free_lstr(split_cmd);
-			return (NULL);
-		}
-		j = 0;
-		while (split_cmd[i][j])
-		{
-			if (split_cmd[i][j] == EXPAND)
-			{
-				j++;
-				while (split_cmd[i][j] != EXPAND)
-					j++;
-			}
-			inside_quote(split_cmd[i][j], &quote);
-			if (quote == 0)
-			{
-				in = redirection_in(in, split_cmd[i], &j, &quote);
-				out = redirection_out(out, split_cmd[i], &j, &quote);
-			}
-			if (!split_cmd[i][j])
-				break;
-			j++;
-		}
+			return (free_lstr(split_cmd), NULL);
+		useless_function6(split_cmd[i], &in, &out);
 		(*cmds)[i].str_in = remove_quote(in);
 		if (!(*cmds)[i].str_in)
-		{
-			free_lstr(split_cmd);
-			return (NULL);
-		}
+			return (free_lstr(split_cmd), NULL);
 		(*cmds)[i++].str_out = remove_quote(out);
 		if (!(*cmds)[i - 1].str_out)
 		{
-			free(split_cmd);
 			free((*cmds)[i - 1].str_in);
-			return (NULL);
+			return (free(split_cmd), NULL);
 		}
 	}
 	return (skip_redirection(split_cmd));
