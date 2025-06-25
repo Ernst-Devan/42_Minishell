@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:20:20 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 18:17:04 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/24 17:17:46 by dernst           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*detect_full_variable(char *input)
 	size_t	i;
 
 	i = 0;
-	buffer = calloc(ft_strlen(input) + 2, sizeof(char));
+	buffer = ft_calloc(ft_strlen(input) + 2, sizeof(char));
 	if (!buffer)
 		return (NULL);
 	input++;
