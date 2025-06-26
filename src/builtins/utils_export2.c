@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 14:00:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 17:28:17 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:02:00 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,6 @@
 #include "exec.h"
 #include "libft.h"
 #include "env_manage.h"
-
-int	add_variable_env(char ***env, char *data)
-{
-	char	**temp;
-	int		i;
-	int		nb_row;
-
-	nb_row = size_of_env(*env);
-	temp = malloc(sizeof(char *) * (nb_row + 2));
-	if (!temp)
-		return (1);
-	temp[nb_row + 1] = NULL;
-	i = -1;
-	while (++i < nb_row)
-	{
-		temp[i] = ft_strdup((*env)[i]);
-		if (!temp[i])
-			return (free_lstr(temp), 1);
-	}
-	free_lstr(*env);
-	temp[i] = ft_strdup(data);
-	if (!temp[i])
-	{
-		*env = NULL;
-		return (free_lstr(temp), 1);
-	}
-	*env = temp;
-	return (0);
-}
 
 int	edit_variable_env(char ***env, char *data)
 {

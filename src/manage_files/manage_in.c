@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:53:49 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 17:27:18 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:00:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	manage_in(t_cmd *cmds, t_table table, int *nb_files)
 		if (check == -1)
 		{
 			cmds[i].in = -1;
-			return (perror("Error in manage in"), 1);
+			return (1);
 		}
 		cmds[i].out = 1;
 	}

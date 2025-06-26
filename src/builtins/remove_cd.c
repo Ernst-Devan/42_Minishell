@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 16:45:04 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:09:33 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ char	*remove_dot_slash(char *path)
 	len = len_without_dotslash(path);
 	new_path = malloc(sizeof(char) * (len + 1));
 	if (!new_path)
-		return (free(path), NULL);
+	{
+		free(path);
+		return (NULL);
+	}
 	make_newpath_without_dotslash(len, path, new_path);
 	new_path[len] = '\0';
 	return (new_path);

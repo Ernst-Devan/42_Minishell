@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:42:33 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 16:40:31 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:36:45 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ char	*remove_consecutiv_slash(char *path)
 	int		len;
 	char	*new_path;
 
-	j = 0;
 	len = len_without_slashslash(path);
-	i = 0;
+	j = -1;
+	i = -1;
 	new_path = malloc(sizeof(char) * (len + 1));
 	if (!new_path)
-		return (free(path), NULL);
-	while (path[i] && j < len)
+		return (NULL);
+	while (path[++i] && ++j < len)
 	{
 		new_path[j] = path[i];
 		if (path[i] == '/' && path[i + 1] == '/')
@@ -50,11 +50,8 @@ char	*remove_consecutiv_slash(char *path)
 			while (path[i] == '/' && path[i + 1] == '/')
 				i++;
 		}
-		i++;
-		j++;
 	}
 	new_path[len] = '\0';
-	free(path);
 	return (new_path);
 }
 

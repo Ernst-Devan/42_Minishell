@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 18:21:15 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 16:30:46 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ size_t		init_redirection(char **in, char **out, char *cmd);
 // Redirection.c
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
 char		**skip_redirection(char **split_cmd);
+char		**free_manage_redirection(t_cmd **cmds, size_t i, char **split_cmd);
+char		**free_lstr_ret(char **split_cmd);
+void		manage_in_out_parse(char *split_cmd, char **in, char **out);
+char		*skip_useless_redirections(char *split_cmd, char *temp);
 
 char		*remove_quote(char *str);
 
@@ -100,7 +104,7 @@ size_t		init_table(t_table **table, char **input, int nb_cmd);
 char		**remove_quotes(char **splited_cmd);
 
 // Free.c
-void		free_lstr(char **lstr);
+int		free_lstr(char **lstr);
 void		free_cmds(t_table tabl);
 void		free_table(t_table table);
 

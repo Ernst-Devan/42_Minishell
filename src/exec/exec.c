@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:03:30 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 17:47:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:04:44 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ static void	exec_child_process(t_table table, char **env)
 	{
 		perror("dup2 failed in exec_bin");
 		free_table(table);
-		free_lstr(env);
-		exit(1);
+		exit(free_lstr(env));
 	}
 	signal(SIGPIPE, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -37,8 +36,7 @@ static void	exec_child_process(t_table table, char **env)
 	{
 		perror("Command not found");
 		free_table(table);
-		free_lstr(env);
-		exit(1);
+		exit(free_lstr(env));
 	}
 }
 
@@ -50,11 +48,17 @@ int	exec_bin(t_table table, char **env)
 	status = 0;
 	pid = fork();
 	if (pid == -1)
-		return (perror("fork failed in exec_bin"), 1);
+	{
+		perror("fork failed in exec_bin");
+		return (1);
+	}
 	if (pid == 0 && table.cmds->path)
 		exec_child_process(table, env);
 	if (waitpid(pid, &status, 0) == -1)
-		return (perror("waitpid failed in exec_bin"), 1);
+	{
+		perror("waitpid failed in exec_bin");
+		return (1);
+	}
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
@@ -99,7 +103,10 @@ int	manage_builtins(t_table table, t_shell *shell)
 	save_std[1] = dup(STDOUT_FILENO);
 	if (dup2(table.cmds->in, STDIN_FILENO) == -1
 		|| dup2(table.cmds->out, STDOUT_FILENO) == -1)
-		return (perror("pid faild on exec_src_bin"), 1);
+	{
+		perror("pid faild on exec_src_bin");
+		return (1);
+	}
 	ret = exec_builtins(table.cmds[0], shell, table, save_std);
 	dup2(save_std[0], STDIN_FILENO);
 	dup2(save_std[1], STDOUT_FILENO);
@@ -108,31 +115,31 @@ int	manage_builtins(t_table table, t_shell *shell)
 	return (ret);
 }
 
-t_shell	exec(t_table table, t_shell shell)
+t_shell	exec(t_table tb, t_shell sh)
 {
 	int	nb_files;
 
 	nb_files = 0;
-	if (manage_in(table.cmds, table, &nb_files)
-		|| manage_out(table.cmds, table))
+	if (manage_in(tb.cmds, tb, &nb_files) || manage_out(tb.cmds, tb))
 	{
-		close_fd(table);
-		shell.error_code = 1;
-		return (shell);
+		close_fd(tb);
+		sh.error_code = 1;
+		return (sh);
 	}
 	if (manage_ctrl_c_var(3) == 1)
 	{
-		shell.error_code = 130;
-		return (printf("\n"), shell);
+		sh.error_code = 130;
+		printf("\n");
+		return (sh);
 	}
-	if (table.cmd_len > 1)
-		shell.error_code = ms_pipe(table, &shell);
-	else if (table.cmds->type != 1 && table.cmds->path)
-		shell.error_code = exec_bin(table, shell.env);
-	else if (table.cmds->type == 1)
-		shell.error_code = manage_builtins(table, &shell);
+	if (tb.cmd_len > 1)
+		sh.error_code = ms_pipe(tb, &sh);
+	else if (tb.cmds->type != 1 && tb.cmds->path)
+		sh.error_code = exec_bin(tb, sh.env);
+	else if (tb.cmds->type == 1)
+		sh.error_code = manage_builtins(tb, &sh);
 	if (manage_ctrl_c_var(3) == 1)
 		printf("\n");
-	close_fd(table);
-	return (shell);
+	close_fd(tb);
+	return (sh);
 }
