@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_word.c                                    :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
+/*   Created: 2025/04/28 16:13:22 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/24 17:02:08 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include "exec.h"
 #include "libft.h"
 
-int	ft_count_word(char *line)
+int	pwd(t_cmd cmd)
 {
-	int	i;
-	int	count;
+	char	*str;
 
-	i = 0;
-	count = 0;
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == '\n')
+	if (cmd.args[1])
 	{
-		while (ft_isspace(line[i]) && line[i])
-			i++;
-		while (line[i] > 32 && line[i])
-			i++;
-		if (line[i - 1] > 32)
-			count++;
-		i++;
+		printf("pwd : too many arguments\n");
+		return (1);
 	}
-	return (count);
+	str = getcwd(NULL, 0);
+	if (!str)
+	{
+		perror("getcwd error");
+		return (1);
+	}
+	printf("%s\n", str);
+	free(str);
+	return (0);
 }

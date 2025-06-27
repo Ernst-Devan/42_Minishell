@@ -1,107 +1,147 @@
-# =======================================
-# Main Variables - Variables / Values
-# =======================================
+NAME := minishell
 
-CC			=	cc
-NAME		=	minishell
-CCFLAGS ?=	-g3 -Wall -Werror -Wextra -MMD -MP
-CPPFLAGS = -lreadline
+# --- SRC/DIR --- #
 
-# =======================================
-# Main Directories - Paths
-# =======================================
+SRC_DIR := src/
 
-SRCS		=	minishell.c 	\
-				parsing.c   	\
-				init.c      	\
-				exec.c 			\
-				ms_cd.c 		\
-				check.c			\
+BUILTINS_DIR := builtins/
+
+BUILTINS_SRCS :=	echo.c \
+					env.c	\
+					exit.c	\
+					export.c	\
+					ms_cd.c 	\
+					pwd_manage.c	\
+					pwd.c 			\
+					remove_cd_utils.c 	\
+					remove_cd.c 		\
+					unset.c 			\
+					utils_export.c 		\
+					utils_export2.c 		\
+
+SRCS += $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
+
+EXEC_DIR :=	exec/
+
+EXEC_SRCS :=	exec.c	\
+				pipe.c 	\
+				pipe_utils.c \
+
+SRCS += $(addprefix $(EXEC_DIR), $(EXEC_SRCS))
+
+MANAGE_FILES_DIR := manage_files/
+
+MANAGE_FILES_SRCS := manage_fd.c 			\
+						manage_heredoc.c 	\
+						manage_in.c 		\
+						manage_out.c 		\
+
+SRCS += $(addprefix $(MANAGE_FILES_DIR), $(MANAGE_FILES_SRCS))
+
+PARSING_DIR  := parsing/
+
+PARSING_SRCS := alloc_expand.c 	\
+				check.c 		\
 				env_manage.c 	\
-				free.c			\
-				lexer.c			\
-				redirection.c	\
-				env.c			\
-				error.c			\
-				export.c		\
-				parser.c		\
-				pipe.c			\
-				utils.c			\
-				quotes.c		\
-				echo.c 			\
-				pwd.c			\
-				unset.c 		\
-				exit.c 			\
-				remove_cd.c     \
-				pwd_manage.c 	\
-				command_split.c \
+				expand.c 		\
+				init.c 			\
+				lexer.c 		\
+				lexical_analyse.c 	\
+				parser.c 			\
+				parsing.c 			\
+				prompt.c 			\
+				quotes.c 			\
+				redirection.c 		\
+				utils_lexical_analyse.c \
+				expand_utils.c			\
+				redirection_utils.c		\
+				redirection_utils2.c	\
+
+SRCS += $(addprefix $(PARSING_DIR), $(PARSING_SRCS))
+
+TOOLS_DIR := tools/
+
+TOOLS_SRCS := command_split.c \
 				ctrl_c.c 		\
-				expand.c		\
-				prompt.c		\
-				manage_in.c 	\
-				manage_out.c 	\
-				lexical_analyse.c \
+				debug.c 		\
+				free.c 			\
+				space.c 		\
+				utils.c 		\
 
-OBJS		= $(SRCS:.c=.o)
-DEPS		= $(OBJS:.o=.d)
-SRC_D		=	src/
-OBJ_D		=	obj/
-INC_D		=	-Iinclude \
-					-Ilibs/libft/includes
+SRCS += $(addprefix $(TOOLS_DIR), $(TOOLS_SRCS))
 
-# =======================================
-# Objets Files
-# =======================================
+SRCS += minishell.c
 
-.PHONY: all
-all: 
-	$(MAKE) -C libs/libft
-	$(MAKE) $(NAME)
+# --- LIBS TARGET --- #
 
-OBJS	:= $(addprefix $(OBJ_D), $(OBJS))
-SRCS	:= $(addprefix $(SRC_D), $(SRCS))
+LIBS_TARGET :=			\
+	libs/libft/libft.a 	\
 
-$(NAME):$(OBJS)
-	$(CC) $(CCFLAGS) $(INC_D) $(CPPFLAGS) $(OBJS) -lm libs/libft/libft.a -o $@
+LIBS := $(patsubst lib%.a, %, $(notdir $(LIBS_TARGET)))
 
-$(OBJ_D)%.o: $(SRC_D)%.c | $(OBJ_D)
-	$(CC) $(CCFLAGS) $(INC_D) -c $< -o $@
+# --- INCLUDES --- #
 
-.PHONY: clean
+INCLUDES := includes/
+
+# --- OBJS/DEPS --- #
+
+OBJS_DIR := .build/objs/
+
+OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
+
+
+DEPS := $(OBJS:.o=.d)
+
+# --- FLAGS --- #
+
+CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES)) \
+					 $(addprefix -I,$(addsuffix $(INCLUDES),$(dir $(LIBS_TARGET))))
+
+CFLAGS += -g3 -Wall -Wextra -Werror
+
+LFLAGS += 	$(addprefix -L,$(dir $(LIBS_TARGET))) \
+			$(addprefix -l,$(LIBS)) \
+			-lreadline
+
+# --- COMPILATER --- #
+
+CC = cc
+
+# --- EXEC --- #
+
+all : $(NAME)
+
+$(NAME) : $(LIBS_TARGET) $(OBJS)
+	$(CC) $^ $(LFLAGS) -o $@
+
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+
+$(LIBS_TARGET) : force
+	$(MAKE) -C $(dir $@)
+
+force:
+
+.PHONY : clean fclean all re print-% debug force
+
 clean:
-	rm -rf $(OBJ_D)
-	$(MAKE) clean -C libs/libft
+	rm -rf .build
+	$(MAKE) clean -C $(dir $(LIBS_TARGET))
 
-.PHONY: fclean
 fclean: clean
-	rm -f $(NAME)
-	rm -f libft.a
-	$(MAKE) fclean -C libs/libft
+	rm -rf $(NAME)
+	$(MAKE) fclean -C $(dir $(LIBS_TARGET))
 
-.PHONY: debug
-debug:
-	@if ! readelf --debug-dump=info obj/init.o | grep -q "Version"; then \
-		$(MAKE) fclean; \
-		$(MAKE) debug -C libs/libft; \
-	fi
-	bash -c "echo -en '\033c\033[3J'"
-	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
-	bash -c "valgrind --leak-check=full --suppressions=valgrind_readline.supp ./minishell"
-	
-.PHONY: debuga 
-debuga:
-	@if ! readelf --debug-dump=info obj/init.o | grep -q "Version"; then \
-		$(MAKE) fclean; \
-		$(MAKE) debug -C libs/libft; \
-	fi
-	bash -c "echo -en '\033c\033[3J'"
-	$(MAKE) CCFLAGS="-Wall -Wextra -MMD -MP -g3"
-	bash -c "valgrind --leak-check=full --track-fds=yes --trace-children=yes ./minishell"
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
-.PHONY: re
-re:	fclean all
+debug: $(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
 
-$(OBJ_D):
-	mkdir -p $(OBJ_D)
+print-%:
+	@echo $(patsubst print-%,%,$@)=
+	@echo $($(patsubst print-%,%,$@))
 
--include $(DEPS)% 
+-include $(DEPS)

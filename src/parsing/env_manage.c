@@ -1,35 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_word.c                                    :+:      :+:    :+:   */
+/*   env_manage.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
+/*   Created: 2025/04/11 15:59:09 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/23 13:34:02 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parsing.h"
 #include "libft.h"
 
-int	ft_count_word(char *line)
+int	size_of_env(char **env)
 {
 	int	i;
-	int	count;
 
 	i = 0;
-	count = 0;
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == '\n')
+	while (env[i])
+		i++;
+	return (i);
+}
+
+char	**new_env(char **env)
+{
+	char	**temp;
+	int		i;
+	int		nb_row;
+
+	nb_row = size_of_env(env);
+	temp = malloc(sizeof(char *) * (nb_row + 1));
+	if (!temp)
+		return (NULL);
+	temp[nb_row] = NULL;
+	i = 0;
+	while (i < nb_row)
 	{
-		while (ft_isspace(line[i]) && line[i])
-			i++;
-		while (line[i] > 32 && line[i])
-			i++;
-		if (line[i - 1] > 32)
-			count++;
+		temp[i] = ft_strdup(env[i]);
+		if (!temp[i])
+		{
+			free_lstr(temp);
+			return (NULL);
+		}
 		i++;
 	}
-	return (count);
+	return (temp);
 }

@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_word.c                                    :+:      :+:    :+:   */
+/*   ctrl_c.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
+/*   Created: 2025/05/06 15:14:12 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/18 13:46:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <signal.h>
+#include <readline/readline.h>
 
-int	ft_count_word(char *line)
+int	manage_ctrl_c_var(int val)
 {
-	int	i;
-	int	count;
+	static int	var;
 
-	i = 0;
-	count = 0;
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == '\n')
+	if (val != 3)
+		var = val;
+	return (var);
+}
+
+void	sig_hand(int sig)
+{
+	if (sig == SIGINT)
 	{
-		while (ft_isspace(line[i]) && line[i])
-			i++;
-		while (line[i] > 32 && line[i])
-			i++;
-		if (line[i - 1] > 32)
-			count++;
-		i++;
+		manage_ctrl_c_var(1);
+		if (rl_readline_state & RL_STATE_COMPLETING)
+			rl_pending_input = 'n';
+		rl_replace_line("", 0);
+		rl_done = 1;
 	}
-	return (count);
+	return ;
+}
+
+int	useless_function(void)
+{
+	return (0);
 }

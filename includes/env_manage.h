@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_word.c                                    :+:      :+:    :+:   */
+/*   env_manage.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
+/*   Created: 2025/06/18 15:16:29 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/18 15:16:30 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef ENV_MANAGE_H 
+# define ENV_MANAGE_H
 
-int	ft_count_word(char *line)
-{
-	int	i;
-	int	count;
+# include "parsing.h"
 
-	i = 0;
-	count = 0;
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == '\n')
-	{
-		while (ft_isspace(line[i]) && line[i])
-			i++;
-		while (line[i] > 32 && line[i])
-			i++;
-		if (line[i - 1] > 32)
-			count++;
-		i++;
-	}
-	return (count);
-}
+char	**new_env(char **env);
+int		size_of_env(char **env);
+void	print_env(char **env);
+
+#endif

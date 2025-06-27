@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_word.c                                    :+:      :+:    :+:   */
+/*   manage_fd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 11:26:57 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/18 15:10:05 by njooris          ###   ########.fr       */
+/*   Created: 2025/06/17 12:21:03 by njooris           #+#    #+#             */
+/*   Updated: 2025/06/24 14:49:08 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <unistd.h>
+#include "parsing.h"
 
-int	ft_count_word(char *line)
+void	close_fd(t_table table)
 {
-	int	i;
-	int	count;
+	size_t	i;
 
 	i = 0;
-	count = 0;
-	if (!line)
-		return (0);
-	while (line[i] && line[i] == '\n')
+	while (i < table.cmd_len)
 	{
-		while (ft_isspace(line[i]) && line[i])
-			i++;
-		while (line[i] > 32 && line[i])
-			i++;
-		if (line[i - 1] > 32)
-			count++;
+		if (table.cmds[i].in != 0 && table.cmds[i].in != -1)
+			close(table.cmds[i].in);
+		if (table.cmds[i].out != 1 && table.cmds[i].out != -1)
+			close(table.cmds[i].out);
 		i++;
 	}
-	return (count);
 }
