@@ -4,7 +4,7 @@
 ## Description
 As beautiful as a shell, minishell is a smaller reproduction of bash
 ## Features
--- Builtin
+### Builtin
 Command               | args / options | description |
 ----------------------|-----------------|------------|
 `echo`       | `-n ` | print args inside the stdout |
