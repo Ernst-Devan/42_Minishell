@@ -10,9 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include "exec.h"
 #include "libft.h"
 #include "parsing.h"
@@ -22,7 +19,7 @@ int	*init_new_tab(int len, int define, int *tab, int *check)
 	int	*new_tab;
 	int	j;
 
-	new_tab = malloc(sizeof(int) * (len + 1));
+	new_tab = ft_calloc((len + 1), sizeof(int));
 	if (!new_tab)
 	{
 		*check = 1;
@@ -40,7 +37,7 @@ int	*init_new_tab(int len, int define, int *tab, int *check)
 	return (tab);
 }
 
-void	lexical_analyser_define(char *input, int *len, int *check, int **tab)
+size_t	lexical_analyser_define(char *input, int *len, int *check, int **tab)
 {
 	int		i;
 	int		define;
@@ -64,9 +61,10 @@ void	lexical_analyser_define(char *input, int *len, int *check, int **tab)
 				define = choose_define(&input[i], &i, quote);
 			*tab = init_new_tab((*len)++, define, *tab, check);
 			if (!*tab)
-				return ;
+				return (E_MALLOC);
 		}
 	}
+	return (0);
 }
 
 int	check_lexical(int *tab, int len)
@@ -115,7 +113,8 @@ int	lexical_analyser(char *input)
 
 	len = 0;
 	check = 0;
-	lexical_analyser_define(input, &len, &check, &tab);
+	if (lexical_analyser_define(input, &len, &check, &tab))
+		return (E_MALLOC);
 	if (!tab && check)
 		return (1);
 	check = check_lexical(tab, len);

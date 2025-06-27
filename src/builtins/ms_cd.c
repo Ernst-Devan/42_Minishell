@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdio.h>
-#include <limits.h>
-#include "parsing.h"
 #include "exec.h"
 #include "libft.h"
 

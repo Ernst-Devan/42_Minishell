@@ -12,7 +12,6 @@
 
 #include <sys/wait.h>
 #include <stdio.h>
-#include <signal.h>
 #include "pipe.h"
 #include "exec.h"
 #include "libft.h"

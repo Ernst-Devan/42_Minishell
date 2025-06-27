@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
 
 size_t	alloc_error_code(t_shell shell, size_t *i)
 {

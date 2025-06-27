@@ -14,14 +14,11 @@
 # define PARSING_H
 
 # include <stddef.h>
-# include <stdlib.h>
 
-# define NAME_MAX 255
-# define ENV_MAX 32760
 # define LIM "<>|"
 # define SEP '\x1F'
 # define SEP2 "\x1F"
-# define EXPAND '*'
+# define EXPAND '\x1E'
 # define RED "\001\e[0;36m\002"
 # define BLUE "\001\e[0;91m\002"
 # define WHITE "\001\e[0;37m\002"
@@ -112,6 +109,7 @@ char		*find_env(char *str, char **env);
 int			lexical(t_shell *shell, char **input, t_table **table);
 int			choose_define(char *input, int *i, char quote);
 void		adding_inside_var(char *input, char **buffer, size_t *i);
+size_t		lexical_analyser_define(char *input, int *len, int *check, int **tab);
 
 // Command_split.c
 size_t		count_split(char *input, char c);

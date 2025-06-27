@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
 
 void	init_cmd(t_cmd *cmd, int nb_cmd)
 {
@@ -55,6 +54,9 @@ size_t	init_expand(t_expand *expand, char *input, t_shell shell)
 	expand->alloc = alloc;
 	expand->buffer = ft_calloc(alloc + 1, sizeof(char));
 	if (!expand->buffer)
+	{
+		free(input);
 		return (1);
+	}
 	return (0);
 }

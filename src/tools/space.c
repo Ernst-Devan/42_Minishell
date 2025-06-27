@@ -12,7 +12,6 @@
 
 #include "parsing.h"
 #include "libft.h"
-#include <stddef.h>
 
 char	*skip_first_space(char *variable)
 {

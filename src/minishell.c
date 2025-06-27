@@ -12,12 +12,10 @@
 
 #include "env_manage.h"
 #include "exec.h"
-#include "parsing.h"
 #include <signal.h>
-#include <readline/history.h>
 #include <readline/readline.h>
-#include <stddef.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static void	manage_signals(void)
 {

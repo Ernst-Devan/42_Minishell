@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <stdio.h>
+#include "stdlib.h"
 
 void	free_lstr(char **lstr)
 {

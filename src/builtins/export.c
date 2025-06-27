@@ -11,11 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include "exec.h"
-#include "libft.h"
-#include "env_manage.h"
 
 int	export(t_cmd cmd, char ***env)
 {

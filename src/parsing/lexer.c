@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
 
 size_t	detect_lim(char *input, char **buffer, size_t *i, size_t *j)
 {

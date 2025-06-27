@@ -12,7 +12,6 @@
 
 #include <libft.h>
 #include <parsing.h>
-#include <stddef.h>
 
 void	adding_inside_var(char *input, char **buffer, size_t *i)
 {

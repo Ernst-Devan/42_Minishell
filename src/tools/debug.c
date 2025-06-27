@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
 #include "stdio.h"
 
 void	display_table(t_table table)

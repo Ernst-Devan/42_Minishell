@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include <parsing.h>
-#include <limits.h>
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <stddef.h>
 
 size_t	get_command(t_shell *shell, char **input)
 {

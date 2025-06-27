@@ -12,7 +12,6 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include <stddef.h>
 
 size_t	count_chars(char *s, char *cs)
 {

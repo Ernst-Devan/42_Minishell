@@ -51,7 +51,10 @@ char	*replace_var(char *str, char **env)
 		return (NULL);
 	buffer = ft_strdup(variable);
 	if (!buffer)
+	{
+		free(variable);
 		return (NULL);
+	}
 	free(variable);
 	return (buffer);
 }

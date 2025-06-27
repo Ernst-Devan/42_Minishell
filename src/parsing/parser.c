@@ -12,7 +12,6 @@
 
 #include "parsing.h"
 #include "libft.h"
-#include <stddef.h>
 
 void	insert_cmd(char **args, t_cmd **cmd, size_t *i, char *path)
 {
@@ -62,7 +61,6 @@ char	**tokenisation(char *input)
 	char	**splited_cmds;
 
 	splited_cmds = split_cmd(input, '|');
-	free(input);
 	if (!splited_cmds)
 		return (NULL);
 	return (splited_cmds);
@@ -71,8 +69,9 @@ char	**tokenisation(char *input)
 size_t	parser(t_table *table, char **env, char *input)
 {
 	char	**splited_cmds;
-
+	(void)input;
 	splited_cmds = tokenisation(input);
+	free(input);
 	if (!splited_cmds)
 	{
 		free_table(*table);
@@ -81,6 +80,7 @@ size_t	parser(t_table *table, char **env, char *input)
 	splited_cmds = manage_redirection(&table->cmds, splited_cmds);
 	if (!splited_cmds)
 	{
+		free_lstr(splited_cmds);
 		free_table(*table);
 		return (1);
 	}

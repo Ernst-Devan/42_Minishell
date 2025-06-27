@@ -12,7 +12,6 @@
 
 #include <unistd.h>
 #include "parsing.h"
-#include <stdio.h>
 
 void	close_fd(t_table table)
 {

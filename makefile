@@ -63,7 +63,6 @@ TOOLS_DIR := tools/
 TOOLS_SRCS := command_split.c \
 				ctrl_c.c 		\
 				debug.c 		\
-				error.c 		\
 				free.c 			\
 				space.c 		\
 				utils.c 		\
