@@ -4,7 +4,7 @@
 ## Description
 As beautiful as a shell, minishell is a smaller reproduction of bash
 ## Features
-### Builtin
+### - Builtin
 Command               | args / options | description |
 ----------------------|-----------------|------------|
 `echo`       | `-n ` | print args inside the stdout |
@@ -15,6 +15,15 @@ Command               | args / options | description |
 `env`       | none |  print all assigned variable | 
 `exit`     | `code` | exit the shell |
 
+### - Operators
+Operator          | description         |
+-------------------|---------------------|
+`>`                 | write output to the file        |
+`<`                   | redirect file to output       |
+`>>`                  | append output to file         |
+`<< 'EOF'`                  | create a heredoc          |
+`$ 'var'`                 | expand var by env variable  |
+`$?`                     | expand the last error code   |
 
 ## Getting started
 ### Download the repository
@@ -30,6 +39,10 @@ make
 ```
 ./minishell
 ```
+## Contributors
+[@dernst] (https://github.com/Ernst-Devan)
+[@njooris] (https://github.com/rayseur123)
+
 ## Acknowledgments
 - Basic Shell (https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 
