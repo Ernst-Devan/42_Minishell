@@ -40,7 +40,7 @@ make
 ./minishell
 ```
 ## Contributors
-[@dernst] (https://github.com/Ernst-Devan)
+[@dernst] (https://github.com/Ernst-Devan)\n
 [@njooris] (https://github.com/rayseur123)
 
 ## Acknowledgments
