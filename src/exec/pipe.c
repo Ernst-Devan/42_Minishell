@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 10:43:08 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/27 12:45:53 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	manage_dup_pipe(t_cmd command, int pipefd[2], int in, t_pack_pipe pp)
 	}
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1 || dup2(in, STDIN_FILENO) == -1)
 	{
-		dprintf(2, "cmd : %d et %d\n", command.in, in);
 		perror("dup2 faild in usepipe");
 		close(in);
 		exit_pipe(pipefd, pp);
@@ -80,21 +79,21 @@ int	ms_pipe(t_table table, t_shell *shell)
 	int			save_in;
 	int			val_return;
 
-	i = 0;
+	display_table(table);
+	i = -1;
 	pack_pipe.shell = shell;
 	pack_pipe.table = table;
 	pipefd[0] = table.cmds[0].in;
-	while (i < table.cmd_len)
+	while (++i < table.cmd_len)
 	{
 		save_in = pipefd[0];
 		if (i + 1 < table.cmd_len && pipe(pipefd) == -1)
-			return (perror("pipe error"), 1);
+			return (1);
 		if (i + 1 == table.cmd_len)
 			pipefd[1] = table.cmds[i].out;
 		val_return = use_pipe(table.cmds[i], save_in, pipefd, pack_pipe);
 		if (val_return == -1)
 			return (1);
-		i++;
 	}
 	return (waiter(val_return));
 }

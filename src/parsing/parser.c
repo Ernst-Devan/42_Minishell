@@ -69,7 +69,7 @@ char	**tokenisation(char *input)
 size_t	parser(t_table *table, char **env, char *input)
 {
 	char	**splited_cmds;
-	(void)input;
+
 	splited_cmds = tokenisation(input);
 	free(input);
 	if (!splited_cmds)

@@ -55,6 +55,7 @@ PARSING_SRCS := alloc_expand.c 	\
 				utils_lexical_analyse.c \
 				expand_utils.c			\
 				redirection_utils.c		\
+				redirection_utils2.c	\
 
 SRCS += $(addprefix $(PARSING_DIR), $(PARSING_SRCS))
 

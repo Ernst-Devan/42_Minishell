@@ -33,7 +33,8 @@ char	*adding_expand(t_expand *expand, char *variable, char **env, char quote)
 	if (quote == 0 && expanded)
 	{
 		expanded = skip_first_space(expanded);
-		manage_space(&expanded);
+		if (manage_space(&expanded))
+			return (NULL);
 	}
 	expand->i += ft_strlen(variable);
 	if (!expanded)

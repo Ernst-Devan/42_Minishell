@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 07:57:21 by dernst            #+#    #+#             */
-/*   Updated: 2025/06/24 18:17:02 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/27 12:46:00 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ size_t		init_redirection(char **in, char **out, char *cmd);
 char		**manage_redirection(t_cmd **cmd, char **split_cmd);
 char		**skip_redirection(char **split_cmd);
 char		*remove_quote(char *str);
+char		**free_lstr_ret(char **split_cmd);
+char		*skip_useless_redirections(char *split_cmd, char *temp);
+void		manage_in_out_parse(char *split_cmd, char **in, char **out);
+char		**free_manage_redirection(t_cmd **cmds, size_t i, char **split_cmd);
 
 // Parsing.c
 size_t		parsing(t_shell *shell, t_table *table);
@@ -98,7 +102,7 @@ char		**remove_quotes(char **splited_cmd);
 size_t		manage_quotes(char **args);
 
 // Free.c
-void		free_lstr(char **lstr);
+int			free_lstr(char **lstr);
 void		free_cmds(t_table tabl);
 void		free_table(t_table table);
 
@@ -109,7 +113,8 @@ char		*find_env(char *str, char **env);
 int			lexical(t_shell *shell, char **input, t_table **table);
 int			choose_define(char *input, int *i, char quote);
 void		adding_inside_var(char *input, char **buffer, size_t *i);
-size_t		lexical_analyser_define(char *input, int *len, int *check, int **tab);
+size_t		lexical_analyser_define(char *input, int *len,
+				int *check, int **tab);
 
 // Command_split.c
 size_t		count_split(char *input, char c);
@@ -157,5 +162,6 @@ size_t		lexer(char **input);
 size_t		parser(t_table *table, char **env, char *lexer);
 
 size_t		quote_check(char *input);
+void		adding_inside_var(char *input, char **buffer, size_t *i);
 
 #endif

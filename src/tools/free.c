@@ -6,14 +6,14 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:27:53 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 15:21:00 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 13:02:47 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include "stdlib.h"
 
-void	free_lstr(char **lstr)
+int	free_lstr(char **lstr)
 {
 	size_t	i;
 	char	*temp;
@@ -30,6 +30,7 @@ void	free_lstr(char **lstr)
 		}
 		free(lstr);
 	}
+	return (1);
 }
 
 void	free_cmds(t_table table)

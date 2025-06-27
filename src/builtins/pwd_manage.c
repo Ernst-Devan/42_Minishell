@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:12:48 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/18 13:13:17 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:37:17 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ char	*get_pwd(char **env)
 
 char	*pwd_manage(char *pwd)
 {
+	char	*temp;
+
+	temp = pwd;
 	pwd = remove_consecutiv_slash(pwd);
+	free(temp);
 	if (!pwd)
 		return (NULL);
 	pwd = remove_dot_slash(pwd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 11:28:29 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 15:47:09 by dernst           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:49:52 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <stddef.h>
+#include <stdio.h>
 
 char	*remove_quote(char *str)
 {
@@ -30,23 +31,17 @@ char	*remove_quote(char *str)
 	temp = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!temp)
 		return (NULL);
-	while (str[i])
+	while (str && str[i])
 	{
-		if (inside_quote(str[i], &quote) > 1)
+		if (inside_quote(str[i], &quote) > 1 && i++)
 		{
-			i++;
-			if (str[i] && str[i] == quote)
-			{
+			if (str[i] && str[i] == quote && i++)
 				quote = 0;
-				i++;
-			}
 		}
 		else
 			temp[j++] = str[i++];
 	}
-	temp[j] = '\0';
-	free(str);
-	return (temp);
+	return (free(str), temp);
 }
 
 size_t	check_empty(char **lstr)
@@ -73,14 +68,9 @@ size_t	check_empty(char **lstr)
 char	**skip_redirection(char **split_cmd)
 {
 	size_t	i;
-	size_t	j;
-	size_t	k;
 	char	*temp;
-	char	quote;
 
 	i = 0;
-	j = 0;
-	quote = 0;
 	if (check_empty(split_cmd) == 0)
 	{
 		free_lstr(split_cmd);
@@ -88,37 +78,13 @@ char	**skip_redirection(char **split_cmd)
 	}
 	while (split_cmd[i])
 	{
-		k = 0;
 		temp = malloc((ft_strlen(split_cmd[i]) + 1) * sizeof(char));
 		if (!temp)
-			return (NULL);
-		while (split_cmd[i][j])
 		{
-			if (split_cmd[i][j] == EXPAND)
-			{
-				temp[k++] = split_cmd[i][j++];
-				while (split_cmd[i][j] != EXPAND)
-					temp[k++] = split_cmd[i][j++];
-			}
-			inside_quote(split_cmd[i][j], &quote);
-			if (quote == 0)
-			{
-				if (split_cmd[i][j] == '>' || split_cmd[i][j] == '<')
-				{
-					j += ft_strlen_c(&split_cmd[i][j], SEP);
-					if (split_cmd[i][j])
-						j++;
-					j += ft_strlen_c(&split_cmd[i][j], SEP);
-				}
-			}
-			if (!split_cmd[i][j])
-				break ;
-			temp[k] = split_cmd[i][j];
-			k++;
-			j++;
+			free_lstr(split_cmd);
+			return (NULL);
 		}
-		j = 0;
-		temp[k] = '\0';
+		temp = skip_useless_redirections(split_cmd[i], temp);
 		free(split_cmd[i]);
 		split_cmd[i] = temp;
 		i++;
@@ -129,53 +95,25 @@ char	**skip_redirection(char **split_cmd)
 char	**manage_redirection(t_cmd **cmds, char **split_cmd)
 {
 	size_t	i;
-	size_t	j;
 	char	*in;
 	char	*out;
-	char	quote;
 
 	i = 0;
-	quote = 0;
 	if (!check_redirection(split_cmd))
 		return (split_cmd);
 	while (check_empty(split_cmd) == 1 && split_cmd[i])
 	{
 		if (init_redirection(&in, &out, split_cmd[i]))
-		{
-			free_lstr(split_cmd);
-			return (NULL);
-		}
-		j = 0;
-		while (split_cmd[i][j])
-		{
-			if (split_cmd[i][j] == EXPAND)
-			{
-				j++;
-				while (split_cmd[i][j] != EXPAND)
-					j++;
-			}
-			inside_quote(split_cmd[i][j], &quote);
-			if (quote == 0)
-			{
-				in = redirection_in(in, split_cmd[i], &j, &quote);
-				out = redirection_out(out, split_cmd[i], &j, &quote);
-			}
-			if (!split_cmd[i][j])
-				break ;
-			j++;
-		}
+			return (free_lstr_ret(split_cmd));
+		manage_in_out_parse(split_cmd[i], &in, &out);
 		(*cmds)[i].str_in = remove_quote(in);
 		if (!(*cmds)[i].str_in)
-		{
-			free_lstr(split_cmd);
-			return (NULL);
-		}
+			return (free_lstr_ret(split_cmd));
 		(*cmds)[i++].str_out = remove_quote(out);
 		if (!(*cmds)[i - 1].str_out)
 		{
-			free(split_cmd);
-			free((*cmds)[i - 1].str_in);
-			return (NULL);
+			free(out);
+			return (free_lstr(split_cmd), NULL);
 		}
 	}
 	return (skip_redirection(split_cmd));

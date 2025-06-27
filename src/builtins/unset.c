@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:54:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/23 14:05:05 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/26 11:44:14 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,22 @@ int	unset(t_cmd cmd, char ***env)
 	char	*str;
 
 	if (!cmd.args[1])
-		return (printf("unset need param\n"), 1);
-	new_env = NULL;
-	i = 1;
-	while (cmd.args[i])
+	{
+		printf("unset need param\n");
+		return (1);
+	}
+	i = 0;
+	while (cmd.args[++i])
 	{
 		str = ft_strjoin(cmd.args[i], "=");
 		if (!str)
 			return (1);
 		check = find_env_variable(*env, str);
 		if (check != -1)
-		{
 			new_env = reset_val_unset(str, env);
-			if (!new_env)
-				return (free(str), 1);
-		}
 		free(str);
-		i++;
+		if (!new_env)
+			return (1);
 	}
 	return (0);
 }

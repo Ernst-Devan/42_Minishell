@@ -46,7 +46,6 @@ size_t	lexical_analyser_define(char *input, int *len, int *check, int **tab)
 
 	i = 0;
 	quote = 0;
-	*tab = NULL;
 	while (input[i])
 	{
 		is_word = 0;
@@ -113,6 +112,7 @@ int	lexical_analyser(char *input)
 
 	len = 0;
 	check = 0;
+	tab = NULL;
 	if (lexical_analyser_define(input, &len, &check, &tab))
 		return (E_MALLOC);
 	if (!tab && check)
