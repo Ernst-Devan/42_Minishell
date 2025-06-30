@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/24 15:16:27 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/30 15:00:08 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,28 @@ int	open_out_file(char *str)
 	return (n);
 }
 
-int	manage_open_out(int i, t_cmd *cmd, int fd)
+int	manage_open_out(int *i, t_cmd *cmd, int fd)
 {
-	if (cmd->str_out[i] && cmd->str_out[i + 1] && cmd->str_out[i] == '>')
+	if (cmd->str_out[*i] && cmd->str_out[(*i) + 1] && cmd->str_out[*i] == '>')
 	{
-		if (cmd->str_out[i + 1] && cmd->str_out[i + 2]
-			&& cmd->str_out[i + 1] == '>' && cmd->str_out[i + 2] == SEP)
+		if (cmd->str_out[(*i) + 1] && cmd->str_out[(*i) + 2]
+			&& cmd->str_out[(*i) + 1] == '>' && cmd->str_out[(*i) + 2] == SEP)
 		{
 			if (fd)
 				close(fd);
-			fd = open_append(&cmd->str_out[i + 3]);
+			fd = open_append(&cmd->str_out[(*i) + 3]);
 			if (fd == -1)
 				return (-1);
-			i += 2;
+			(*i)++;
 		}
-		else if (cmd->str_out[i + 1] && cmd->str_out[i + 1] == SEP)
+		else if (cmd->str_out[(*i) + 1] && cmd->str_out[(*i) + 1] == SEP)
 		{
 			if (fd)
 				close(fd);
-			fd = open_out_file(&cmd->str_out[i + 2]);
+			fd = open_out_file(&cmd->str_out[(*i) + 2]);
 			if (fd == -1)
 				return (-1);
+			printf("la\n");
 		}
 	}
 	return (fd);
@@ -84,10 +85,11 @@ int	open_out_cmd(t_cmd *cmd)
 	fd = 0;
 	while (cmd->str_out && cmd->str_out[i])
 	{
-		fd = manage_open_out(i, cmd, fd);
+		fd = manage_open_out(&i, cmd, fd);
 		if (fd == -1)
 			return (-1);
-		i++;
+		if (cmd->str_out[i])
+			i++;
 	}
 	if (fd == 0)
 		fd++;
