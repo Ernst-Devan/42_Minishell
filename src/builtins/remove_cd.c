@@ -6,12 +6,13 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:29:27 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/26 11:09:33 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/30 16:54:37 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "libft.h"
+#include <stdio.h>
 
 char	*remove_dot_slash(char *path)
 {
