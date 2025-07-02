@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:55:44 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/30 15:00:08 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/02 16:40:15 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	manage_open_out(int *i, t_cmd *cmd, int fd)
 			fd = open_out_file(&cmd->str_out[(*i) + 2]);
 			if (fd == -1)
 				return (-1);
-			printf("la\n");
 		}
 	}
 	return (fd);
