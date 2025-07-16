@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 15:42:33 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/26 11:36:45 by njooris          ###   ########.fr       */
+/*   Updated: 2025/06/30 17:01:05 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	len_without_dotslash(char *path)
 			i++;
 		}
 	}
-	if ((i == 1 && path[i - 1] == '.') || (i > 1 && path[i - 2] == '/'))
+	if ((i == 1 && path[i - 1] == '.')
+		|| (i > 1 && path[i - 2] == '/' && path[i - 2] == '.'))
 		len--;
 	return (len);
 }

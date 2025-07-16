@@ -6,7 +6,7 @@
 /*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:55:59 by njooris           #+#    #+#             */
-/*   Updated: 2025/06/27 12:45:53 by dernst           ###   ########lyon.fr   */
+/*   Updated: 2025/07/16 14:18:03 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	ms_pipe(t_table table, t_shell *shell)
 	int			save_in;
 	int			val_return;
 
-	display_table(table);
 	i = -1;
 	pack_pipe.shell = shell;
 	pack_pipe.table = table;
