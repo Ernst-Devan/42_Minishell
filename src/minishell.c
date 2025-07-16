@@ -47,10 +47,7 @@ int	minishell(char **env)
 	size_t		check;
 
 	if (!isatty(0) || !isatty(1))
-	{
-		printf("TTY is not accepted\n");
 		return (0);
-	}
 	manage_signals();
 	check = 0;
 	shell.env = manage_env(env);
