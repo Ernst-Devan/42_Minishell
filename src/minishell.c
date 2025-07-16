@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: dernst <dernst@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:14:25 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/01 13:54:01 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/16 14:39:35 by dernst           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "exec.h"
 #include <signal.h>
 #include <readline/readline.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -46,7 +47,10 @@ int	minishell(char **env)
 	size_t		check;
 
 	if (!isatty(0) || !isatty(1))
+	{
+		printf("TTY is not accepted\n");
 		return (0);
+	}
 	manage_signals();
 	check = 0;
 	shell.env = manage_env(env);
