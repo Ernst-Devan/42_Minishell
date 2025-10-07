@@ -28,11 +28,11 @@ Operator          | description         |
 ## Getting started
 ### Download the repository
 ```
-git clone git@github.com:Ernst-Devan/42_Minishell.git Dernst_Minishell
+git clone git@github.com:Ernst-Devan/42_Minishell.git Minishell
 ```
 ### Access and compile
 ```
-cd Dernst_fdf
+cd Minishell
 make
 ```
 ### Launch the program
